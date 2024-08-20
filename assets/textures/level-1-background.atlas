@@ -1,0 +1,11 @@
+level-1-background.png
+size:1024,512
+repeat:none
+parallax-1
+bounds:2,100,616,110
+parallax-2
+bounds:2,2,112,96
+parallax-3
+bounds:2,212,544,236
+parallax-4
+bounds:620,144,112,304

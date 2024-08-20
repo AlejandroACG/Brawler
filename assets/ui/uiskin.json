@@ -1,0 +1,46 @@
+{
+  "com.badlogic.gdx.graphics.Color": {
+    "black": { "r": 0, "g": 0, "b": 0, "a": 1 },
+    "white": { "r": 1, "g": 1, "b": 1, "a": 1 },
+    "red": { "r": 1, "g": 0, "b": 0, "a": 1 },
+    "dark-grey": { "r": 32, "g": 32, "b": 32, "a": 1 }
+  },
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "aetherius-font": { "file": "aetherius.fnt" },
+    "caladea-font": {"file": "caladea.fnt"}
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "default": {
+      "font": "aetherius-font",
+      "fontColor": "black"
+    },
+    "system": {
+      "font": "caladea-font",
+      "fontColor": "white"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "default": {
+      "up": "textbutton-up",
+      "over": "textbutton-over",
+      "down": "textbutton-down",
+      "disabled": "textbutton-disabled",
+      "font": "aetherius-font",
+      "fontColor": "black"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
+    "default": {
+      "font": "aetherius-font",
+      "fontColor": "black",
+      "checkboxOn": "checkbox-on",
+      "checkboxOff": "checkbox-off",
+      "checkboxOver": "checkbox-over",
+      "checkboxOnOver": "checkbox-on-over",
+      "checkboxOffDisabled": "checkbox-off-disabled",
+      "checkboxOnDisabled": "checkbox-on-disabled",
+      "overFontColor": "black",
+      "disabledFontColor": "dark-grey"
+    }
+  }
+}
