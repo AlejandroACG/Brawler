@@ -2,20 +2,24 @@ package com.svalero.brawler.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import static com.svalero.brawler.managers.ResourceManager.getMusic;
+import static com.svalero.brawler.utils.Constants.MENU_MUSIC;
 
 public class MusicManager {
     private static Music backgroundMusic;
 
     public static void startMusic(String path) {
-        if (backgroundMusic != null) {
-            if (backgroundMusic.isPlaying()) {
-                backgroundMusic.stop();
+        if (!ConfigurationManager.mute) {
+            if (backgroundMusic != null && backgroundMusic.isPlaying()) {
+                return;
             }
-            backgroundMusic.dispose();
+
+            backgroundMusic = getMusic(path);
+            if (backgroundMusic != null) {
+                backgroundMusic.setLooping(true);
+                backgroundMusic.play();
+            }
         }
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(path));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
     }
 
     public static void stopMusic() {
@@ -24,5 +28,11 @@ public class MusicManager {
             backgroundMusic.dispose();
             backgroundMusic = null;
         }
+    }
+
+    public static void setSplashMusic() {
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(MENU_MUSIC));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
     }
 }

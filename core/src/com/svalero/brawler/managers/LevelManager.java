@@ -36,6 +36,7 @@ public class LevelManager {
     private float mapHeight;
     private CameraManager cameraManager;
     private final Array<ParallaxLayer> parallaxLayers = new Array<>();
+    private String backgroundMusic;
 
     public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter) {
         this.game = game;
@@ -49,11 +50,12 @@ public class LevelManager {
                 map = mapLoader.load(LEVEL_1_MAP);
                 mapWidth = LEVEL_1_MAP_WIDTH;
                 mapHeight = LEVEL_1_MAP_HEIGHT;
+                backgroundMusic = LEVEL_1_MUSIC;
         }
 
         // TODO loadCurrentLevel
         // TODO restartCurrentLevel (retry/restart/exit)
-        // TODO falta un método playCurrentLevelMusic
+        MusicManager.startMusic(backgroundMusic);
         loadColliders();
         loadCharacters(selectedCharacter);
 
@@ -178,12 +180,10 @@ public class LevelManager {
 
             @Override
             public void preSolve(Contact contact, Manifold manifold) {
-
             }
 
             @Override
             public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-
             }
         });
     }
@@ -198,9 +198,7 @@ public class LevelManager {
 
     public Map<Integer, Character> getCharacters() { return characters; }
 
-    public Player getPlayer() {
-        return player;
-    }
+    public Player getPlayer() { return player; }
 
     public World getWorld() {
         return world;

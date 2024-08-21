@@ -3,6 +3,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.svalero.brawler.managers.ResourceManager;
 import com.svalero.brawler.screens.SplashScreen;
 import static com.svalero.brawler.utils.Constants.UI_SKIN_ATLAS;
 import static com.svalero.brawler.utils.Constants.UI_SKIN_JSON;
@@ -30,6 +31,7 @@ public class Brawler extends Game {
 	@Override
 	public void dispose () {
 		skin.dispose();
+		ResourceManager.dispose();
 		super.dispose();
 	}
 }

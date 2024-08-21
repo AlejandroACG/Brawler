@@ -1,12 +1,16 @@
 package com.svalero.brawler.domains;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import static com.svalero.brawler.utils.Constants.*;
+import com.svalero.brawler.managers.SoundManager;
 import com.svalero.brawler.utils.FixtureData.*;
 
 public abstract class Player extends Character {
+    private float walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+
     public Player(World world, Vector2 position, float scale, String characterAtlas, float speed, float width, float height,
                   float spriteWidth, float spriteHeight, float correctionX, float correctionY, float idleDuration,
                   float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength) {
@@ -22,10 +26,7 @@ public abstract class Player extends Character {
         stateTime += dt;
     }
 
-    // TODO ¿Puede que la fuerza de salto no funcione por algún motivo?
-    // TODO Que cuando salta tarde un segundo de instante, sincronizado con la animación
-    // TODO Limpiar aquí y en Character todo donde ponga Kain en vez de ser un atributo genérico
-    // TODO Limpiar también los idle placeholders
+    // TODO De meter más personajes, limpiar aquí y en Character todo donde ponga Kain en vez de ser un atributo genérico
     // TODO Cuando se agacha, la mitad superior del body no deberia recibir daños, igual puedo crear un Fixture para cuando está
     // TODO agachado y alternarlos?
     // TODO Faltan ataques (idle, jump, crouch) y el movimiento especial
@@ -38,22 +39,32 @@ public abstract class Player extends Character {
 
     public void manageInput(float dt) {
         Vector2 velocity = body.getLinearVelocity();
+
+        // WALK
         if (currentState == State.WALK) {
             currentState = State.IDLE;
         }
 
+        // IDLE
         if (currentState == State.IDLE) {
+            velocity.x = 0;
+            currentAnimation = getIdleAnimation();
+
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 velocity.x = speed;
                 currentState = State.WALK;
                 currentAnimation = getWalkAnimation();
                 facingLeft = false;
+                SoundManager.playLongSound(WALKING_ON_GRASS, "kain_walk");
+                walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 velocity.x = -speed;
                 currentState = State.WALK;
                 currentAnimation = getWalkAnimation();
                 facingLeft = true;
+                SoundManager.playLongSound(WALKING_ON_GRASS, "kain_walk");
+                walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 currentAnimation = getCrouchDownAnimation();
@@ -64,6 +75,8 @@ public abstract class Player extends Character {
                 velocity.y = jumpStrength;
                 currentState = State.JUMP_UP;
             }
+
+        // CROUCH DOWN
         } else if (currentState == State.CROUCH_DOWN) {
             if (stateTime >= KAIN_CROUCH_FRAMES * KAIN_CROUCH_DURATION) {
                 currentState = State.CROUCH;
@@ -72,16 +85,26 @@ public abstract class Player extends Character {
                 currentAnimation = getCrouchUpAnimation();
                 currentState = State.CROUCH_UP;
             }
+
+        // CROUCH
         } else if (currentState == State.CROUCH) {
             currentAnimation = getCrouchAnimation();
             if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
                 currentAnimation = getCrouchUpAnimation();
                 currentState = State.CROUCH_UP;
             }
+
+        // CROUCH UP
         } else if (currentState == State.CROUCH_UP) {
             if (stateTime >= KAIN_CROUCH_FRAMES * KAIN_CROUCH_DURATION) {
                 currentState = State.IDLE;
             }
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                currentAnimation = getCrouchDownAnimation();
+                currentState = State.CROUCH_DOWN;
+            }
+
+        // JUMP UP
         } else if (currentState == State.JUMP_UP || currentState == State.JUMP_DOWN) {
             if (velocity.y > 0) {
                 currentAnimation = getJumpUpAnimation();
@@ -96,6 +119,8 @@ public abstract class Player extends Character {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 velocity.x = body.getLinearVelocity().x - speed * 0.05f;
             }
+
+        // LAND
         } else if (currentState == State.LAND) {
             currentAnimation = getLandAnimation();
             velocity.x = 0;
@@ -111,15 +136,15 @@ public abstract class Player extends Character {
             }
         }
 
-        if (currentState == State.IDLE) {
-            velocity.x = 0;
-            currentAnimation = getIdleAnimation();
+        // Stop walking sound
+        if (currentState != State.WALK) {
+            if (walkingSoundTimer > 0) {
+                walkingSoundTimer -= dt;
+            } else {
+                SoundManager.stopLongSound(WALKING_ON_GRASS, "kain_walk");
+            }
         }
 
         body.setLinearVelocity(velocity.x, velocity.y);
-
-//            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//                position.y -= speed * dt;
-//            }
     }
 }

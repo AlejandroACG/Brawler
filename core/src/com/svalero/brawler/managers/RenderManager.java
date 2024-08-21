@@ -22,14 +22,12 @@ public class RenderManager {
 
         drawBackground();
 
-
         mapRenderer.setView(cameraManager.getCamera());
         mapRenderer.render();
 
         batch.begin();
         levelManager.getPlayer().draw(batch);
         batch.end();
-
     }
 
     public void drawBackground() {

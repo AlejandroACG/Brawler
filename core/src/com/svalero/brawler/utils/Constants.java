@@ -3,6 +3,7 @@ package com.svalero.brawler.utils;
 public class Constants {
     public static final float ASPECT_RATIO = 16f / 9f;
     public static final float GRAVITY = -175f;
+    public static final boolean DEBUG_MODE = true;
 
     // Buttons
     public static final float buttonWidthRatio = 0.4f;
@@ -22,8 +23,12 @@ public class Constants {
     public static final String LEVEL_1_BACKGROUND = "textures/level-1-background.atlas";
     public static final String KAIN_ATLAS = "textures/kain.atlas";
 
-    // Music and Sounds
+    // Music
     public static final String MENU_MUSIC = "music/menu-music.mp3";
+    public static final String LEVEL_1_MUSIC = "music/level-1-music.mp3";
+
+    // Sounds
+    public static final String WALKING_ON_GRASS = "sounds/walking-on-grass.wav";
 
     // Level 1
     public static final String LEVEL_1_MAP = "maps/level-1.tmx";
@@ -49,6 +54,7 @@ public class Constants {
     public static final float KAIN_CROUCH_DURATION = 0.1f;
     public static final float KAIN_JUMP_UP_DURATION = 0.5f;
     public static final float KAIN_WALK_DURATION = 0.15f;
+    public static final float KAIN_WALKING_SOUND_TIMER = 0.20f;
     public static final int KAIN_LAND_FRAMES = 2;
     public static final float KAIN_LAND_DURATION = 0.1f;
     public static final float KAIN_JUMP_DOWN_DURATION = 0.15f;

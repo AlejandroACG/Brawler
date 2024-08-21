@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.svalero.brawler.Brawler;
+import com.svalero.brawler.managers.MusicManager;
 import com.svalero.brawler.managers.ResourceManager;
 import static com.svalero.brawler.utils.Constants.*;
 
@@ -28,6 +29,7 @@ public class MainMenuScreen implements Screen {
     public void show() {
         stage = new Stage();
 
+        MusicManager.startMusic(MENU_MUSIC);
 
         Texture backgroundTexture = ResourceManager.getTexture(MAIN_MENU_BACKGROUND);
         Image backgroundImage = new Image(backgroundTexture);
@@ -42,6 +44,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
+                MusicManager.stopMusic();
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(game, 1));
             }
         });

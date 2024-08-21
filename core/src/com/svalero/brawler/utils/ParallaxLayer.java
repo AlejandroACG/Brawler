@@ -1,4 +1,5 @@
 package com.svalero.brawler.utils;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.svalero.brawler.managers.CameraManager;

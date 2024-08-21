@@ -9,10 +9,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.svalero.brawler.Brawler;
 import com.svalero.brawler.domains.Character;
 import com.svalero.brawler.managers.*;
-
 import java.util.Map;
-
 import static com.svalero.brawler.managers.ConfigurationManager.SelectedCharacter.*;
+import static com.svalero.brawler.utils.Constants.DEBUG_MODE;
 
 public class GameScreen implements Screen {
     private CameraManager cameraManager;
@@ -27,18 +26,15 @@ public class GameScreen implements Screen {
         this.game = game;
         this.currentLevel = currentLevel;
         levelManager = new LevelManager(game, currentLevel, KAIN);
-
         cameraManager = new CameraManager(levelManager);
         levelManager.setCameraManager(cameraManager);
         levelManager.setBackground();
         actionManager = new ActionManager(levelManager);
         renderManager = new RenderManager(levelManager, cameraManager);
-
-        debugRenderer = new Box2DDebugRenderer();
+        if (DEBUG_MODE) {
+            debugRenderer = new Box2DDebugRenderer();
+        }
     }
-
-    @Override
-    public void show() {}
 
     @Override
     public void render(float dt) {
@@ -50,31 +46,14 @@ public class GameScreen implements Screen {
         renderManager.drawFrame();
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            MusicManager.stopMusic();
             ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(game));
         }
 
-        debugRenderer.render(levelManager.getWorld(), cameraManager.getCamera().combined.cpy().scl(1f));
-        System.out.println(levelManager.getPlayer().getCurrentState());
-    }
-
-    @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
+        if (DEBUG_MODE) {
+            debugRenderer.render(levelManager.getWorld(), cameraManager.getCamera().combined.cpy().scl(1f));
+            System.out.println(levelManager.getPlayer().getCurrentState());
+        }
     }
 
     @Override
@@ -85,6 +64,23 @@ public class GameScreen implements Screen {
         }
         levelManager.getWorld().dispose();
 
-        debugRenderer.dispose();
+        if (DEBUG_MODE) {
+            debugRenderer.dispose();
+        }
     }
+
+    @Override
+    public void show() {}
+
+    @Override
+    public void resize(int i, int i1) {}
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {}
 }

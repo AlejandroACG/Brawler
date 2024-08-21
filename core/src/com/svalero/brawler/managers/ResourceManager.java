@@ -1,4 +1,5 @@
 package com.svalero.brawler.managers;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -13,9 +14,14 @@ public class ResourceManager {
     public static AssetManager assets = new AssetManager();
 
     public static void loadAllResources() {
-        // Audios
+        // Cargar sonidos
+        assets.load(WALKING_ON_GRASS, Sound.class);
 
-        // Texturas
+        // Cargar música
+        assets.load(MENU_MUSIC, Music.class);
+        assets.load(LEVEL_1_MUSIC, Music.class);
+
+        // Cargar texturas
         assets.load(MAIN_MENU_BACKGROUND, Texture.class);
         assets.load(TABLE_BACKGROUND, Texture.class);
         assets.load(LEVEL_1_BACKGROUND, TextureAtlas.class);
@@ -34,9 +40,7 @@ public class ResourceManager {
         return assets.get(path, Texture.class);
     }
 
-    public static Drawable getTableBackground() {
-        return new TextureRegionDrawable(new TextureRegion(getTexture(TABLE_BACKGROUND)));
-    }
+    public static Drawable getTableBackground() { return new TextureRegionDrawable(new TextureRegion(getTexture(TABLE_BACKGROUND))); }
 
     public static TextureAtlas getAtlas(String path) {
         return assets.get(path, TextureAtlas.class);
@@ -46,9 +50,7 @@ public class ResourceManager {
         return assets.get(path, Sound.class);
     }
 
-    public static Music getMusic(String path) {
-        return assets.get(path, Music.class);
-    }
+    public static Music getMusic(String path) { return assets.get(path, Music.class); }
 
     public static void dispose() {
         assets.dispose();
