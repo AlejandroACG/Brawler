@@ -11,16 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.svalero.brawler.Brawler;
+import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.managers.MusicManager;
 import com.svalero.brawler.managers.ResourceManager;
-
-import static com.svalero.brawler.utils.Constants.MENU_MUSIC;
 
 public class SplashScreen implements Screen {
     private Texture splashTexture;
     private Image splashImage;
     private Stage stage;
-    private boolean splashDone = false;
+    private boolean resourcesLoaded = false;
     private final Brawler game;
 
     public SplashScreen(Brawler game) {
@@ -47,7 +46,7 @@ public class SplashScreen implements Screen {
         stage.addActor(table);
         stage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(2f), Actions.delay(2f),
                 Actions.run(() -> stage.addAction(Actions.sequence(Actions.fadeOut(2f), Actions.delay(0f),
-                                Actions.run(() -> splashDone = true )
+                                Actions.run(() -> resourcesLoaded = true )
                         ))
                 )
         ));
@@ -64,16 +63,15 @@ public class SplashScreen implements Screen {
         stage.draw();
 
         if (ResourceManager.update()) {
-            if (splashDone) {
+            if (resourcesLoaded) {
+                AnimationManager.loadAllAnimations();
                 game.setScreen(new MainMenuScreen(game));
             }
         }
     }
 
     @Override
-    public void resize(int w, int h) {
-        stage.getViewport().update(w, h, true);
-    }
+    public void resize(int w, int h) { stage.getViewport().update(w, h, true); }
 
     @Override
     public void pause() {}
@@ -82,9 +80,7 @@ public class SplashScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {
-        dispose();
-    }
+    public void hide() { dispose(); }
 
     @Override
     public void dispose() {

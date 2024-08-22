@@ -14,6 +14,7 @@ public class Constants {
     public static final short COLLIDER_CATEGORY_ENEMY = 0x0002;
     public static final short COLLIDER_CATEGORY_GROUND = 0x0003;
     public static final short COLLIDER_CATEGORY_BORDER = 0x0004;
+    public static final short COLLIDER_CATEGORY_PLAYER_ATTACK = 0X0005;
 
     // Resource Manager
     public static final String UI_SKIN_JSON = "ui/uiskin.json";
@@ -28,7 +29,10 @@ public class Constants {
     public static final String LEVEL_1_MUSIC = "music/level-1-music.mp3";
 
     // Sounds
-    public static final String WALKING_ON_GRASS = "sounds/walking-on-grass.wav";
+    public static final String KAIN_ATTACK_SOUND = "sounds/kain-attack.mp3";
+    public static final String KAIN_GRUNT_SOUND = "sounds/kain-grunt.wav";
+    public static final String LAND_SOUND = "sounds/land.mp3";
+    public static final String WALKING_ON_GRASS_SOUND = "sounds/walking-on-grass.wav";
 
     // Level 1
     public static final String LEVEL_1_MAP = "maps/level-1.tmx";
@@ -52,10 +56,20 @@ public class Constants {
     public static final float KAIN_IDLE_DURATION = 0.15f;
     public static final int KAIN_CROUCH_FRAMES = 2;
     public static final float KAIN_CROUCH_DURATION = 0.1f;
-    public static final float KAIN_JUMP_UP_DURATION = 0.5f;
+    public static final float KAIN_JUMP_UP_DURATION = 0.1f;
     public static final float KAIN_WALK_DURATION = 0.15f;
     public static final float KAIN_WALKING_SOUND_TIMER = 0.20f;
     public static final int KAIN_LAND_FRAMES = 2;
     public static final float KAIN_LAND_DURATION = 0.1f;
     public static final float KAIN_JUMP_DOWN_DURATION = 0.15f;
+    public static final float KAIN_ATTACK_DURATION = 0.1f;
+    public static final int KAIN_ATTACK_FRAMES = 8;
+    public static final String KAIN_IDLE_ANIMATION = "kain_idle";
+    public static final String KAIN_WALK_ANIMATION = "kain_walk";
+    public static final String KAIN_ATTACK_ANIMATION = "kain_attack";
+    public static final String KAIN_CROUCH_DOWN_ANIMATION = "kain_crouch_down";
+    public static final String KAIN_CROUCH_UP_ANIMATION = "kain_crouch_up";
+    public static final String KAIN_JUMP_UP_ANIMATION = "kain_jump_up";
+    public static final String KAIN_JUMP_DOWN_ANIMATION = "kain_jump_down";
+    public static final String KAIN_LAND_ANIMATION = "kain_land";
 }

@@ -6,17 +6,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import static com.svalero.brawler.utils.Constants.*;
 import com.svalero.brawler.managers.SoundManager;
-import com.svalero.brawler.utils.FixtureData.*;
 
 public abstract class Player extends Character {
     private float walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
 
     public Player(World world, Vector2 position, float scale, String characterAtlas, float speed, float width, float height,
                   float spriteWidth, float spriteHeight, float correctionX, float correctionY, float idleDuration,
-                  float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength) {
-        super(world, position, scale, characterAtlas, speed, width, height, EntityType.PLAYER, COLLIDER_CATEGORY_PLAYER,
+                  float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
+        super(world, position, scale, characterAtlas, speed, width, height, COLLIDER_CATEGORY_PLAYER,
                 spriteWidth, spriteHeight, correctionX, correctionY, idleDuration, walkDuration, jumpUpDuration, jumpDownDuration,
-                jumpStrength);
+                jumpStrength, idleAnimationKey);
     }
 
     public void update(float dt) {
@@ -31,87 +30,93 @@ public abstract class Player extends Character {
     // TODO agachado y alternarlos?
     // TODO Faltan ataques (idle, jump, crouch) y el movimiento especial
     // TODO Faltan bloqueos
-    // TODO Cambiar en el atlas landing por land
     // TODO Enemigos
     // TODO Daño
     // TODO Pause
-    // TODO Sonidos con mute
+    // TODO Todo el tema de agacharse
 
     public void manageInput(float dt) {
         Vector2 velocity = body.getLinearVelocity();
 
         // WALK
         if (currentState == State.WALK) {
-            currentState = State.IDLE;
+            setCurrentStateWithoutReset(State.IDLE);
         }
 
         // IDLE
         if (currentState == State.IDLE) {
             velocity.x = 0;
-            currentAnimation = getIdleAnimation();
+            currentAnimation = getIdleAnimation(KAIN_IDLE_ANIMATION);
 
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 velocity.x = speed;
-                currentState = State.WALK;
-                currentAnimation = getWalkAnimation();
+                setCurrentStateWithoutReset(State.WALK);
+                currentAnimation = getWalkAnimation(KAIN_WALK_ANIMATION);
                 facingLeft = false;
-                SoundManager.playLongSound(WALKING_ON_GRASS, "kain_walk");
+                SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
                 walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 velocity.x = -speed;
-                currentState = State.WALK;
-                currentAnimation = getWalkAnimation();
+                setCurrentStateWithoutReset(State.WALK);
+                currentAnimation = getWalkAnimation(KAIN_WALK_ANIMATION);
                 facingLeft = true;
-                SoundManager.playLongSound(WALKING_ON_GRASS, "kain_walk");
+                SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
                 walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchDownAnimation();
+                currentAnimation = getCrouchDownAnimation(KAIN_CROUCH_DOWN_ANIMATION);
                 velocity.x = 0;
-                currentState = State.CROUCH_DOWN;
+                setCurrentState(State.CROUCH_DOWN);
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
                 velocity.y = jumpStrength;
-                currentState = State.JUMP_UP;
+                SoundManager.playSound(KAIN_GRUNT_SOUND);
+                setCurrentState(State.JUMP_UP);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+                velocity.x = 0;
+                currentAnimation = getAttackAnimation(KAIN_ATTACK_ANIMATION);
+                SoundManager.playSound(KAIN_ATTACK_SOUND);
+                setCurrentState(State.ATTACK);
             }
 
         // CROUCH DOWN
         } else if (currentState == State.CROUCH_DOWN) {
             if (stateTime >= KAIN_CROUCH_FRAMES * KAIN_CROUCH_DURATION) {
-                currentState = State.CROUCH;
+                setCurrentState(State.CROUCH);
             }
             if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchUpAnimation();
-                currentState = State.CROUCH_UP;
+                currentAnimation = getCrouchUpAnimation(KAIN_CROUCH_UP_ANIMATION);
+                setCurrentState(State.CROUCH_UP);
             }
 
         // CROUCH
         } else if (currentState == State.CROUCH) {
-            currentAnimation = getCrouchAnimation();
+            currentAnimation = getCrouchAnimation(KAIN_CROUCH_DOWN_ANIMATION);
             if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchUpAnimation();
-                currentState = State.CROUCH_UP;
+                currentAnimation = getCrouchUpAnimation(KAIN_CROUCH_UP_ANIMATION);
+                setCurrentState(State.CROUCH_UP);
             }
 
         // CROUCH UP
         } else if (currentState == State.CROUCH_UP) {
             if (stateTime >= KAIN_CROUCH_FRAMES * KAIN_CROUCH_DURATION) {
-                currentState = State.IDLE;
+                setCurrentStateWithoutReset(State.IDLE);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchDownAnimation();
-                currentState = State.CROUCH_DOWN;
+                currentAnimation = getCrouchDownAnimation(KAIN_CROUCH_DOWN_ANIMATION);
+                setCurrentState(State.CROUCH_DOWN);
             }
 
         // JUMP UP
         } else if (currentState == State.JUMP_UP || currentState == State.JUMP_DOWN) {
             if (velocity.y > 0) {
-                currentAnimation = getJumpUpAnimation();
-                currentState = State.JUMP_UP;
+                currentAnimation = getJumpUpAnimation(KAIN_JUMP_UP_ANIMATION);
+                setCurrentState(State.JUMP_UP);
             } else if (velocity.y < 0) {
-                currentAnimation = getJumpDownAnimation();
-                currentState = State.JUMP_DOWN;
+                currentAnimation = getJumpDownAnimation(KAIN_JUMP_DOWN_ANIMATION);
+                setCurrentState(State.JUMP_DOWN);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 velocity.x = body.getLinearVelocity().x + speed * 0.05f;
@@ -122,17 +127,26 @@ public abstract class Player extends Character {
 
         // LAND
         } else if (currentState == State.LAND) {
-            currentAnimation = getLandAnimation();
+            currentAnimation = getLandAnimation(KAIN_LAND_ANIMATION);
             velocity.x = 0;
+            SoundManager.playLongSound(LAND_SOUND, "kain_land");
             if (stateTime >= KAIN_LAND_FRAMES * KAIN_LAND_DURATION) {
-                currentState = State.IDLE;
+                SoundManager.stopLongSound(LAND_SOUND, "kain_land");
+                setCurrentState(State.IDLE);
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    currentState = State.WALK;
+                    setCurrentState(State.WALK);
                 }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchDownAnimation();
-                currentState = State.CROUCH_DOWN;
+                currentAnimation = getCrouchDownAnimation(KAIN_CROUCH_DOWN_ANIMATION);
+                setCurrentState(State.CROUCH_DOWN);
+            }
+        }
+
+        // ATTACK
+        if (currentState == State.ATTACK) {
+            if (stateTime >= KAIN_ATTACK_FRAMES * KAIN_ATTACK_DURATION) {
+                setCurrentState(State.IDLE);
             }
         }
 
@@ -141,7 +155,7 @@ public abstract class Player extends Character {
             if (walkingSoundTimer > 0) {
                 walkingSoundTimer -= dt;
             } else {
-                SoundManager.stopLongSound(WALKING_ON_GRASS, "kain_walk");
+                SoundManager.stopLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
             }
         }
 

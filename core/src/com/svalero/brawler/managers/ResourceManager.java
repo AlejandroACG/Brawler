@@ -15,7 +15,10 @@ public class ResourceManager {
 
     public static void loadAllResources() {
         // Cargar sonidos
-        assets.load(WALKING_ON_GRASS, Sound.class);
+        assets.load(KAIN_ATTACK_SOUND, Sound.class);
+        assets.load(KAIN_GRUNT_SOUND, Sound.class);
+        assets.load(LAND_SOUND, Sound.class);
+        assets.load(WALKING_ON_GRASS_SOUND, Sound.class);
 
         // Cargar música
         assets.load(MENU_MUSIC, Music.class);
@@ -32,9 +35,7 @@ public class ResourceManager {
         assets.finishLoading();
     }
 
-    public static boolean update() {
-        return assets.update();
-    }
+    public static boolean update() { return assets.update(); }
 
     public static Texture getTexture(String path) {
         return assets.get(path, Texture.class);

@@ -3,16 +3,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.svalero.brawler.utils.FixtureData;
+import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.utils.IDGenerator;
 import static com.svalero.brawler.utils.Constants.*;
-import com.svalero.brawler.utils.FixtureData.*;
 
 public abstract class Character implements Disposable {
     protected TextureAtlas textureAtlas;
@@ -38,6 +35,7 @@ public abstract class Character implements Disposable {
     protected final float jumpUpDuration;
     protected final float jumpDownDuration;
     protected final float jumpStrength;
+    protected Animation<TextureRegion> getCurrentAnimation;
 
     public enum State {
         IDLE,
@@ -50,13 +48,13 @@ public abstract class Character implements Disposable {
         CROUCH,
         CROUCH_UP,
         BLOCK,
-        HURT
+        HIT
     }
 
     public Character(World world, Vector2 position, float scale,
-                     String characterAtlas, float speed, float width, float height, EntityType entityType, short category,
+                     String characterAtlas, float speed, float width, float height, short category,
                      float spriteWidth, float spriteHeight, float correctionX, float correctionY, float idleDuration,
-                     float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength) {
+                     float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
         this.position = position;
         this.scale = scale;
         this.speed = speed;
@@ -73,12 +71,13 @@ public abstract class Character implements Disposable {
         this.jumpUpDuration = jumpUpDuration;
         this.jumpDownDuration = jumpDownDuration;
         this.jumpStrength = jumpStrength;
-        createBody(world, characterAtlas, entityType, category);
+        this.currentAnimation = AnimationManager.getAnimation("kain_idle");
+        createBody(world, characterAtlas, category, idleAnimationKey);
     }
 
-    protected void createBody(World world, String characterAtlas, EntityType entityType, short category) {
+    protected void createBody(World world, String characterAtlas, short category, String idleAnimationKey) {
         textureAtlas = new TextureAtlas(Gdx.files.internal(characterAtlas));
-        currentAnimation = getIdleAnimation();
+        currentAnimation = getIdleAnimation(idleAnimationKey);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -86,10 +85,10 @@ public abstract class Character implements Disposable {
 
         body = world.createBody(bodyDef);
 
-        createBodyFixtures(entityType, scale, category);
+        createBodyFixtures(scale, category);
     }
 
-    protected void createBodyFixtures(FixtureData.EntityType entityType, float scale, short category) {
+    protected void createBodyFixtures(float scale, short category) {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 2f * scale, height / 2f * scale);
         FixtureDef fixtureDef = new FixtureDef();
@@ -98,91 +97,91 @@ public abstract class Character implements Disposable {
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0.0f;
         fixtureDef.filter.categoryBits = category;
-        if (category == COLLIDER_CATEGORY_PLAYER) {
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_ENEMY | COLLIDER_CATEGORY_BORDER;
-        } else {
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_PLAYER;
-        }
-        FixtureData bodyData = new FixtureData(entityType, id, FixtureData.SensorType.BODY);
-        body.createFixture(fixtureDef).setUserData(bodyData);
+        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER;
+        body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
         PolygonShape sensorShape = new PolygonShape();
         Vector2 sensorPosition = new Vector2(0f, -height / 2f * scale);
         sensorShape.setAsBox(width / 2f * scale, 0.1f, sensorPosition, 0f);
-        FixtureDef fixtureSensorDef = new FixtureDef();
-        fixtureSensorDef.shape = sensorShape;
-        fixtureSensorDef.isSensor = true;
-        FixtureData footData = new FixtureData(entityType, id, FixtureData.SensorType.FOOT);
-        body.createFixture(fixtureSensorDef).setUserData(footData);
+        FixtureDef sensorFixtureDef = new FixtureDef();
+        sensorFixtureDef.shape = sensorShape;
+        sensorFixtureDef.isSensor = true;
+        sensorFixtureDef.filter.categoryBits = category;
+        sensorFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ENEMY /*| COLLIDER_CATEGORY_ATTACK*/;
+        body.createFixture(sensorFixtureDef).setUserData(this);
         sensorShape.dispose();
     }
 
-    public Animation<TextureRegion> getIdleAnimation() {
-        Array<AtlasRegion> idleFrames = textureAtlas.findRegions("idle");
+    public void setCurrentState(State state) {
+        if (this.currentState != state) {
+            this.currentState = state;
+            stateTime = 0;
+            // Para manejar el crouch que carece de animación propia
+            if (this.currentState == State.CROUCH) {
+                stateTime = 3;
+            }
+        }
+    }
+
+    public void setCurrentStateWithoutReset(State state) {
+        if (this.currentState != state) {
+            this.currentState = state;
+        }
+    }
+
+    public Animation<TextureRegion> getIdleAnimation(String animationKey) {
+        Animation<TextureRegion> idleAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = true;
-        if (currentState != State.IDLE) {
-            stateTime = 0;
-        }
-        return new Animation<>(idleDuration, idleFrames, Animation.PlayMode.LOOP);
+        return idleAnimation;
     }
 
-    public Animation<TextureRegion> getWalkAnimation() {
-        Array<AtlasRegion> walkFrames = textureAtlas.findRegions("walk");
+    public Animation<TextureRegion> getWalkAnimation(String animationKey) {
+        Animation<TextureRegion> walkAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = true;
-        if (currentState != State.WALK) {
-            stateTime = 0;
-        }
-        return new Animation<>(walkDuration, walkFrames, Animation.PlayMode.LOOP);
+        return walkAnimation;
     }
 
-    public Animation<TextureRegion> getCrouchDownAnimation() {
-        Array<AtlasRegion> crouchFrames = textureAtlas.findRegions("crouch");
+    public Animation<TextureRegion> getCrouchDownAnimation(String animationKey) {
+        Animation<TextureRegion> crouchDownAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = false;
-        if (currentState != State.CROUCH_DOWN) {
-            stateTime = 0;
-        }
-        return new Animation<>(KAIN_CROUCH_DURATION, crouchFrames, Animation.PlayMode.NORMAL);
+        return crouchDownAnimation;
     }
 
-    public Animation<TextureRegion> getCrouchAnimation() {
-        Array<AtlasRegion> crouchFrames = textureAtlas.findRegions("crouch");
+    public Animation<TextureRegion> getCrouchAnimation(String animationKey) {
+        Animation<TextureRegion> crouchAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = false;
-        return new Animation<>(KAIN_CROUCH_DURATION, crouchFrames, Animation.PlayMode.NORMAL);
+        return crouchAnimation;
     }
 
-    public Animation<TextureRegion> getCrouchUpAnimation() {
-        Array<AtlasRegion> crouchFrames = textureAtlas.findRegions("crouch");
-        crouchFrames.reverse();
+    public Animation<TextureRegion> getCrouchUpAnimation(String animationKey) {
+        Animation<TextureRegion> crouchUpAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = false;
-        if (currentState != State.CROUCH_UP) {
-            stateTime = 0;
-        }
-        return new Animation<>(KAIN_CROUCH_DURATION, crouchFrames, Animation.PlayMode.NORMAL);
+        return crouchUpAnimation;
     }
 
-    public Animation<TextureRegion> getJumpUpAnimation() {
-        Array<AtlasRegion> jumpUpFrames = textureAtlas.findRegions("jump_up");
+    public Animation<TextureRegion> getJumpUpAnimation(String animationKey) {
+        Animation<TextureRegion> jumpUpAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = false;
-        if (currentState != State.JUMP_UP) {
-            stateTime = 0;
-        }
-        return new Animation<>(jumpUpDuration, jumpUpFrames, Animation.PlayMode.NORMAL);
+        return jumpUpAnimation;
     }
 
-    public Animation<TextureRegion> getJumpDownAnimation() {
-        Array<AtlasRegion> jumpDownFrames = textureAtlas.findRegions("jump_down");
+    public Animation<TextureRegion> getJumpDownAnimation(String animationKey) {
+        Animation<TextureRegion> jumpDownAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = false;
-        if (currentState != State.JUMP_DOWN) {
-            stateTime = 0;
-        }
-        return new Animation<>(jumpDownDuration, jumpDownFrames, Animation.PlayMode.NORMAL);
+        return jumpDownAnimation;
     }
 
-    public Animation<TextureRegion> getLandAnimation() {
-        Array<AtlasRegion> landFrames = textureAtlas.findRegions("landing");
+    public Animation<TextureRegion> getLandAnimation(String animationKey) {
+        Animation<TextureRegion> landAnimation = AnimationManager.getAnimation(animationKey);
         animationLoop = false;
-        return new Animation<>(KAIN_LAND_DURATION, landFrames, Animation.PlayMode.NORMAL);
+        return landAnimation;
+    }
+
+    public Animation<TextureRegion> getAttackAnimation(String animationKey) {
+        Animation<TextureRegion> attackAnimation = AnimationManager.getAnimation(animationKey);
+        animationLoop = false;
+        return attackAnimation;
     }
 
     public void draw(SpriteBatch batch) {
@@ -203,10 +202,6 @@ public abstract class Character implements Disposable {
 
     protected TextureRegion getCurrentFrame() {
         return currentAnimation.getKeyFrame(stateTime, animationLoop);
-    }
-
-    public void setCurrentState(State state) {
-        currentState = state;
     }
 
     public State getCurrentState() {

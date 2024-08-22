@@ -14,13 +14,11 @@ import com.svalero.brawler.domains.Character;
 import com.svalero.brawler.domains.Enemy;
 import com.svalero.brawler.domains.Kain;
 import com.svalero.brawler.domains.Player;
-import com.svalero.brawler.utils.FixtureData;
 import com.svalero.brawler.utils.ParallaxLayer;
 import java.util.HashMap;
 import java.util.Map;
 import static com.svalero.brawler.utils.Constants.*;
 import com.svalero.brawler.managers.ConfigurationManager.SelectedCharacter;
-import com.svalero.brawler.utils.FixtureData.*;
 import com.svalero.brawler.domains.Character.*;
 
 public class LevelManager {
@@ -92,16 +90,16 @@ public class LevelManager {
             if (object.getProperties().containsKey("tag")) {
                 if (object instanceof RectangleMapObject) {
                     if (object.getProperties().get("tag", String.class).equals("ground")) {
-                        createScenarioBody(object, EntityType.GROUND, SensorType.GROUND, COLLIDER_CATEGORY_GROUND);
+                        createScenarioBody(object, COLLIDER_CATEGORY_GROUND);
                     } else if (object.getProperties().get("tag", String.class).equals("border")) {
-                        createScenarioBody(object, EntityType.BORDER, SensorType.BORDER, COLLIDER_CATEGORY_BORDER);
+                        createScenarioBody(object, COLLIDER_CATEGORY_BORDER);
                     }
                 }
             }
         }
     }
 
-    public void createScenarioBody(MapObject object, EntityType entityType, SensorType sensorType, short category) {
+    public void createScenarioBody(MapObject object, short category) {
         Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
         BodyDef bodyDef = new BodyDef();
@@ -115,13 +113,8 @@ public class LevelManager {
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
         fixtureDef.filter.categoryBits = category;
-        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER | COLLIDER_CATEGORY_ENEMY;
-        if (category == COLLIDER_CATEGORY_BORDER) {
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER;
-        }
-        Fixture fixture = body.createFixture(fixtureDef);
-        FixtureData groundData = new FixtureData(entityType, -2, sensorType);
-        fixture.setUserData(groundData);
+        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER | COLLIDER_CATEGORY_ENEMY; // Colisiones sólidas con jugador y enemigos
+        body.createFixture(fixtureDef);
         shape.dispose();
     }
 
@@ -148,13 +141,13 @@ public class LevelManager {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                FixtureData fixtureDataA = (FixtureData) contact.getFixtureA().getUserData();
-                FixtureData fixtureDataB = (FixtureData) contact.getFixtureB().getUserData();
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
 
-                // Landing
-                if (fixtureDataA.entityType == EntityType.GROUND || fixtureDataB.entityType == EntityType.GROUND) {
-                    FixtureData characterData = fixtureDataA.entityType == EntityType.GROUND ? fixtureDataB : fixtureDataA;
-                    Character character = characters.get(characterData.id);
+                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && fixtureB.getUserData() instanceof Character) ||
+                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && fixtureA.getUserData() instanceof Character)) {
+
+                    Character character = (Character) (fixtureA.getUserData() instanceof Character ? fixtureA.getUserData() : fixtureB.getUserData());
                     if (character.getCurrentState() == State.JUMP_DOWN || character.getCurrentState() == State.JUMP_UP) {
                         character.setStateTime(0);
                         character.setCurrentState(State.LAND);
@@ -163,28 +156,13 @@ public class LevelManager {
             }
 
             @Override
-            public void endContact(Contact contact) {
-                FixtureData fixtureDataA = (FixtureData) contact.getFixtureA().getUserData();
-                FixtureData fixtureDataB = (FixtureData) contact.getFixtureB().getUserData();
-
-                // Jumping
-//                if (fixtureDataA.entityType == EntityType.GROUND || fixtureDataB.entityType == EntityType.GROUND) {
-//                    FixtureData characterData = fixtureDataA.entityType == EntityType.GROUND ? fixtureDataB : fixtureDataA;
-//                    if(characters.get(characterData.id).body.getLinearVelocity().y >= 0) {
-//                        characters.get(characterData.id).setCurrentState(State.JUMP_UP);
-//                    } else {
-//                        characters.get(characterData.id).setCurrentState(State.JUMP_DOWN);
-//                    }
-//                }
-            }
+            public void endContact(Contact contact) {}
 
             @Override
-            public void preSolve(Contact contact, Manifold manifold) {
-            }
+            public void preSolve(Contact contact, Manifold manifold) {}
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-            }
+            public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
         });
     }
 
