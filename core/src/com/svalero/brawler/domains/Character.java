@@ -36,6 +36,7 @@ public abstract class Character implements Disposable {
     protected final float jumpDownDuration;
     protected final float jumpStrength;
     protected Animation<TextureRegion> getCurrentAnimation;
+    protected Fixture attackFixture;
 
     public enum State {
         IDLE,
@@ -52,7 +53,7 @@ public abstract class Character implements Disposable {
     }
 
     public Character(World world, Vector2 position, float scale,
-                     String characterAtlas, float speed, float width, float height, short category,
+                     String characterAtlas, float speed, float width, float height,
                      float spriteWidth, float spriteHeight, float correctionX, float correctionY, float idleDuration,
                      float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
         this.position = position;
@@ -72,10 +73,10 @@ public abstract class Character implements Disposable {
         this.jumpDownDuration = jumpDownDuration;
         this.jumpStrength = jumpStrength;
         this.currentAnimation = AnimationManager.getAnimation("kain_idle");
-        createBody(world, characterAtlas, category, idleAnimationKey);
+        createBody(world, characterAtlas, idleAnimationKey);
     }
 
-    protected void createBody(World world, String characterAtlas, short category, String idleAnimationKey) {
+    protected void createBody(World world, String characterAtlas, String idleAnimationKey) {
         textureAtlas = new TextureAtlas(Gdx.files.internal(characterAtlas));
         currentAnimation = getIdleAnimation(idleAnimationKey);
 
@@ -85,10 +86,10 @@ public abstract class Character implements Disposable {
 
         body = world.createBody(bodyDef);
 
-        createBodyFixtures(scale, category);
+        createBodyFixtures(scale);
     }
 
-    protected void createBodyFixtures(float scale, short category) {
+    protected void createBodyFixtures(float scale) {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 2f * scale, height / 2f * scale);
         FixtureDef fixtureDef = new FixtureDef();
@@ -96,7 +97,7 @@ public abstract class Character implements Disposable {
         fixtureDef.density = 1f;
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0.0f;
-        fixtureDef.filter.categoryBits = category;
+        fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_BODY;
         fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER;
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
@@ -107,10 +108,28 @@ public abstract class Character implements Disposable {
         FixtureDef sensorFixtureDef = new FixtureDef();
         sensorFixtureDef.shape = sensorShape;
         sensorFixtureDef.isSensor = true;
-        sensorFixtureDef.filter.categoryBits = category;
-        sensorFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ENEMY /*| COLLIDER_CATEGORY_ATTACK*/;
+        sensorFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_BODY;
+//        sensorFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ENEMY_ATTACK;
         body.createFixture(sensorFixtureDef).setUserData(this);
         sensorShape.dispose();
+    }
+
+    public void createAttackFixture() {
+        PolygonShape attackShape = new PolygonShape();
+        float attackWidth = width * 1.5f;
+        float attackHeight = height * 0.5f;
+        float offsetX = facingLeft ? -attackWidth / 2 : attackWidth / 2;
+        attackShape.setAsBox(attackWidth / 2, attackHeight / 2, new Vector2(offsetX, 0), 0);
+
+        FixtureDef attackFixtureDef = new FixtureDef();
+        attackFixtureDef.shape = attackShape;
+        attackFixtureDef.isSensor = true;
+        attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK;
+        attackFixtureDef.filter.maskBits = COLLIDER_CATEGORY_BODY;
+
+        attackFixture = body.createFixture(attackFixtureDef);
+        attackFixture.setUserData(this);
+        attackShape.dispose();
     }
 
     public void setCurrentState(State state) {

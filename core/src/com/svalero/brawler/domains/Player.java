@@ -13,7 +13,7 @@ public abstract class Player extends Character {
     public Player(World world, Vector2 position, float scale, String characterAtlas, float speed, float width, float height,
                   float spriteWidth, float spriteHeight, float correctionX, float correctionY, float idleDuration,
                   float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
-        super(world, position, scale, characterAtlas, speed, width, height, COLLIDER_CATEGORY_PLAYER,
+        super(world, position, scale, characterAtlas, speed, width, height,
                 spriteWidth, spriteHeight, correctionX, correctionY, idleDuration, walkDuration, jumpUpDuration, jumpDownDuration,
                 jumpStrength, idleAnimationKey);
     }
@@ -79,6 +79,7 @@ public abstract class Player extends Character {
                 currentAnimation = getAttackAnimation(KAIN_ATTACK_ANIMATION);
                 SoundManager.playSound(KAIN_ATTACK_SOUND);
                 setCurrentState(State.ATTACK);
+                createAttackFixture();
             }
 
         // CROUCH DOWN
@@ -129,9 +130,10 @@ public abstract class Player extends Character {
         } else if (currentState == State.LAND) {
             currentAnimation = getLandAnimation(KAIN_LAND_ANIMATION);
             velocity.x = 0;
-            SoundManager.playLongSound(LAND_SOUND, "kain_land");
+            if (stateTime == 0) {
+                SoundManager.playSound(LAND_SOUND);
+            }
             if (stateTime >= KAIN_LAND_FRAMES * KAIN_LAND_DURATION) {
-                SoundManager.stopLongSound(LAND_SOUND, "kain_land");
                 setCurrentState(State.IDLE);
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D)) {
                     setCurrentState(State.WALK);
@@ -147,6 +149,15 @@ public abstract class Player extends Character {
         if (currentState == State.ATTACK) {
             if (stateTime >= KAIN_ATTACK_FRAMES * KAIN_ATTACK_DURATION) {
                 setCurrentState(State.IDLE);
+                if (attackFixture != null) {
+                    body.destroyFixture(attackFixture);
+                    attackFixture = null;
+                }
+            }
+        } else {
+            if (attackFixture != null) {
+                body.destroyFixture(attackFixture);
+                attackFixture = null;
             }
         }
 

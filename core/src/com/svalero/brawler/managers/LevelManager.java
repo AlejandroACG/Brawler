@@ -113,7 +113,7 @@ public class LevelManager {
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
         fixtureDef.filter.categoryBits = category;
-        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER | COLLIDER_CATEGORY_ENEMY; // Colisiones sólidas con jugador y enemigos
+        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_BODY; // Colisiones sólidas con jugador y enemigos
         body.createFixture(fixtureDef);
         shape.dispose();
     }
@@ -143,9 +143,12 @@ public class LevelManager {
             public void beginContact(Contact contact) {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
+                Object userDataA = fixtureA.getUserData();
+                Object userDataB = fixtureB.getUserData();
 
-                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && fixtureB.getUserData() instanceof Character) ||
-                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && fixtureA.getUserData() instanceof Character)) {
+                // Detección de colisión con el suelo al caer de un salto
+                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataB instanceof Character) ||
+                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataA instanceof Character)) {
 
                     Character character = (Character) (fixtureA.getUserData() instanceof Character ? fixtureA.getUserData() : fixtureB.getUserData());
                     if (character.getCurrentState() == State.JUMP_DOWN || character.getCurrentState() == State.JUMP_UP) {
@@ -153,16 +156,26 @@ public class LevelManager {
                         character.setCurrentState(State.LAND);
                     }
                 }
+
+                // Detección de colisión de ataques normales
+                if (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataA instanceof Enemy && userDataB instanceof Player) {
+                    handleAttackHit((Character) userDataA, (Character) userDataB);
+                } else if (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataB instanceof Enemy && userDataA instanceof Player) {
+                    handleAttackHit((Character) userDataB, (Character) userDataA);
+                }
+            }
+
+            private void handleAttackHit(Character attacker, Character victim) {
             }
 
             @Override
             public void endContact(Contact contact) {}
 
             @Override
-            public void preSolve(Contact contact, Manifold manifold) {}
+            public void preSolve(Contact contact, Manifold oldManifold) {}
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
     }
 
