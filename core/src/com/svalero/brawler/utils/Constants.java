@@ -60,9 +60,15 @@ public class Constants {
     public static final float KAIN_WALKING_SOUND_TIMER = 0.20f;
     public static final int KAIN_LAND_FRAMES = 2;
     public static final float KAIN_LAND_DURATION = 0.1f;
-    public static final float KAIN_JUMP_DOWN_DURATION = 0.15f;
-    public static final float KAIN_ATTACK_DURATION = 0.1f;
+    public static final float KAIN_JUMP_DOWN_DURATION = 0.1f;
     public static final int KAIN_ATTACK_FRAMES = 8;
+    public static final float KAIN_ATTACK_DURATION = 0.1f;
+    public static final float KAIN_ATTACK_WIDTH = 98f;
+    public static final int KAIN_JUMP_ATTACK_FRAMES = 8;
+    public static final float KAIN_JUMP_ATTACK_DURATION = 0.1f;
+    public static final float KAIN_ATTACK_HEIGHT = 29f;
+    public static final float KAIN_JUMP_ATTACK_WIDTH = 58f;
+    public static final float KAIN_JUMP_ATTACK_HEIGHT = 39f;
     public static final String KAIN_IDLE_ANIMATION = "kain_idle";
     public static final String KAIN_WALK_ANIMATION = "kain_walk";
     public static final String KAIN_ATTACK_ANIMATION = "kain_attack";
@@ -71,4 +77,5 @@ public class Constants {
     public static final String KAIN_JUMP_UP_ANIMATION = "kain_jump_up";
     public static final String KAIN_JUMP_DOWN_ANIMATION = "kain_jump_down";
     public static final String KAIN_LAND_ANIMATION = "kain_land";
+    public static final String KAIN_JUMP_ATTACK_ANIMATION = "kain_jump_attack";
 }

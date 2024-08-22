@@ -34,6 +34,8 @@ public abstract class Player extends Character {
     // TODO Daño
     // TODO Pause
     // TODO Todo el tema de agacharse
+    // TODO Ataque especial
+    // TODO Darle ángulo al fixture del ataque aéreo para mejorar la hitbox
 
     public void manageInput(float dt) {
         Vector2 velocity = body.getLinearVelocity();
@@ -79,7 +81,10 @@ public abstract class Player extends Character {
                 currentAnimation = getAttackAnimation(KAIN_ATTACK_ANIMATION);
                 SoundManager.playSound(KAIN_ATTACK_SOUND);
                 setCurrentState(State.ATTACK);
-                createAttackFixture();
+
+                float offsetX = facingLeft ? -(width / 2 + KAIN_ATTACK_WIDTH / 2) * scale : (width / 2 + KAIN_ATTACK_WIDTH / 2) * scale;
+                float offsetY = (KAIN_ATTACK_HEIGHT / 2) * scale;
+                createAttackFixture(offsetX, offsetY, KAIN_ATTACK_WIDTH, KAIN_ATTACK_HEIGHT);
             }
 
         // CROUCH DOWN
@@ -125,6 +130,16 @@ public abstract class Player extends Character {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 velocity.x = body.getLinearVelocity().x - speed * 0.05f;
             }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !hasAttackedThisJump) {
+                currentAnimation = getAttackAnimation(KAIN_JUMP_ATTACK_ANIMATION);
+                SoundManager.playSound(KAIN_ATTACK_SOUND);
+                setCurrentState(State.JUMP_ATTACK);
+                setHasAttackedThisJump(true);
+
+                float offsetX = facingLeft ? -(width / 2 + KAIN_JUMP_ATTACK_WIDTH / 2) * scale : (width / 2 + KAIN_JUMP_ATTACK_WIDTH / 2) * scale;
+                float offsetY = (-(KAIN_JUMP_ATTACK_HEIGHT / 2) + 9) * scale;
+                createAttackFixture(offsetX, offsetY, KAIN_JUMP_ATTACK_WIDTH, KAIN_JUMP_ATTACK_HEIGHT);
+            }
 
         // LAND
         } else if (currentState == State.LAND) {
@@ -150,15 +165,26 @@ public abstract class Player extends Character {
             if (stateTime >= KAIN_ATTACK_FRAMES * KAIN_ATTACK_DURATION) {
                 setCurrentState(State.IDLE);
                 if (attackFixture != null) {
-                    body.destroyFixture(attackFixture);
-                    attackFixture = null;
+                    clearAttackFixture();
                 }
             }
-        } else {
-            if (attackFixture != null) {
-                body.destroyFixture(attackFixture);
-                attackFixture = null;
+        }
+
+        // JUMP ATTACK
+        if (currentState == State.JUMP_ATTACK) {
+            velocity.y = 0;
+            velocity.x = 0;
+            if (stateTime >= KAIN_JUMP_ATTACK_FRAMES * KAIN_JUMP_ATTACK_DURATION) {
+                setCurrentState(State.JUMP_DOWN);
+                if (attackFixture != null) {
+                    clearAttackFixture();
+                }
             }
+        }
+
+        // Erase unused attack fixtures
+        if (currentState != State.ATTACK && currentState != State.JUMP_ATTACK) {
+            clearAttackFixture();
         }
 
         // Stop walking sound

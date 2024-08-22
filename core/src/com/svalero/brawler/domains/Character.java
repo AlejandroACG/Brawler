@@ -37,17 +37,19 @@ public abstract class Character implements Disposable {
     protected final float jumpStrength;
     protected Animation<TextureRegion> getCurrentAnimation;
     protected Fixture attackFixture;
+    protected boolean hasAttackedThisJump = false;
 
     public enum State {
         IDLE,
         WALK,
-        ATTACK,
         JUMP_UP,
         JUMP_DOWN,
         LAND,
         CROUCH_DOWN,
         CROUCH,
         CROUCH_UP,
+        ATTACK,
+        JUMP_ATTACK,
         BLOCK,
         HIT
     }
@@ -109,23 +111,25 @@ public abstract class Character implements Disposable {
         sensorFixtureDef.shape = sensorShape;
         sensorFixtureDef.isSensor = true;
         sensorFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_BODY;
-//        sensorFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ENEMY_ATTACK;
+        sensorFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ATTACK;
         body.createFixture(sensorFixtureDef).setUserData(this);
         sensorShape.dispose();
     }
 
-    public void createAttackFixture() {
+    public void createAttackFixture(float offsetX, float offsetY, float attackWidth, float attackHeight) {
         PolygonShape attackShape = new PolygonShape();
-        float attackWidth = width * 1.5f;
-        float attackHeight = height * 0.5f;
-        float offsetX = facingLeft ? -attackWidth / 2 : attackWidth / 2;
-        attackShape.setAsBox(attackWidth / 2, attackHeight / 2, new Vector2(offsetX, 0), 0);
+
+        attackShape.setAsBox(attackWidth / 2 * scale, attackHeight / 2 * scale, new Vector2(offsetX, offsetY), 0);
 
         FixtureDef attackFixtureDef = new FixtureDef();
         attackFixtureDef.shape = attackShape;
         attackFixtureDef.isSensor = true;
         attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK;
         attackFixtureDef.filter.maskBits = COLLIDER_CATEGORY_BODY;
+
+        if (attackFixture != null) {
+            body.destroyFixture(attackFixture);
+        }
 
         attackFixture = body.createFixture(attackFixtureDef);
         attackFixture.setUserData(this);
@@ -223,24 +227,25 @@ public abstract class Character implements Disposable {
         return currentAnimation.getKeyFrame(stateTime, animationLoop);
     }
 
-    public State getCurrentState() {
-        return currentState;
+    protected void clearAttackFixture() {
+        if (attackFixture != null) {
+            body.destroyFixture(attackFixture);
+            attackFixture = null;
+        }
     }
 
-    public void setStateTime(int stateTime) {
-        this.stateTime = stateTime;
+    public void setHasAttackedThisJump(boolean hasAttackedThisJump) {
+        this.hasAttackedThisJump = hasAttackedThisJump;
     }
 
-    public Vector2 getPosition() {
-        return position;
-    }
+    public State getCurrentState() { return currentState; }
 
-    public int getId() {
-        return id;
-    }
+    public void setStateTime(int stateTime) { this.stateTime = stateTime; }
+
+    public Vector2 getPosition() { return position; }
+
+    public int getId() { return id; }
 
     @Override
-    public void dispose() {
-        textureAtlas.dispose();
-    }
+    public void dispose() { textureAtlas.dispose(); }
 }

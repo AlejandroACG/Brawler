@@ -154,6 +154,7 @@ public class LevelManager {
                     if (character.getCurrentState() == State.JUMP_DOWN || character.getCurrentState() == State.JUMP_UP) {
                         character.setStateTime(0);
                         character.setCurrentState(State.LAND);
+                        character.setHasAttackedThisJump(false);
                     }
                 }
 
