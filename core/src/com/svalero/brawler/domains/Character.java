@@ -103,6 +103,7 @@ public abstract class Character implements Disposable {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position.x, position.y + (height) / 2);
+        bodyDef.fixedRotation = true;
 
         body = world.createBody(bodyDef);
 

@@ -31,6 +31,16 @@ public class AnimationManager {
         TextureAtlas bishamonAtlas = ResourceManager.getAtlas(BISHAMON_ATLAS);
 
         animations.put(BISHAMON_IDLE, new Animation<>(BISHAMON_IDLE_DURATION, bishamonAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
+
+        // HSIEN KO
+        TextureAtlas hsienKoAtlas = ResourceManager.getAtlas(HSIEN_KO_ATLAS);
+
+        animations.put(HSIEN_KO_IDLE, new Animation<>(HSIEN_KO_IDLE_DURATION, hsienKoAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
+
+        // DEATH ADDER
+        TextureAtlas deathAdderAtlas = ResourceManager.getAtlas(DEATH_ADDER_ATLAS);
+
+        animations.put(DEATH_ADDER_IDLE, new Animation<>(DEATH_ADDER_IDLE_DURATION, deathAdderAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
     }
 
     public static Animation<TextureRegion> getAnimation(String key) { return animations.get(key); }
