@@ -10,10 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.svalero.brawler.Brawler;
+import com.svalero.brawler.domains.*;
 import com.svalero.brawler.domains.Character;
-import com.svalero.brawler.domains.Enemy;
-import com.svalero.brawler.domains.Kain;
-import com.svalero.brawler.domains.Player;
 import com.svalero.brawler.utils.ParallaxLayer;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +39,7 @@ public class LevelManager {
         this.currentLevel = currentLevel;
         world = new World(new Vector2(0, GRAVITY), true);
         characters = new HashMap<>();
+        enemies = new HashMap<>();
         mapLoader = new TmxMapLoader();
 
         switch (currentLevel) {
@@ -133,6 +132,13 @@ public class LevelManager {
                     characters.put(player.getId(), player);
                 }
 
+                if (object.getProperties().get("tag", String.class).equals("bishamon")) {
+                    x = object.getProperties().get("x", float.class);
+                    y = object.getProperties().get("y", float.class);
+                    Enemy enemy = new Bishamon(world, new Vector2(x, y));
+                    characters.put(enemy.getId(), enemy);
+                    enemies.put(enemy.getId(), enemy);
+                }
             }
         }
     }
@@ -190,6 +196,8 @@ public class LevelManager {
     }
 
     public Map<Integer, Character> getCharacters() { return characters; }
+
+    public Map<Integer, Enemy> getEnemies() { return enemies; }
 
     public Player getPlayer() { return player; }
 

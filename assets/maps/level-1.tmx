@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="20">
- <editorsettings>
-  <export target="Export/Level 1.tmx" format="tmx"/>
- </editorsettings>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="21">
  <tileset firstgid="1" source="level-1-tileset.tsx"/>
  <layer id="1" name="Tiles" width="60" height="17">
   <data encoding="csv">
@@ -50,6 +47,11 @@
   <object id="19" x="43.1818" y="239.911">
    <properties>
     <property name="tag" value="player"/>
+   </properties>
+  </object>
+  <object id="20" x="279.761" y="239.91">
+   <properties>
+    <property name="tag" value="bishamon"/>
    </properties>
   </object>
  </objectgroup>

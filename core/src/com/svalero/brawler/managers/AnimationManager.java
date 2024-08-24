@@ -26,6 +26,11 @@ public class AnimationManager {
         animations.put(KAIN_LAND, new Animation<>(KAIN_LAND_DURATION, kainAtlas.findRegions("land"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_ATTACK, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_JUMP_ATTACK, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("jump_attack"), Animation.PlayMode.NORMAL));
+
+        // BISHAMON
+        TextureAtlas bishamonAtlas = ResourceManager.getAtlas(BISHAMON_ATLAS);
+
+        animations.put(BISHAMON_IDLE, new Animation<>(BISHAMON_IDLE_DURATION, bishamonAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
     }
 
     public static Animation<TextureRegion> getAnimation(String key) { return animations.get(key); }

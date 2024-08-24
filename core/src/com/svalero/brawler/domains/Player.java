@@ -11,11 +11,11 @@ import com.svalero.brawler.managers.SoundManager;
 public abstract class Player extends Character {
     private float walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
 
-    public Player(World world, Vector2 position, float scale, String characterAtlas, float speed, float width, float height,
-                  float spriteWidth, float spriteHeight, float correctionX, float correctionY, float idleDuration,
-                  float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
-        super(world, position, scale, characterAtlas, speed, width, height,
-                spriteWidth, spriteHeight, correctionX, correctionY, idleDuration, walkDuration, jumpUpDuration, jumpDownDuration,
+    public Player(World world, Vector2 position, String characterAtlas, float speed, float width, float height,
+                  float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
+                  float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
+        super(world, position, characterAtlas, speed, width, height,
+                frameWidth, frameHeight, correctionX, correctionY, idleDuration, jumpUpDuration, jumpDownDuration,
                 jumpStrength, idleAnimationKey);
     }
 

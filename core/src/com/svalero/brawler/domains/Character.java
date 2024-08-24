@@ -22,20 +22,18 @@ public abstract class Character implements Disposable {
     protected Body body;
     protected float width;
     protected float height;
-    protected float scale;
     protected Animation<TextureRegion> currentAnimation;
     protected int id;
     protected State currentState;
-    protected final float spriteWidth;
-    protected final float spriteHeight;
+    protected final float frameWidth;
+    protected final float frameHeight;
     protected final float correctionX;
     protected final float correctionY;
     protected boolean facingLeft;
     protected final float idleDuration;
-    protected final float walkDuration;
-    protected final float jumpUpDuration;
-    protected final float jumpDownDuration;
-    protected final float jumpStrength;
+    protected float jumpUpDuration;
+    protected float jumpDownDuration;
+    protected float jumpStrength;
     protected Animation<TextureRegion> getCurrentAnimation;
     protected Fixture attackFixture;
     protected boolean hasAttackedThisJump = false;
@@ -58,27 +56,43 @@ public abstract class Character implements Disposable {
         HIT
     }
 
-    public Character(World world, Vector2 position, float scale,
+    public Character(World world, Vector2 position,
                      String characterAtlas, float speed, float width, float height,
-                     float spriteWidth, float spriteHeight, float correctionX, float correctionY, float idleDuration,
-                     float walkDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
+                     float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
+                     float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
         this.position = position;
-        this.scale = scale;
         this.speed = speed;
         this.id = IDGenerator.generateUniqueId();
         this.width = width;
         this.height = height;
         this.currentState = State.IDLE;
-        this.spriteWidth = spriteWidth;
-        this.spriteHeight = spriteHeight;
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
         this.correctionX = correctionX;
         this.correctionY = correctionY;
         this.idleDuration = idleDuration;
-        this.walkDuration = walkDuration;
         this.jumpUpDuration = jumpUpDuration;
         this.jumpDownDuration = jumpDownDuration;
         this.jumpStrength = jumpStrength;
-        this.currentAnimation = AnimationManager.getAnimation("kain_idle");
+        createBody(world, characterAtlas, idleAnimationKey);
+    }
+
+    public Character(World world, Vector2 position,
+                     String characterAtlas, float speed, float width, float height,
+                     float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
+                     String idleAnimationKey) {
+        this.position = position;
+        this.speed = speed;
+        this.id = IDGenerator.generateUniqueId();
+        this.width = width;
+        this.height = height;
+        this.currentState = State.IDLE;
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
+        this.correctionX = correctionX;
+        this.correctionY = correctionY;
+        this.idleDuration = idleDuration;
+        this.currentAnimation = AnimationManager.getAnimation(idleAnimationKey);
         createBody(world, characterAtlas, idleAnimationKey);
     }
 
@@ -88,16 +102,16 @@ public abstract class Character implements Disposable {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position.x, position.y + height * scale / 2);
+        bodyDef.position.set(position.x, position.y + (height) / 2);
 
         body = world.createBody(bodyDef);
 
-        createBodyFixtures(scale);
+        createBodyFixtures();
     }
 
-    protected void createBodyFixtures(float scale) {
+    protected void createBodyFixtures() {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2f * scale, height / 2f * scale);
+        shape.setAsBox((width) / 2f, (height) / 2f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
@@ -109,8 +123,8 @@ public abstract class Character implements Disposable {
         shape.dispose();
 
         PolygonShape sensorShape = new PolygonShape();
-        Vector2 sensorPosition = new Vector2(0f, -height / 2f * scale);
-        sensorShape.setAsBox(width / 2f * scale, 0.1f, sensorPosition, 0f);
+        Vector2 sensorPosition = new Vector2(0f, -height / 2f);
+        sensorShape.setAsBox(width / 2f, 0.1f, sensorPosition, 0f);
         FixtureDef sensorFixtureDef = new FixtureDef();
         sensorFixtureDef.shape = sensorShape;
         sensorFixtureDef.isSensor = true;
@@ -123,7 +137,7 @@ public abstract class Character implements Disposable {
     public void createAttackFixture(float offsetX, float offsetY, float attackWidth, float attackHeight) {
         PolygonShape attackShape = new PolygonShape();
 
-        attackShape.setAsBox(attackWidth / 2 * scale, attackHeight / 2 * scale, new Vector2(offsetX, offsetY), 0);
+        attackShape.setAsBox(attackWidth / 2, attackHeight / 2, new Vector2(offsetX, offsetY), 0);
 
         FixtureDef attackFixtureDef = new FixtureDef();
         attackFixtureDef.shape = attackShape;
@@ -163,14 +177,14 @@ public abstract class Character implements Disposable {
             batch.draw(getCurrentFrame(),
                     (position.x - correctionX),
                     (position.y - correctionY),
-                    spriteWidth * scale,
-                    spriteHeight * scale);
+                    frameWidth,
+                    frameHeight);
         } else {
             batch.draw(getCurrentFrame(),
                     (position.x + correctionX),
                     (position.y - correctionY),
-                    -(spriteWidth * scale),
-                    spriteHeight * scale);
+                    -(frameWidth),
+                    frameHeight);
         }
     }
 

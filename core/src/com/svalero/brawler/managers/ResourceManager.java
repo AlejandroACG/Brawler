@@ -29,6 +29,9 @@ public class ResourceManager {
         assets.load(TABLE_BACKGROUND, Texture.class);
         assets.load(LEVEL_1_BACKGROUND, TextureAtlas.class);
         assets.load(KAIN_ATLAS, TextureAtlas.class);
+        assets.load(BISHAMON_ATLAS, TextureAtlas.class);
+        assets.load(HSIEN_KO_ATLAS, TextureAtlas.class);
+        assets.load(DEATH_ADDER_ATLAS, TextureAtlas.class);
     }
 
     public static void finishLoading() {
