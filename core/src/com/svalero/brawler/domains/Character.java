@@ -9,13 +9,15 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.utils.IDGenerator;
+
+import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public abstract class Character implements Disposable {
     protected TextureAtlas textureAtlas;
     protected Vector2 position;
     protected float stateTime = 0;
-    protected int life;
+    protected int health;
     protected float speed;
     protected Body body;
     protected float width;
@@ -24,7 +26,6 @@ public abstract class Character implements Disposable {
     protected Animation<TextureRegion> currentAnimation;
     protected int id;
     protected State currentState;
-    protected boolean animationLoop = true;
     protected final float spriteWidth;
     protected final float spriteHeight;
     protected final float correctionX;
@@ -41,6 +42,7 @@ public abstract class Character implements Disposable {
 
     public enum State {
         IDLE,
+        TURN,
         WALK,
         JUMP_UP,
         JUMP_DOWN,
@@ -50,7 +52,9 @@ public abstract class Character implements Disposable {
         CROUCH_UP,
         ATTACK,
         JUMP_ATTACK,
+        BLOCK_UP,
         BLOCK,
+        BLOCK_DOWN,
         HIT
     }
 
@@ -80,7 +84,7 @@ public abstract class Character implements Disposable {
 
     protected void createBody(World world, String characterAtlas, String idleAnimationKey) {
         textureAtlas = new TextureAtlas(Gdx.files.internal(characterAtlas));
-        currentAnimation = getIdleAnimation(idleAnimationKey);
+        currentAnimation = getAnimation(idleAnimationKey);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -141,6 +145,7 @@ public abstract class Character implements Disposable {
             this.currentState = state;
             stateTime = 0;
             // Para manejar el crouch que carece de animación propia
+            // TODO Podría darle una propia.
             if (this.currentState == State.CROUCH) {
                 stateTime = 3;
             }
@@ -151,60 +156,6 @@ public abstract class Character implements Disposable {
         if (this.currentState != state) {
             this.currentState = state;
         }
-    }
-
-    public Animation<TextureRegion> getIdleAnimation(String animationKey) {
-        Animation<TextureRegion> idleAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = true;
-        return idleAnimation;
-    }
-
-    public Animation<TextureRegion> getWalkAnimation(String animationKey) {
-        Animation<TextureRegion> walkAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = true;
-        return walkAnimation;
-    }
-
-    public Animation<TextureRegion> getCrouchDownAnimation(String animationKey) {
-        Animation<TextureRegion> crouchDownAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = false;
-        return crouchDownAnimation;
-    }
-
-    public Animation<TextureRegion> getCrouchAnimation(String animationKey) {
-        Animation<TextureRegion> crouchAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = false;
-        return crouchAnimation;
-    }
-
-    public Animation<TextureRegion> getCrouchUpAnimation(String animationKey) {
-        Animation<TextureRegion> crouchUpAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = false;
-        return crouchUpAnimation;
-    }
-
-    public Animation<TextureRegion> getJumpUpAnimation(String animationKey) {
-        Animation<TextureRegion> jumpUpAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = false;
-        return jumpUpAnimation;
-    }
-
-    public Animation<TextureRegion> getJumpDownAnimation(String animationKey) {
-        Animation<TextureRegion> jumpDownAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = false;
-        return jumpDownAnimation;
-    }
-
-    public Animation<TextureRegion> getLandAnimation(String animationKey) {
-        Animation<TextureRegion> landAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = false;
-        return landAnimation;
-    }
-
-    public Animation<TextureRegion> getAttackAnimation(String animationKey) {
-        Animation<TextureRegion> attackAnimation = AnimationManager.getAnimation(animationKey);
-        animationLoop = false;
-        return attackAnimation;
     }
 
     public void draw(SpriteBatch batch) {
@@ -224,7 +175,7 @@ public abstract class Character implements Disposable {
     }
 
     protected TextureRegion getCurrentFrame() {
-        return currentAnimation.getKeyFrame(stateTime, animationLoop);
+        return currentAnimation.getKeyFrame(stateTime);
     }
 
     protected void clearAttackFixture() {
@@ -234,9 +185,9 @@ public abstract class Character implements Disposable {
         }
     }
 
-    public void setHasAttackedThisJump(boolean hasAttackedThisJump) {
-        this.hasAttackedThisJump = hasAttackedThisJump;
-    }
+    public void setHasAttackedThisJump(boolean hasAttackedThisJump) { this.hasAttackedThisJump = hasAttackedThisJump; }
+
+    public boolean isFacingLeft() { return facingLeft; }
 
     public State getCurrentState() { return currentState; }
 

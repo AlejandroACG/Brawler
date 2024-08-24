@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 import com.svalero.brawler.managers.SoundManager;
 
@@ -48,26 +49,44 @@ public abstract class Player extends Character {
         // IDLE
         if (currentState == State.IDLE) {
             velocity.x = 0;
-            currentAnimation = getIdleAnimation(KAIN_IDLE_ANIMATION);
+            currentAnimation = getAnimation(KAIN_IDLE);
 
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                velocity.x = speed;
-                setCurrentStateWithoutReset(State.WALK);
-                currentAnimation = getWalkAnimation(KAIN_WALK_ANIMATION);
-                facingLeft = false;
-                SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
-                walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+                if (isFacingLeft()) {
+                    setCurrentState(State.TURN);
+                    // TODO Sound
+                    currentAnimation = getAnimation(KAIN_TURN);
+                    facingLeft = false;
+                } else {
+                    velocity.x = speed;
+                    setCurrentStateWithoutReset(State.WALK);
+                    currentAnimation = getAnimation(KAIN_WALK);
+                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
+                    walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+                }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                velocity.x = -speed;
-                setCurrentStateWithoutReset(State.WALK);
-                currentAnimation = getWalkAnimation(KAIN_WALK_ANIMATION);
-                facingLeft = true;
-                SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
-                walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+                if (!isFacingLeft()) {
+                    setCurrentState(State.TURN);
+                    // TODO Sound
+                    currentAnimation = getAnimation(KAIN_TURN);
+                    facingLeft = true;
+                } else {
+                    velocity.x = -speed;
+                    setCurrentStateWithoutReset(State.WALK);
+                    currentAnimation = getAnimation(KAIN_WALK);
+                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
+                    walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+                }
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+                currentAnimation = getAnimation(KAIN_BLOCK_UP);
+                velocity.x = 0;
+                setCurrentState(State.BLOCK_UP);
+                // TODO Sound
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchDownAnimation(KAIN_CROUCH_DOWN_ANIMATION);
+                currentAnimation = getAnimation(KAIN_CROUCH_DOWN);
                 velocity.x = 0;
                 setCurrentState(State.CROUCH_DOWN);
             }
@@ -78,13 +97,32 @@ public abstract class Player extends Character {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
                 velocity.x = 0;
-                currentAnimation = getAttackAnimation(KAIN_ATTACK_ANIMATION);
+                currentAnimation = getAnimation(KAIN_ATTACK);
                 SoundManager.playSound(KAIN_ATTACK_SOUND);
                 setCurrentState(State.ATTACK);
 
-                float offsetX = facingLeft ? -(width / 2 + KAIN_ATTACK_WIDTH / 2) * scale : (width / 2 + KAIN_ATTACK_WIDTH / 2) * scale;
-                float offsetY = (KAIN_ATTACK_HEIGHT / 2) * scale;
-                createAttackFixture(offsetX, offsetY, KAIN_ATTACK_WIDTH, KAIN_ATTACK_HEIGHT);
+                launchAttack();
+            }
+
+        // TURN
+        } else if (currentState == State.TURN) {
+            if (stateTime >= KAIN_TURN_FRAMES * KAIN_TURN_DURATION) {
+                setCurrentStateWithoutReset(State.WALK);
+            }
+
+        // BLOCK
+        } else if (currentState == State.BLOCK_UP) {
+            if (stateTime >= KAIN_BLOCK_FRAMES * KAIN_BLOCK_DURATION) {
+                setCurrentStateWithoutReset(State.BLOCK);
+            }
+        } else if (currentState == State.BLOCK) {
+            if (!Gdx.input.isKeyPressed(Input.Keys.K)) {
+                currentAnimation = getAnimation(KAIN_BLOCK_DOWN);
+                setCurrentState(State.BLOCK_DOWN);
+            }
+        } else if (currentState == State.BLOCK_DOWN) {
+            if (stateTime >= KAIN_BLOCK_FRAMES * KAIN_BLOCK_DURATION) {
+                setCurrentStateWithoutReset(State.IDLE);
             }
 
         // CROUCH DOWN
@@ -93,15 +131,15 @@ public abstract class Player extends Character {
                 setCurrentState(State.CROUCH);
             }
             if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchUpAnimation(KAIN_CROUCH_UP_ANIMATION);
+                currentAnimation = getAnimation(KAIN_CROUCH_UP);
                 setCurrentState(State.CROUCH_UP);
             }
 
         // CROUCH
         } else if (currentState == State.CROUCH) {
-            currentAnimation = getCrouchAnimation(KAIN_CROUCH_DOWN_ANIMATION);
+            currentAnimation = getAnimation(KAIN_CROUCH_DOWN);
             if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchUpAnimation(KAIN_CROUCH_UP_ANIMATION);
+                currentAnimation = getAnimation(KAIN_CROUCH_UP);
                 setCurrentState(State.CROUCH_UP);
             }
 
@@ -111,17 +149,17 @@ public abstract class Player extends Character {
                 setCurrentStateWithoutReset(State.IDLE);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchDownAnimation(KAIN_CROUCH_DOWN_ANIMATION);
+                currentAnimation = getAnimation(KAIN_CROUCH_DOWN);
                 setCurrentState(State.CROUCH_DOWN);
             }
 
         // JUMP UP
         } else if (currentState == State.JUMP_UP || currentState == State.JUMP_DOWN) {
             if (velocity.y > 0) {
-                currentAnimation = getJumpUpAnimation(KAIN_JUMP_UP_ANIMATION);
+                currentAnimation = getAnimation(KAIN_JUMP_UP);
                 setCurrentState(State.JUMP_UP);
-            } else if (velocity.y < 0) {
-                currentAnimation = getJumpDownAnimation(KAIN_JUMP_DOWN_ANIMATION);
+            } else if (velocity.y <= 0) {
+                currentAnimation = getAnimation(KAIN_JUMP);
                 setCurrentState(State.JUMP_DOWN);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
@@ -131,19 +169,17 @@ public abstract class Player extends Character {
                 velocity.x = body.getLinearVelocity().x - speed * 0.05f;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !hasAttackedThisJump) {
-                currentAnimation = getAttackAnimation(KAIN_JUMP_ATTACK_ANIMATION);
+                currentAnimation = getAnimation(KAIN_JUMP_ATTACK);
                 SoundManager.playSound(KAIN_ATTACK_SOUND);
                 setCurrentState(State.JUMP_ATTACK);
                 setHasAttackedThisJump(true);
 
-                float offsetX = facingLeft ? -(width / 2 + KAIN_JUMP_ATTACK_WIDTH / 2) * scale : (width / 2 + KAIN_JUMP_ATTACK_WIDTH / 2) * scale;
-                float offsetY = (-(KAIN_JUMP_ATTACK_HEIGHT / 2) + 9) * scale;
-                createAttackFixture(offsetX, offsetY, KAIN_JUMP_ATTACK_WIDTH, KAIN_JUMP_ATTACK_HEIGHT);
+                launchJumpAttack();
             }
 
         // LAND
         } else if (currentState == State.LAND) {
-            currentAnimation = getLandAnimation(KAIN_LAND_ANIMATION);
+            currentAnimation = getAnimation(KAIN_LAND);
             velocity.x = 0;
             if (stateTime == 0) {
                 SoundManager.playSound(LAND_SOUND);
@@ -155,7 +191,7 @@ public abstract class Player extends Character {
                 }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                currentAnimation = getCrouchDownAnimation(KAIN_CROUCH_DOWN_ANIMATION);
+                currentAnimation = getAnimation(KAIN_CROUCH_DOWN);
                 setCurrentState(State.CROUCH_DOWN);
             }
         }
@@ -174,8 +210,12 @@ public abstract class Player extends Character {
         if (currentState == State.JUMP_ATTACK) {
             velocity.y = 0;
             velocity.x = 0;
+            body.setGravityScale(0);
             if (stateTime >= KAIN_JUMP_ATTACK_FRAMES * KAIN_JUMP_ATTACK_DURATION) {
                 setCurrentState(State.JUMP_DOWN);
+                body.setGravityScale(1);
+                stateTime = KAIN_JUMP_DOWN_DURATION;
+                velocity.y = -1;
                 if (attackFixture != null) {
                     clearAttackFixture();
                 }
@@ -197,5 +237,19 @@ public abstract class Player extends Character {
         }
 
         body.setLinearVelocity(velocity.x, velocity.y);
+    }
+
+    protected void launchAttack() {
+        if (this instanceof Kain) {
+            float offsetX = facingLeft ? -KAIN_ATTACK_OFFSET_X : KAIN_ATTACK_OFFSET_X;
+            createAttackFixture(offsetX, KAIN_ATTACK_OFFSET_Y, KAIN_ATTACK_WIDTH, KAIN_ATTACK_HEIGHT);
+        }
+    }
+
+    protected void launchJumpAttack() {
+        if (this instanceof Kain) {
+            float offsetX = facingLeft ? -KAIN_JUMP_ATTACK_OFFSET_X : KAIN_JUMP_ATTACK_OFFSET_X;
+            createAttackFixture(offsetX, KAIN_JUMP_ATTACK_OFFSET_Y, KAIN_JUMP_ATTACK_WIDTH, KAIN_JUMP_ATTACK_HEIGHT);
+        }
     }
 }

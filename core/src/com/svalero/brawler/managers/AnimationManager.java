@@ -14,15 +14,18 @@ public class AnimationManager {
         // KAIN
         TextureAtlas kainAtlas = ResourceManager.getAtlas(KAIN_ATLAS);
 
-        animations.put(KAIN_IDLE_ANIMATION, new Animation<>(KAIN_IDLE_DURATION, kainAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
-        animations.put(KAIN_WALK_ANIMATION, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
-        animations.put(KAIN_CROUCH_DOWN_ANIMATION, new Animation<>(KAIN_CROUCH_DURATION, kainAtlas.findRegions("crouch"), Animation.PlayMode.NORMAL));
-        animations.put(KAIN_CROUCH_UP_ANIMATION, new Animation<>(KAIN_CROUCH_DURATION, kainAtlas.findRegions("crouch"), Animation.PlayMode.REVERSED));
-        animations.put(KAIN_JUMP_UP_ANIMATION, new Animation<>(KAIN_JUMP_UP_DURATION, kainAtlas.findRegions("jump_up"), Animation.PlayMode.NORMAL));
-        animations.put(KAIN_JUMP_DOWN_ANIMATION, new Animation<>(KAIN_JUMP_DOWN_DURATION, kainAtlas.findRegions("jump_down"), Animation.PlayMode.NORMAL));
-        animations.put(KAIN_LAND_ANIMATION, new Animation<>(KAIN_LAND_DURATION, kainAtlas.findRegions("land"), Animation.PlayMode.NORMAL));
-        animations.put(KAIN_ATTACK_ANIMATION, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
-        animations.put(KAIN_JUMP_ATTACK_ANIMATION, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("jump_attack"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_IDLE, new Animation<>(KAIN_IDLE_DURATION, kainAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
+        animations.put(KAIN_TURN, new Animation<>(KAIN_TURN_DURATION, kainAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
+        animations.put(KAIN_WALK, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
+        animations.put(KAIN_BLOCK_UP, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("block"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_BLOCK_DOWN, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("block"), Animation.PlayMode.REVERSED));
+        animations.put(KAIN_CROUCH_DOWN, new Animation<>(KAIN_CROUCH_DURATION, kainAtlas.findRegions("crouch"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_CROUCH_UP, new Animation<>(KAIN_CROUCH_DURATION, kainAtlas.findRegions("crouch"), Animation.PlayMode.REVERSED));
+        animations.put(KAIN_JUMP_UP, new Animation<>(KAIN_JUMP_UP_DURATION, kainAtlas.findRegions("jump_up"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_JUMP, new Animation<>(KAIN_JUMP_DOWN_DURATION, kainAtlas.findRegions("jump_down"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_LAND, new Animation<>(KAIN_LAND_DURATION, kainAtlas.findRegions("land"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_ATTACK, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_JUMP_ATTACK, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("jump_attack"), Animation.PlayMode.NORMAL));
     }
 
     public static Animation<TextureRegion> getAnimation(String key) { return animations.get(key); }
