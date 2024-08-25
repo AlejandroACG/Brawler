@@ -27,10 +27,10 @@ public class RenderManager {
         mapRenderer.render();
 
         batch.begin();
-        levelManager.getPlayer().draw(batch);
         for (Enemy enemy : levelManager.getEnemies().values()) {
             enemy.draw(batch);
         }
+        levelManager.getPlayer().draw(batch);
         batch.end();
     }
 

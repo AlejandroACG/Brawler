@@ -110,9 +110,7 @@ public class LevelManager {
         shape.setAsBox(rect.width / 2, rect.height / 2);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1.0f;
         fixtureDef.filter.categoryBits = category;
-        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_BODY; // Colisiones sólidas con jugador y enemigos
         body.createFixture(fixtureDef);
         shape.dispose();
     }
@@ -176,11 +174,11 @@ public class LevelManager {
                 }
 
                 // Detección de colisión de ataques normales
-                if (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataA instanceof Enemy && userDataB instanceof Player) {
-                    handleAttackHit((Character) userDataA, (Character) userDataB);
-                } else if (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataB instanceof Enemy && userDataA instanceof Player) {
-                    handleAttackHit((Character) userDataB, (Character) userDataA);
-                }
+//                if (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataA instanceof Enemy && userDataB instanceof Player) {
+//                    handleAttackHit((Character) userDataA, (Character) userDataB);
+//                } else if (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataB instanceof Enemy && userDataA instanceof Player) {
+//                    handleAttackHit((Character) userDataB, (Character) userDataA);
+//                }
             }
 
             private void handleAttackHit(Character attacker, Character victim) {

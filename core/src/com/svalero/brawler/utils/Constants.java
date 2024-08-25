@@ -13,10 +13,10 @@ public class Constants {
     public static final float buttonHeightRatio = 0.05f;
 
     // Colliders
-    public static final short COLLIDER_CATEGORY_BODY = 0x0001;
+    public static final short COLLIDER_CATEGORY_CHARACTER = 0x0001;
     public static final short COLLIDER_CATEGORY_GROUND = 0x0002;
-    public static final short COLLIDER_CATEGORY_BORDER = 0x0003;
-    public static final short COLLIDER_CATEGORY_ATTACK = 0X0004;
+    public static final short COLLIDER_CATEGORY_BORDER = 0x0004;
+    public static final short COLLIDER_CATEGORY_ATTACK = 0X0008;
 
     // Resource Manager
     public static final String UI_SKIN_JSON = "ui/uiskin.json";

@@ -121,8 +121,12 @@ public abstract class Character implements Disposable {
         fixtureDef.density = 1f;
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0.0f;
-        fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_BODY;
-        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER;
+        fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_CHARACTER;
+        if (this instanceof Player) {
+            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER;
+        } else if (this instanceof Enemy) {
+            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND;
+        }
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
@@ -132,7 +136,7 @@ public abstract class Character implements Disposable {
         FixtureDef sensorFixtureDef = new FixtureDef();
         sensorFixtureDef.shape = sensorShape;
         sensorFixtureDef.isSensor = true;
-        sensorFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_BODY;
+        sensorFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_CHARACTER;
         sensorFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ATTACK;
         body.createFixture(sensorFixtureDef).setUserData(this);
         sensorShape.dispose();
@@ -146,8 +150,11 @@ public abstract class Character implements Disposable {
         FixtureDef attackFixtureDef = new FixtureDef();
         attackFixtureDef.shape = attackShape;
         attackFixtureDef.isSensor = true;
-        attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK;
-        attackFixtureDef.filter.maskBits = COLLIDER_CATEGORY_BODY;
+        if (this instanceof Player) {
+            attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK;
+        } else if (this instanceof Enemy) {
+            attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_CHARACTER;
+        }
 
         if (attackFixture != null) {
             body.destroyFixture(attackFixture);
