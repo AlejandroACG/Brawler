@@ -121,10 +121,10 @@ public class LevelManager {
         for (MapObject object : map.getLayers().get("Characters").getObjects()) {
             float x, y;
             if (object.getProperties().containsKey("tag")) {
-                if (object.getProperties().get("tag", String.class).equals("player")) {
-                    x = object.getProperties().get("x", float.class);
-                    y = object.getProperties().get("y", float.class);
+                x = object.getProperties().get("x", float.class);
+                y = object.getProperties().get("y", float.class);
 
+                if (object.getProperties().get("tag", String.class).equals("player")) {
                     switch (selectedCharacter) {
                         case KAIN:
                             player = new Kain(world, new Vector2(x, y));
@@ -133,9 +133,19 @@ public class LevelManager {
                 }
 
                 if (object.getProperties().get("tag", String.class).equals("bishamon")) {
-                    x = object.getProperties().get("x", float.class);
-                    y = object.getProperties().get("y", float.class);
                     Enemy enemy = new Bishamon(world, new Vector2(x, y));
+                    characters.put(enemy.getId(), enemy);
+                    enemies.put(enemy.getId(), enemy);
+                }
+
+                if (object.getProperties().get("tag", String.class).equals("hsien-ko")) {
+                    Enemy enemy = new HsienKo(world, new Vector2(x, y));
+                    characters.put(enemy.getId(), enemy);
+                    enemies.put(enemy.getId(), enemy);
+                }
+
+                if (object.getProperties().get("tag", String.class).equals("death-adder")) {
+                    Enemy enemy = new DeathAdder(world, new Vector2(x, y));
                     characters.put(enemy.getId(), enemy);
                     enemies.put(enemy.getId(), enemy);
                 }

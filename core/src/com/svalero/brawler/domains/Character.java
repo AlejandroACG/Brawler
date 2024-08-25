@@ -58,10 +58,11 @@ public abstract class Character implements Disposable {
     }
 
     public Character(World world, Vector2 position,
-                     String characterAtlas, float speed, float width, float height,
+                     String characterAtlas, int health, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
                      float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
         this.position = position;
+        this.health = health;
         this.speed = speed;
         this.id = IDGenerator.generateUniqueId();
         this.width = width;
@@ -79,10 +80,11 @@ public abstract class Character implements Disposable {
     }
 
     public Character(World world, Vector2 position,
-                     String characterAtlas, float speed, float width, float height,
+                     String characterAtlas, int health, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
                      String idleAnimationKey) {
         this.position = position;
+        this.health = health;
         this.speed = speed;
         this.id = IDGenerator.generateUniqueId();
         this.width = width;

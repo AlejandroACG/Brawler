@@ -9,11 +9,11 @@ import static com.svalero.brawler.utils.Constants.*;
 public class Enemy extends Character {
     private float walkingSoundTimer = WALKING_SOUND_TIMER;
 
-    public Enemy(World world, Vector2 position, String characterAtlas, float speed, float width, float height,
+    public Enemy(World world, Vector2 position, String characterAtlas, int health, float speed, float width, float height,
                   float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
                   String idleAnimationKey) {
-        super(world, position, characterAtlas, speed, width, height,
-                frameWidth, frameHeight, correctionX, correctionY, idleDuration, idleAnimationKey);
+        super(world, position, characterAtlas, health, speed, width, height, frameWidth, frameHeight, correctionX, correctionY,
+                idleDuration, idleAnimationKey);
     }
 
     public void update(float dt) {

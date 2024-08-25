@@ -15,12 +15,11 @@ public abstract class Player extends Character {
     private long lastKeyPressTimeD = 0;
     private boolean isRunning = false;
 
-    public Player(World world, Vector2 position, String characterAtlas, float speed, float width, float height,
+    public Player(World world, Vector2 position, String characterAtlas, int health, float speed, float width, float height,
                   float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
                   float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
-        super(world, position, characterAtlas, speed, width, height,
-                frameWidth, frameHeight, correctionX, correctionY, idleDuration, jumpUpDuration, jumpDownDuration,
-                jumpStrength, idleAnimationKey);
+        super(world, position, characterAtlas, health, speed, width, height, frameWidth, frameHeight, correctionX, correctionY,
+                idleDuration, jumpUpDuration, jumpDownDuration, jumpStrength, idleAnimationKey);
     }
 
     public void update(float dt) {
@@ -33,14 +32,14 @@ public abstract class Player extends Character {
     // TODO De meter más personajes, limpiar aquí y en Character todo donde ponga Kain en vez de ser un atributo genérico
     // TODO Cuando se agacha, la mitad superior del body no deberia recibir daños, igual puedo crear un Fixture para cuando está
     // TODO agachado y alternarlos?
-    // TODO Faltan ataques (idle, jump, crouch) y el movimiento especial
+    // TODO Faltan ataques crouch y el movimiento especial
     // TODO Faltan bloqueos
     // TODO Enemigos
     // TODO Daño
     // TODO Pause
     // TODO Todo el tema de agacharse
-    // TODO Ataque especial
     // TODO Darle ángulo al fixture del ataque aéreo para mejorar la hitbox
+    // TODO Mejorar la lógica de mantener A y D a la vez
 
     public void manageInput(float dt) {
         Vector2 velocity = body.getLinearVelocity();
@@ -72,6 +71,7 @@ public abstract class Player extends Character {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 if (!isFacingLeft()) {
                     setCurrentState(State.TURN);
+                    velocity.x = 0;
                     currentAnimation = getAnimation(KAIN_TURN);
                     facingLeft = true;
                 } else if (currentState == State.RUN) {
@@ -103,6 +103,7 @@ public abstract class Player extends Character {
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 if (isFacingLeft()) {
                     setCurrentState(State.TURN);
+                    velocity.x = 0;
                     currentAnimation = getAnimation(KAIN_TURN);
                     facingLeft = false;
                 } else if (currentState == State.RUN) {

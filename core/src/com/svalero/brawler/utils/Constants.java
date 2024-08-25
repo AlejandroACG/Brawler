@@ -60,6 +60,8 @@ public class Constants {
     public static final float KAIN_DRAW_CORRECTION_Y = (31f * KAIN_SCALE) + KAIN_HEIGHT / 2;
     public static final float KAIN_SPEED = 70f;
     public static final float KAIN_JUMP_STRENGTH = 10000000000000f;
+    public static final int KAIN_HEALTH = 1000;
+    public static final int KAIN_HARD = 500;
     public static final float KAIN_IDLE_DURATION = 0.15f;
     public static final int KAIN_TURN_FRAMES = 3;
     public static final float KAIN_TURN_DURATION = 0.1f;
@@ -100,7 +102,7 @@ public class Constants {
     public static final String KAIN_JUMP_ATTACK = "kain_jump_attack";
 
     // Bishamon
-    public static final float BISHAMON_SCALE = 0.5f;
+    public static final float BISHAMON_SCALE = 0.6f;
     public static final float BISHAMON_WIDTH = 92f * BISHAMON_SCALE;
     public static final float BISHAMON_HEIGHT = 98f * BISHAMON_SCALE;
     public static final float BISHAMON_FRAME_WIDTH = 306f * BISHAMON_SCALE;
@@ -108,6 +110,8 @@ public class Constants {
     public static final float BISHAMON_DRAW_CORRECTION_X =  (34f * BISHAMON_SCALE) + BISHAMON_WIDTH / 2;;
     public static final float BISHAMON_DRAW_CORRECTION_Y = (16f * BISHAMON_SCALE) + BISHAMON_HEIGHT / 2;
     public static final float BISHAMON_SPEED = 70f;
+    public static final int BISHAMON_HEALTH = 500;
+    public static final int BISHAMON_HARD = 1000;
     public static final float BISHAMON_IDLE_DURATION = 0.15f;
 //    public static final int KAIN_TURN_FRAMES = 3;
 //    public static final float KAIN_TURN_DURATION = 0.1f;
@@ -155,6 +159,8 @@ public class Constants {
     public static final float HSIEN_KO_DRAW_CORRECTION_X =  (70f * HSIEN_KO_SCALE) + HSIEN_KO_WIDTH / 2;;
     public static final float HSIEN_KO_DRAW_CORRECTION_Y = (7f * HSIEN_KO_SCALE) + HSIEN_KO_HEIGHT / 2;
     public static final float HSIEN_KO_SPEED = 70f;
+    public static final int HSIEN_KO_HEALTH = 300;
+    public static final int HSIEN_KO_HARD = 600;
     public static final float HSIEN_KO_IDLE_DURATION = 0.15f;
     //    public static final int KAIN_TURN_FRAMES = 3;
 //    public static final float KAIN_TURN_DURATION = 0.1f;
@@ -202,6 +208,8 @@ public class Constants {
     public static final float DEATH_ADDER_DRAW_CORRECTION_X =  (73f * DEATH_ADDER_SCALE) + DEATH_ADDER_WIDTH / 2;;
     public static final float DEATH_ADDER_DRAW_CORRECTION_Y = (35f * DEATH_ADDER_SCALE) + DEATH_ADDER_HEIGHT / 2;
     public static final float DEATH_ADDER_SPEED = 70f;
+    public static final int DEATH_ADDER_HEALTH = 1000;
+    public static final int DEATH_ADDER_HARD = 2000;
     public static final float DEATH_ADDER_IDLE_DURATION = 0.15f;
     //    public static final int KAIN_TURN_FRAMES = 3;
 //    public static final float KAIN_TURN_DURATION = 0.1f;
