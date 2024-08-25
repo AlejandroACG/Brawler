@@ -4,6 +4,9 @@ public class Constants {
     public static final float ASPECT_RATIO = 16f / 9f;
     public static final float GRAVITY = -175f;
     public static final boolean DEBUG_MODE = true;
+    public static final long DOUBLE_CLICK_THRESHOLD = 300;
+    public static final float WALKING_SOUND_TIMER = 0.20f;
+    public static final float RUNNING_SOUND_TIMER = 0.20f;
 
     // Buttons
     public static final float buttonWidthRatio = 0.4f;
@@ -26,15 +29,17 @@ public class Constants {
     public static final String HSIEN_KO_ATLAS = "textures/hsien-ko.atlas";
     public static final String DEATH_ADDER_ATLAS = "textures/death-adder.atlas";
 
-    // Music
-    public static final String MENU_MUSIC = "music/menu-music.mp3";
-    public static final String LEVEL_1_MUSIC = "music/level-1-music.mp3";
-
     // Sounds
     public static final String KAIN_ATTACK_SOUND = "sounds/kain-attack.mp3";
     public static final String KAIN_GRUNT_SOUND = "sounds/kain-grunt.wav";
+    public static final String KAIN_BLOCK_PREP = "sounds/kain-block-prep.wav";
     public static final String LAND_SOUND = "sounds/land.mp3";
     public static final String WALKING_ON_GRASS_SOUND = "sounds/walking-on-grass.wav";
+    public static final String RUNNING_ON_GRASS_SOUND = "sounds/running-on-grass.mp3";
+
+    // Music
+    public static final String MENU_MUSIC = "music/menu-music.mp3";
+    public static final String LEVEL_1_MUSIC = "music/level-1-music.mp3";
 
     // Level 1
     public static final String LEVEL_1_MAP = "maps/level-1.tmx";
@@ -49,9 +54,9 @@ public class Constants {
     public static final float KAIN_SCALE = 0.5f;
     public static final float KAIN_WIDTH = 67f * KAIN_SCALE;
     public static final float KAIN_HEIGHT = 99f * KAIN_SCALE;
-    public static final float KAIN_FRAME_WIDTH = 297f * KAIN_SCALE;
+    public static final float KAIN_FRAME_WIDTH = 256f * KAIN_SCALE;
     public static final float KAIN_FRAME_HEIGHT = 186f * KAIN_SCALE;
-    public static final float KAIN_DRAW_CORRECTION_X = (134f * KAIN_SCALE) + KAIN_WIDTH / 2;
+    public static final float KAIN_DRAW_CORRECTION_X = (93f * KAIN_SCALE) + KAIN_WIDTH / 2;
     public static final float KAIN_DRAW_CORRECTION_Y = (31f * KAIN_SCALE) + KAIN_HEIGHT / 2;
     public static final float KAIN_SPEED = 70f;
     public static final float KAIN_JUMP_STRENGTH = 10000000000000f;
@@ -59,7 +64,7 @@ public class Constants {
     public static final int KAIN_TURN_FRAMES = 3;
     public static final float KAIN_TURN_DURATION = 0.1f;
     public static final float KAIN_WALK_DURATION = 0.15f;
-    public static final float KAIN_WALKING_SOUND_TIMER = 0.20f;
+    public static final float KAIN_RUN_DURATION = 0.1f;
     public static final float KAIN_BLOCK_DURATION = 0.1f;
     public static final int KAIN_BLOCK_FRAMES = 2;
     public static final int KAIN_CROUCH_FRAMES = 2;
@@ -83,6 +88,7 @@ public class Constants {
     public static final String KAIN_IDLE = "kain_idle";
     public static final String KAIN_TURN = "kain_turn";
     public static final String KAIN_WALK = "kain_walk";
+    public static final String KAIN_RUN = "kain_run";
     public static final String KAIN_BLOCK_UP = "kain_block_up";
     public static final String KAIN_BLOCK_DOWN = "kain_block_down";
     public static final String KAIN_CROUCH_DOWN = "kain_crouch_down";
@@ -97,10 +103,10 @@ public class Constants {
     public static final float BISHAMON_SCALE = 0.5f;
     public static final float BISHAMON_WIDTH = 92f * BISHAMON_SCALE;
     public static final float BISHAMON_HEIGHT = 98f * BISHAMON_SCALE;
-    public static final float BISHAMON_FRAME_WIDTH = 345f * BISHAMON_SCALE;
-    public static final float BISHAMON_FRAME_HEIGHT = 221f * BISHAMON_SCALE;
+    public static final float BISHAMON_FRAME_WIDTH = 306f * BISHAMON_SCALE;
+    public static final float BISHAMON_FRAME_HEIGHT = 157f * BISHAMON_SCALE;
     public static final float BISHAMON_DRAW_CORRECTION_X =  (34f * BISHAMON_SCALE) + BISHAMON_WIDTH / 2;;
-    public static final float BISHAMON_DRAW_CORRECTION_Y = (9f * BISHAMON_SCALE) + BISHAMON_HEIGHT / 2;
+    public static final float BISHAMON_DRAW_CORRECTION_Y = (16f * BISHAMON_SCALE) + BISHAMON_HEIGHT / 2;
     public static final float BISHAMON_SPEED = 70f;
     public static final float BISHAMON_IDLE_DURATION = 0.15f;
 //    public static final int KAIN_TURN_FRAMES = 3;
@@ -129,7 +135,7 @@ public class Constants {
 //    public static final float KAIN_JUMP_ATTACK_OFFSET_Y = (-(KAIN_JUMP_ATTACK_HEIGHT / 2) + 9);
     public static final String BISHAMON_IDLE = "bishamon_idle";
 //    public static final String KAIN_TURN = "kain_turn";
-//    public static final String KAIN_WALK = "kain_walk";
+    public static final String BISHAMON_WALK = "bishamon_walk";
 //    public static final String KAIN_BLOCK_UP = "kain_block_up";
 //    public static final String KAIN_BLOCK_DOWN = "kain_block_down";
 //    public static final String KAIN_CROUCH_DOWN = "kain_crouch_down";
@@ -144,10 +150,10 @@ public class Constants {
     public static final float HSIEN_KO_SCALE = 0.5f;
     public static final float HSIEN_KO_WIDTH = 57f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_HEIGHT = 81f * HSIEN_KO_SCALE;
-    public static final float HSIEN_KO_FRAME_WIDTH = 280f * HSIEN_KO_SCALE;
-    public static final float HSIEN_KO_FRAME_HEIGHT = 131f * HSIEN_KO_SCALE;
+    public static final float HSIEN_KO_FRAME_WIDTH = 204f * HSIEN_KO_SCALE;
+    public static final float HSIEN_KO_FRAME_HEIGHT = 117f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_DRAW_CORRECTION_X =  (70f * HSIEN_KO_SCALE) + HSIEN_KO_WIDTH / 2;;
-    public static final float HSIEN_KO_DRAW_CORRECTION_Y = (9f * HSIEN_KO_SCALE) + HSIEN_KO_HEIGHT / 2;
+    public static final float HSIEN_KO_DRAW_CORRECTION_Y = (7f * HSIEN_KO_SCALE) + HSIEN_KO_HEIGHT / 2;
     public static final float HSIEN_KO_SPEED = 70f;
     public static final float HSIEN_KO_IDLE_DURATION = 0.15f;
     //    public static final int KAIN_TURN_FRAMES = 3;
@@ -190,10 +196,10 @@ public class Constants {
     // Death Adder
     public static final float DEATH_ADDER_SCALE = 0.5f;
     public static final float DEATH_ADDER_WIDTH = 97f * DEATH_ADDER_SCALE;
-    public static final float DEATH_ADDER_HEIGHT = 128f * DEATH_ADDER_SCALE;
-    public static final float DEATH_ADDER_FRAME_WIDTH = 337f * DEATH_ADDER_SCALE;
+    public static final float DEATH_ADDER_HEIGHT = 127f * DEATH_ADDER_SCALE;
+    public static final float DEATH_ADDER_FRAME_WIDTH = 246f * DEATH_ADDER_SCALE;
     public static final float DEATH_ADDER_FRAME_HEIGHT = 206f * DEATH_ADDER_SCALE;
-    public static final float DEATH_ADDER_DRAW_CORRECTION_X =  (164f * DEATH_ADDER_SCALE) + DEATH_ADDER_WIDTH / 2;;
+    public static final float DEATH_ADDER_DRAW_CORRECTION_X =  (73f * DEATH_ADDER_SCALE) + DEATH_ADDER_WIDTH / 2;;
     public static final float DEATH_ADDER_DRAW_CORRECTION_Y = (35f * DEATH_ADDER_SCALE) + DEATH_ADDER_HEIGHT / 2;
     public static final float DEATH_ADDER_SPEED = 70f;
     public static final float DEATH_ADDER_IDLE_DURATION = 0.15f;

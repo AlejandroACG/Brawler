@@ -1,15 +1,13 @@
 package com.svalero.brawler.domains;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.svalero.brawler.managers.SoundManager;
+
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Enemy extends Character {
-    private float walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+    private float walkingSoundTimer = WALKING_SOUND_TIMER;
 
     public Enemy(World world, Vector2 position, String characterAtlas, float speed, float width, float height,
                   float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
@@ -20,6 +18,13 @@ public class Enemy extends Character {
 
     public void update(float dt) {
 //        manageInput(dt);
+
+        Vector2 velocity = body.getLinearVelocity();
+        setCurrentStateWithoutReset(State.WALK);
+        currentAnimation = getAnimation(BISHAMON_WALK);
+        velocity.x = speed;
+        body.setLinearVelocity(velocity.x, velocity.y);
+
         Vector2 bodyPosition = body.getPosition();
         position.set(bodyPosition.x, bodyPosition.y);
         stateTime += dt;

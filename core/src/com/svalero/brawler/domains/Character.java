@@ -42,6 +42,7 @@ public abstract class Character implements Disposable {
         IDLE,
         TURN,
         WALK,
+        RUN,
         JUMP_UP,
         JUMP_DOWN,
         LAND,

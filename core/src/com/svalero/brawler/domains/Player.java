@@ -9,7 +9,11 @@ import static com.svalero.brawler.utils.Constants.*;
 import com.svalero.brawler.managers.SoundManager;
 
 public abstract class Player extends Character {
-    private float walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+    private float walkingSoundTimer = WALKING_SOUND_TIMER;
+    private float runningSoundTimer = RUNNING_SOUND_TIMER;
+    private long lastKeyPressTimeA = 0;
+    private long lastKeyPressTimeD = 0;
+    private boolean isRunning = false;
 
     public Player(World world, Vector2 position, String characterAtlas, float speed, float width, float height,
                   float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
@@ -40,61 +44,105 @@ public abstract class Player extends Character {
 
     public void manageInput(float dt) {
         Vector2 velocity = body.getLinearVelocity();
+        long currentTime = System.currentTimeMillis();
 
-        // WALK
-        if (currentState == State.WALK) {
+        // Stop WALK / RUN
+        if ((currentState == State.WALK || currentState == State.RUN) &&
+                (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))) {
             setCurrentStateWithoutReset(State.IDLE);
+            isRunning = true;
         }
 
-        // IDLE
-        if (currentState == State.IDLE) {
-            velocity.x = 0;
+        // IDLE / WALK / RUN
+        if (currentState == State.IDLE || currentState == State.WALK || currentState == State.RUN) {
             currentAnimation = getAnimation(KAIN_IDLE);
 
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                if (isFacingLeft()) {
-                    setCurrentState(State.TURN);
-                    // TODO Sound
-                    currentAnimation = getAnimation(KAIN_TURN);
-                    facingLeft = false;
-                } else {
-                    velocity.x = speed;
-                    setCurrentStateWithoutReset(State.WALK);
-                    currentAnimation = getAnimation(KAIN_WALK);
-                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
-                    walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+            // Walking / running left
+            if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+                if (currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD || currentState == State.RUN) {
+                    velocity.x = -speed * 2;
+                    setCurrentState(State.RUN);
+                    isRunning = true;
+                    currentAnimation = getAnimation(KAIN_RUN);
+                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, KAIN_RUN);
+                    runningSoundTimer = RUNNING_SOUND_TIMER;
                 }
+                lastKeyPressTimeA = currentTime;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 if (!isFacingLeft()) {
                     setCurrentState(State.TURN);
-                    // TODO Sound
                     currentAnimation = getAnimation(KAIN_TURN);
                     facingLeft = true;
+                } else if (currentState == State.RUN) {
+                    velocity.x = -speed * 2;
+                    setCurrentState(State.RUN);
+                    currentAnimation = getAnimation(KAIN_RUN);
+                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, KAIN_RUN);
+                    runningSoundTimer = RUNNING_SOUND_TIMER;
                 } else {
                     velocity.x = -speed;
-                    setCurrentStateWithoutReset(State.WALK);
+                    setCurrentState(State.WALK);
                     currentAnimation = getAnimation(KAIN_WALK);
-                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
-                    walkingSoundTimer = KAIN_WALKING_SOUND_TIMER;
+                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, KAIN_WALK);
+                    walkingSoundTimer = WALKING_SOUND_TIMER;
                 }
             }
+            // Walking / running right
+            if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+                if (currentTime - lastKeyPressTimeD < DOUBLE_CLICK_THRESHOLD || currentState == State.RUN) {
+                    velocity.x = speed * 2;
+                    isRunning = true;
+                    setCurrentState(State.RUN);
+                    currentAnimation = getAnimation(KAIN_RUN);
+                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, KAIN_RUN);
+                    runningSoundTimer = RUNNING_SOUND_TIMER;
+                }
+                lastKeyPressTimeD = currentTime;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                if (isFacingLeft()) {
+                    setCurrentState(State.TURN);
+                    currentAnimation = getAnimation(KAIN_TURN);
+                    facingLeft = false;
+                } else if (currentState == State.RUN) {
+                    velocity.x = speed * 2;
+                    setCurrentState(State.RUN);
+                    currentAnimation = getAnimation(KAIN_RUN);
+                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, KAIN_RUN);
+                    runningSoundTimer = RUNNING_SOUND_TIMER;
+                } else {
+                    velocity.x = speed;
+                    setCurrentState(State.WALK);
+                    currentAnimation = getAnimation(KAIN_WALK);
+                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, KAIN_WALK);
+                    walkingSoundTimer = WALKING_SOUND_TIMER;
+                }
+            }
+
+            // Block
             if (Gdx.input.isKeyPressed(Input.Keys.K)) {
                 currentAnimation = getAnimation(KAIN_BLOCK_UP);
                 velocity.x = 0;
                 setCurrentState(State.BLOCK_UP);
-                // TODO Sound
+                SoundManager.playSound(KAIN_BLOCK_PREP);
             }
+
+            // Crouch
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 currentAnimation = getAnimation(KAIN_CROUCH_DOWN);
                 velocity.x = 0;
                 setCurrentState(State.CROUCH_DOWN);
             }
+
+            // Jump
             if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
                 velocity.y = jumpStrength;
                 SoundManager.playSound(KAIN_GRUNT_SOUND);
                 setCurrentState(State.JUMP_UP);
             }
+
+            // Attack
             if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
                 velocity.x = 0;
                 currentAnimation = getAnimation(KAIN_ATTACK);
@@ -104,10 +152,24 @@ public abstract class Player extends Character {
                 launchAttack();
             }
 
+            // Idle
+            if (currentState == State.IDLE) {
+                isRunning = false;
+                velocity.x = 0;
+            }
+
         // TURN
         } else if (currentState == State.TURN) {
+            if ((Gdx.input.isKeyJustPressed(Input.Keys.A) && currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD)
+                    || (Gdx.input.isKeyJustPressed(Input.Keys.D) && currentTime - lastKeyPressTimeD < DOUBLE_CLICK_THRESHOLD)) {
+                isRunning = true;
+            }
             if (stateTime >= KAIN_TURN_FRAMES * KAIN_TURN_DURATION) {
-                setCurrentStateWithoutReset(State.WALK);
+                if (isRunning) {
+                    setCurrentStateWithoutReset(State.RUN);
+                } else {
+                    setCurrentStateWithoutReset(State.WALK);
+                }
             }
 
         // BLOCK
@@ -117,6 +179,7 @@ public abstract class Player extends Character {
             }
         } else if (currentState == State.BLOCK) {
             if (!Gdx.input.isKeyPressed(Input.Keys.K)) {
+                SoundManager.playSound(KAIN_BLOCK_PREP);
                 currentAnimation = getAnimation(KAIN_BLOCK_DOWN);
                 setCurrentState(State.BLOCK_DOWN);
             }
@@ -232,9 +295,19 @@ public abstract class Player extends Character {
             if (walkingSoundTimer > 0) {
                 walkingSoundTimer -= dt;
             } else {
-                SoundManager.stopLongSound(WALKING_ON_GRASS_SOUND, "kain_walk");
+                SoundManager.stopLongSound(WALKING_ON_GRASS_SOUND, KAIN_WALK);
             }
         }
+
+        // Stop running sound
+        if (currentState != State.RUN) {
+            if (runningSoundTimer > 0) {
+                runningSoundTimer -= dt;
+            } else {
+                SoundManager.stopLongSound(WALKING_ON_GRASS_SOUND, KAIN_RUN);
+            }
+        }
+
 
         body.setLinearVelocity(velocity.x, velocity.y);
     }

@@ -17,6 +17,7 @@ public class AnimationManager {
         animations.put(KAIN_IDLE, new Animation<>(KAIN_IDLE_DURATION, kainAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
         animations.put(KAIN_TURN, new Animation<>(KAIN_TURN_DURATION, kainAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
         animations.put(KAIN_WALK, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
+        animations.put(KAIN_RUN, new Animation<>(KAIN_RUN_DURATION, kainAtlas.findRegions("run"), Animation.PlayMode.LOOP));
         animations.put(KAIN_BLOCK_UP, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("block"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_BLOCK_DOWN, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("block"), Animation.PlayMode.REVERSED));
         animations.put(KAIN_CROUCH_DOWN, new Animation<>(KAIN_CROUCH_DURATION, kainAtlas.findRegions("crouch"), Animation.PlayMode.NORMAL));
@@ -31,6 +32,7 @@ public class AnimationManager {
         TextureAtlas bishamonAtlas = ResourceManager.getAtlas(BISHAMON_ATLAS);
 
         animations.put(BISHAMON_IDLE, new Animation<>(BISHAMON_IDLE_DURATION, bishamonAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
+        animations.put(BISHAMON_WALK, new Animation<>(BISHAMON_IDLE_DURATION, bishamonAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
 
         // HSIEN KO
         TextureAtlas hsienKoAtlas = ResourceManager.getAtlas(HSIEN_KO_ATLAS);

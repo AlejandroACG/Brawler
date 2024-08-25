@@ -17,8 +17,10 @@ public class ResourceManager {
         // Cargar sonidos
         assets.load(KAIN_ATTACK_SOUND, Sound.class);
         assets.load(KAIN_GRUNT_SOUND, Sound.class);
+        assets.load(KAIN_BLOCK_PREP, Sound.class);
         assets.load(LAND_SOUND, Sound.class);
         assets.load(WALKING_ON_GRASS_SOUND, Sound.class);
+        assets.load(RUNNING_ON_GRASS_SOUND, Sound.class);
 
         // Cargar música
         assets.load(MENU_MUSIC, Music.class);
