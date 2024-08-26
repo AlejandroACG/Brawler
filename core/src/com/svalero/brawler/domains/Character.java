@@ -8,11 +8,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.svalero.brawler.managers.AnimationManager;
+import com.svalero.brawler.managers.LevelManager;
+import com.svalero.brawler.managers.SoundManager;
 import com.svalero.brawler.utils.IDGenerator;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public abstract class Character implements Disposable {
+    protected LevelManager levelManager;
     protected TextureAtlas textureAtlas;
     protected Vector2 position;
     protected float stateTime = 0;
@@ -54,6 +57,9 @@ public abstract class Character implements Disposable {
     protected String blockMoveSoundKey;
     protected String jumpSoundKey;
     protected String attackSoundKey;
+    protected String hitSoundKey;
+    protected String deadKey;
+    protected String deadSoundKey;
     protected int turnFrames;
     protected float turnDuration;
     protected int blockFrames;
@@ -62,6 +68,10 @@ public abstract class Character implements Disposable {
     protected float crouchDuration;
     protected int landFrames;
     protected float landDuration;
+    protected int hitFrames;
+    protected float hitDuration;
+    protected int deadFrames;
+    protected float deadDuration;
     protected int attackFrames;
     protected float attackDuration;
     protected int jumpAttackFrames;
@@ -95,7 +105,7 @@ public abstract class Character implements Disposable {
         DEAD
     }
 
-    public Character(World world, Vector2 position,
+    public Character(LevelManager levelManager, World world, Vector2 position,
                      String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
                      float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleKey, String turnKey,
@@ -103,10 +113,13 @@ public abstract class Character implements Disposable {
                      String crouchUpKey, String jumpUpKey, String jumpDownKey, String landKey, String attackKey,
                      String jumpAttackKey, String hitKey, String blockMoveSoundKey, String jumpSoundKey,
                      String attackSoundKey, int turnFrames, float turnDuration, int blockFrames, float blockDuration,
-                     int crouchFrames, float crouchDuration, int landFrames, float landDuration, int attackFrames,
-                     float attackDuration, int jumpAttackFrames, float jumpAttackDuration, float attackOffsetX,
-                     float attackOffsetY, float attackWidth, float attackHeight, float jumpAttackOffsetX,
-                     float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight) {
+                     int crouchFrames, float crouchDuration, int landFrames, float landDuration, int hitFrames,
+                     float hitDuration, int attackFrames, float attackDuration, int jumpAttackFrames,
+                     float jumpAttackDuration, float attackOffsetX, float attackOffsetY, float attackWidth,
+                     float attackHeight, float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth,
+                     float jumpAttackHeight, String hitSoundKey, String deadKey, String deadSoundKey, int deadFrames,
+                     float deadDuration) {
+        this.levelManager = levelManager;
         this.world = world;
         this.position = position;
         this.health = health;
@@ -149,6 +162,8 @@ public abstract class Character implements Disposable {
         this.crouchDuration = crouchDuration;
         this.landFrames = landFrames;
         this.landDuration = landDuration;
+        this.hitFrames = hitFrames;
+        this.hitDuration = hitDuration;
         this.attackFrames = attackFrames;
         this.attackDuration = attackDuration;
         this.jumpAttackFrames = jumpAttackFrames;
@@ -161,14 +176,21 @@ public abstract class Character implements Disposable {
         this.jumpAttackOffsetY = jumpAttackOffsetY;
         this.jumpAttackWidth = jumpAttackWidth;
         this.jumpAttackHeight = jumpAttackHeight;
+        this.hitSoundKey = hitSoundKey;
+        this.deadKey = deadKey;
+        this.deadSoundKey = deadSoundKey;
+        this.deadFrames = deadFrames;
+        this.deadDuration = deadDuration;
 
         createBody(world, characterAtlas);
     }
 
-    public Character(World world, Vector2 position,
+    public Character(LevelManager levelManager, World world, Vector2 position,
                      String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
-                     String idleKey, String hitKey) {
+                     String idleKey, String hitKey, int hitFrames, float hitDuration, String hitSoundKey,
+                     String deadKey, String deadSoundKey, int deadFrames, float deadDuration) {
+        this.levelManager = levelManager;
         this.position = position;
         this.health = health;
         this.attackStrength = attackStrength;
@@ -185,6 +207,14 @@ public abstract class Character implements Disposable {
         this.currentAnimation = AnimationManager.getAnimation(idleKey);
         this.idleKey = idleKey;
         this.hitKey = hitKey;
+        this.hitFrames = hitFrames;
+        this.hitDuration = hitDuration;
+        this.hitSoundKey = hitSoundKey;
+        this.deadKey = deadKey;
+        this.deadSoundKey = deadSoundKey;
+        this.deadFrames = deadFrames;
+        this.deadDuration = deadDuration;
+
         createBody(world, characterAtlas);
     }
 
@@ -215,7 +245,7 @@ public abstract class Character implements Disposable {
             fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_ENEMY;
         } else if (this instanceof Enemy) {
             fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ENEMY;
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_ATTACK_PLAYER;
+            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_PLAYER;
         }
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
@@ -240,9 +270,8 @@ public abstract class Character implements Disposable {
             body.destroyFixture(attackFixture);
         }
 
-        AttackFixtureData fixtureData = new AttackFixtureData(this);
         attackFixture = body.createFixture(attackFixtureDef);
-        attackFixture.setUserData(fixtureData);
+        attackFixture.setUserData(this);
 
         attackShape.dispose();
     }
@@ -292,13 +321,19 @@ public abstract class Character implements Disposable {
         }
     }
 
-    public void getHit(int strength) {
+    public void getHit(int strength, boolean attackFromLeft) {
         health = health - strength;
         if (health <= 0) {
-            dispose();
+            facingLeft = attackFromLeft;
+            setCurrentState(State.DEAD);
+            currentAnimation = getAnimation(deadKey);
+            SoundManager.playSound(deadSoundKey);
+        } else {
+            currentAnimation = AnimationManager.getAnimation(hitKey);
+            SoundManager.playSound(HIT_SOUND);
+            SoundManager.playSound(hitSoundKey);
+            setCurrentState(State.HIT);
         }
-        currentAnimation = AnimationManager.getAnimation(hitKey);
-        setCurrentState(State.HIT);
     }
 
     public void setHasAttackedThisJump(boolean hasAttackedThisJump) { this.hasAttackedThisJump = hasAttackedThisJump; }
@@ -317,7 +352,6 @@ public abstract class Character implements Disposable {
 
     @Override
     public void dispose() {
-        textureAtlas.dispose();
         if (world != null && body != null) {
             world.destroyBody(body);
             body = null;

@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
+
+import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 
 public abstract class Player extends Character {
@@ -15,24 +17,27 @@ public abstract class Player extends Character {
     private long lastKeyPressTimeD = 0;
     private boolean isRunning = false;
 
-    public Player(World world, Vector2 position, String characterAtlas, int health, int attackStrength, float speed,
-                  float width, float height, float frameWidth, float frameHeight, float correctionX, float correctionY,
-                  float idleDuration, float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleKey,
-                  String turnKey, String walkKey, String runKey, String blockUpKey, String blockDownKey,
-                  String crouchDownKey, String crouchUpKey, String jumpUpKey, String jumpDownKey, String landKey,
-                  String attackKey, String jumpAttackKey, String hitKey, String blockMoveSoundKey, String jumpSoundKey,
-                  String attackSoundKey, int turnFrames, float turnDuration, int blockFrames, float blockDuration,
-                  int crouchFrames, float crouchDuration, int landFrames, float landDuration, int attackFrames,
+    public Player(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
+                  int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
+                  float correctionX, float correctionY, float idleDuration, float jumpUpDuration,
+                  float jumpDownDuration, float jumpStrength, String idleKey, String turnKey, String walkKey,
+                  String runKey, String blockUpKey, String blockDownKey, String crouchDownKey, String crouchUpKey,
+                  String jumpUpKey, String jumpDownKey, String landKey, String attackKey, String jumpAttackKey,
+                  String hitKey, String blockMoveSoundKey, String jumpSoundKey, String attackSoundKey, int turnFrames,
+                  float turnDuration, int blockFrames, float blockDuration, int crouchFrames, float crouchDuration,
+                  int landFrames, float landDuration, int hitFrames, float hitDuration, int attackFrames,
                   float attackDuration, int jumpAttackFrames, float jumpAttackDuration, float attackOffsetX,
                   float attackOffsetY, float attackWidth, float attackHeight, float jumpAttackOffsetX,
-                  float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight) {
-        super(world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth, frameHeight,
+                  float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight, String hitSoundKey,
+                  String deadKey, String deadSoundKey, int deadFrames, float deadDuration) {
+        super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth, frameHeight,
                 correctionX, correctionY, idleDuration, jumpUpDuration, jumpDownDuration, jumpStrength, idleKey,
                 turnKey, walkKey, runKey, blockUpKey, blockDownKey, crouchDownKey, crouchUpKey, jumpUpKey, jumpDownKey,
                 landKey, attackKey, jumpAttackKey, hitKey, blockMoveSoundKey, jumpSoundKey, attackSoundKey, turnFrames,
                 turnDuration, blockFrames, blockDuration, crouchFrames, crouchDuration, landFrames, landDuration,
-                attackFrames, attackDuration, jumpAttackFrames, jumpAttackDuration, attackOffsetX, attackOffsetY,
-                attackWidth, attackHeight, jumpAttackOffsetX, jumpAttackOffsetY, jumpAttackWidth, jumpAttackHeight);
+                hitFrames, hitDuration, attackFrames, attackDuration, jumpAttackFrames, jumpAttackDuration,
+                attackOffsetX, attackOffsetY, attackWidth, attackHeight, jumpAttackOffsetX, jumpAttackOffsetY,
+                jumpAttackWidth, jumpAttackHeight, hitSoundKey, deadKey, deadSoundKey, deadFrames, deadDuration);
     }
 
     public void update(float dt) {
@@ -294,6 +299,31 @@ public abstract class Player extends Character {
                 if (attackFixture != null) {
                     clearAttackFixture();
                 }
+            }
+        }
+
+        // HIT
+        if (currentState == State.HIT) {
+            velocity.x = 0;
+            if (stateTime >= hitFrames * hitDuration) {
+                currentAnimation = getAnimation(idleKey);
+                setCurrentStateWithoutReset(State.IDLE);
+            }
+        }
+
+        // DEAD
+        if (currentState == State.DEAD) {
+            if (stateTime == 0) {
+                velocity.y = 100f;
+                if (facingLeft) {
+                    velocity.x = 140f;
+                } else {
+                    velocity.x = -140f;
+                }
+            }
+            if (stateTime >= (deadFrames - 1) * deadDuration) {
+                velocity.y = 0;
+                velocity.x = 0;
             }
         }
 

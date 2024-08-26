@@ -18,6 +18,15 @@ public class ResourceManager {
         assets.load(KAIN_ATTACK_SOUND, Sound.class);
         assets.load(KAIN_GRUNT_SOUND, Sound.class);
         assets.load(KAIN_BLOCK_MOVE_SOUND, Sound.class);
+        assets.load(KAIN_HIT_SOUND, Sound.class);
+        assets.load(KAIN_DEAD_SOUND, Sound.class);
+        assets.load(BISHAMON_HIT_SOUND, Sound.class);
+        assets.load(BISHAMON_DEAD_SOUND, Sound.class);
+        assets.load(HSIEN_KO_HIT_SOUND, Sound.class);
+        assets.load(HSIEN_KO_DEAD_SOUND, Sound.class);
+        assets.load(DEATH_ADDER_HIT_SOUND, Sound.class);
+        assets.load(DEATH_ADDER_DEAD_SOUND, Sound.class);
+        assets.load(HIT_SOUND, Sound.class);
         assets.load(LAND_SOUND, Sound.class);
         assets.load(WALKING_ON_GRASS_SOUND, Sound.class);
         assets.load(RUNNING_ON_GRASS_SOUND, Sound.class);

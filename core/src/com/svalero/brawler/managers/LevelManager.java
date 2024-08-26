@@ -125,25 +125,25 @@ public class LevelManager {
                 if (object.getProperties().get("tag", String.class).equals("player")) {
                     switch (selectedCharacter) {
                         case KAIN:
-                            player = new Kain(world, new Vector2(x, y));
+                            player = new Kain(this, world, new Vector2(x, y));
                     }
                     characters.put(player.getId(), player);
                 }
 
                 if (object.getProperties().get("tag", String.class).equals("bishamon")) {
-                    Enemy enemy = new Bishamon(world, new Vector2(x, y));
+                    Enemy enemy = new Bishamon(this, world, new Vector2(x, y));
                     characters.put(enemy.getId(), enemy);
                     enemies.put(enemy.getId(), enemy);
                 }
 
                 if (object.getProperties().get("tag", String.class).equals("hsien-ko")) {
-                    Enemy enemy = new HsienKo(world, new Vector2(x, y));
+                    Enemy enemy = new HsienKo(this, world, new Vector2(x, y));
                     characters.put(enemy.getId(), enemy);
                     enemies.put(enemy.getId(), enemy);
                 }
 
                 if (object.getProperties().get("tag", String.class).equals("death-adder")) {
-                    Enemy enemy = new DeathAdder(world, new Vector2(x, y));
+                    Enemy enemy = new DeathAdder(this, world, new Vector2(x, y));
                     characters.put(enemy.getId(), enemy);
                     enemies.put(enemy.getId(), enemy);
                 }
@@ -176,17 +176,18 @@ public class LevelManager {
                 // Detección de colisión de ataques
                 if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureB.getUserData() instanceof Enemy) ||
                         (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureB.getUserData() instanceof Player)) {
-                    handleAttackHit((AttackFixtureData) fixtureA.getUserData(), (Character) fixtureB.getUserData());
+                    boolean attackFromLeft = fixtureA.getBody().getPosition().x < fixtureB.getBody().getPosition().x;
+                    handleAttackHit((Character) fixtureA.getUserData(), (Character) fixtureB.getUserData(), attackFromLeft);
                 } else if ((fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureA.getUserData() instanceof Enemy) ||
                         (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureA.getUserData() instanceof Player)) {
-                    handleAttackHit((AttackFixtureData) fixtureB.getUserData(), (Character) fixtureA.getUserData());
+                    boolean attackFromLeft = fixtureB.getBody().getPosition().x < fixtureA.getBody().getPosition().x;
+                    handleAttackHit((Character) fixtureB.getUserData(), (Character) fixtureA.getUserData(), attackFromLeft);
                 }
             }
 
-            private void handleAttackHit(AttackFixtureData attackData, Character victim) {
-                if (!attackData.getHitEnemyIds().contains(victim.getId())) {
-                    victim.getHit(attackData.getAttacker().getAttackStrength());
-                    attackData.getHitEnemyIds().add(victim.getId());
+            private void handleAttackHit(Character attacker, Character victim, boolean attackFromLeft) {
+                if (victim.getCurrentState() != State.HIT && victim.getCurrentState() != State.DEAD) {
+                    victim.getHit(attacker.getAttackStrength(), attackFromLeft);
                 }
             }
 

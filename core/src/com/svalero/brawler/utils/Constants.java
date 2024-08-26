@@ -35,6 +35,15 @@ public class Constants {
     public static final String KAIN_ATTACK_SOUND = "sounds/kain-attack.mp3";
     public static final String KAIN_GRUNT_SOUND = "sounds/kain-grunt.wav";
     public static final String KAIN_BLOCK_MOVE_SOUND = "sounds/kain-block-prep.wav";
+    public static final String KAIN_HIT_SOUND = "sounds/kain-hit.mp3";
+    public static final String KAIN_DEAD_SOUND = "sounds/kain-dead.mp3";
+    public static final String BISHAMON_HIT_SOUND = "sounds/bishamon-hit.wav";
+    public static final String BISHAMON_DEAD_SOUND = "sounds/bishamon-dead.wav";
+    public static final String HSIEN_KO_HIT_SOUND = "sounds/hsien-ko-hit.wav";
+    public static final String HSIEN_KO_DEAD_SOUND = "sounds/hsien-ko-dead.wav";
+    public static final String DEATH_ADDER_HIT_SOUND = "sounds/death-adder-hit.wav";
+    public static final String DEATH_ADDER_DEAD_SOUND = "sounds/death-adder-dead.wav";
+    public static final String HIT_SOUND = "sounds/hit.mp3";
     public static final String LAND_SOUND = "sounds/land.mp3";
     public static final String WALKING_ON_GRASS_SOUND = "sounds/walking-on-grass.wav";
     public static final String RUNNING_ON_GRASS_SOUND = "sounds/running-on-grass.mp3";
@@ -61,9 +70,9 @@ public class Constants {
     public static final float KAIN_DRAW_CORRECTION_X = (93f * KAIN_SCALE) + KAIN_WIDTH / 2;
     public static final float KAIN_DRAW_CORRECTION_Y = (31f * KAIN_SCALE) + KAIN_HEIGHT / 2;
     public static final float KAIN_SPEED = 70f;
-    public static final float KAIN_JUMP_STRENGTH = 10000000000000f;
-    public static final int KAIN_HEALTH = 1000;
-    public static final int KAIN_HEALTH_HARD = 500;
+    public static final float KAIN_JUMP_STRENGTH = 2000f;
+    public static final int KAIN_HEALTH = 2000;
+    public static final int KAIN_HEALTH_HARD = 100;
     public static final int KAIN_ATTACK_STRENGTH = 250;
     public static final float KAIN_IDLE_DURATION = 0.15f;
     public static final int KAIN_TURN_FRAMES = 3;
@@ -90,7 +99,10 @@ public class Constants {
     public static final float KAIN_JUMP_ATTACK_HEIGHT = 37f * KAIN_SCALE;
     public static final float KAIN_JUMP_ATTACK_OFFSET_X = KAIN_WIDTH / 2 + KAIN_JUMP_ATTACK_WIDTH / 2;
     public static final float KAIN_JUMP_ATTACK_OFFSET_Y = -(KAIN_JUMP_ATTACK_HEIGHT / 2) + (9 * KAIN_SCALE);
-    public static final float KAIN_HIT_DURATION = 0.5f;
+    public static final int KAIN_HIT_FRAMES = 2;
+    public static final float KAIN_HIT_DURATION = 0.1f;
+    public static final int KAIN_DEAD_FRAMES = 6;
+    public static final float KAIN_DEAD_DURATION = 0.1f;
     public static final String KAIN_IDLE = "kain_idle";
     public static final String KAIN_TURN = "kain_turn";
     public static final String KAIN_WALK = "kain_walk";
@@ -105,6 +117,7 @@ public class Constants {
     public static final String KAIN_ATTACK = "kain_attack";
     public static final String KAIN_JUMP_ATTACK = "kain_jump_attack";
     public static final String KAIN_HIT = "kain_hit";
+    public static final String KAIN_DEAD = "kain_knockdown";
 
     // Bishamon
     public static final float BISHAMON_SCALE = 0.6f;
@@ -115,12 +128,15 @@ public class Constants {
     public static final float BISHAMON_DRAW_CORRECTION_X =  (34f * BISHAMON_SCALE) + BISHAMON_WIDTH / 2;;
     public static final float BISHAMON_DRAW_CORRECTION_Y = (16f * BISHAMON_SCALE) + BISHAMON_HEIGHT / 2;
     public static final float BISHAMON_SPEED = 70f;
-    public static final int BISHAMON_HEALTH = 500;
-    public static final int BISHAMON_HEALTH_HARD = 1000;
+    public static final int BISHAMON_HEALTH = 1000;
+    public static final int BISHAMON_HEALTH_HARD = 2000;
     public static final int BISHAMON_STRENGTH = 250;
     public static final int BISHAMON_STRENGTH_HARD = 500;
     public static final float BISHAMON_IDLE_DURATION = 0.15f;
-    public static final float BISHAMON_HIT_DURATION = 0.5f;
+    public static final int BISHAMON_HIT_FRAMES = 2;
+    public static final float BISHAMON_HIT_DURATION = 0.1f;
+    public static final int BISHAMON_DEAD_FRAMES = 9;
+    public static final float BISHAMON_DEAD_DURATION = 0.1f;
 //    public static final int KAIN_TURN_FRAMES = 3;
 //    public static final float KAIN_TURN_DURATION = 0.1f;
 //    public static final float KAIN_WALK_DURATION = 0.15f;
@@ -158,6 +174,7 @@ public class Constants {
 //    public static final String KAIN_ATTACK = "kain_attack";
 //    public static final String KAIN_JUMP_ATTACK = "kain_jump_attack";
     public static final String BISHAMON_HIT = "bishamon_hit";
+    public static final String BISHAMON_DEAD = "bishamon_knockdown";
 
     // Hsien Ko
     public static final float HSIEN_KO_SCALE = 0.5f;
@@ -168,11 +185,15 @@ public class Constants {
     public static final float HSIEN_KO_DRAW_CORRECTION_X =  (70f * HSIEN_KO_SCALE) + HSIEN_KO_WIDTH / 2;;
     public static final float HSIEN_KO_DRAW_CORRECTION_Y = (7f * HSIEN_KO_SCALE) + HSIEN_KO_HEIGHT / 2;
     public static final float HSIEN_KO_SPEED = 70f;
-    public static final int HSIEN_KO_HEALTH = 300;
-    public static final int HSIEN_KO_HEALTH_HARD = 600;
+    public static final int HSIEN_KO_HEALTH = 500;
+    public static final int HSIEN_KO_HEALTH_HARD = 900;
     public static final int HSIEN_KO_STRENGTH = 200;
     public static final int HSIEN_KO_STRENGTH_HARD = 400;
     public static final float HSIEN_KO_IDLE_DURATION = 0.15f;
+    public static final int HSIEN_KO_HIT_FRAMES = 2;
+    public static final float HSIEN_KO_HIT_DURATION = 0.1f;
+    public static final int HSIEN_KO_DEAD_FRAMES = 10;
+    public static final float HSIEN_KO_DEAD_DURATION = 0.1f;
     //    public static final int KAIN_TURN_FRAMES = 3;
 //    public static final float KAIN_TURN_DURATION = 0.1f;
 //    public static final float KAIN_WALK_DURATION = 0.15f;
@@ -210,6 +231,7 @@ public class Constants {
 //    public static final String KAIN_ATTACK = "kain_attack";
 //    public static final String KAIN_JUMP_ATTACK = "kain_jump_attack";
     public static final String HSIEN_KO_HIT = "hsien_ko_hit";
+    public static final String HSIEN_KO_DEAD = "hsien_ko_knockdown";
 
     // Death Adder
     public static final float DEATH_ADDER_SCALE = 0.5f;
@@ -220,11 +242,15 @@ public class Constants {
     public static final float DEATH_ADDER_DRAW_CORRECTION_X =  (73f * DEATH_ADDER_SCALE) + DEATH_ADDER_WIDTH / 2;;
     public static final float DEATH_ADDER_DRAW_CORRECTION_Y = (35f * DEATH_ADDER_SCALE) + DEATH_ADDER_HEIGHT / 2;
     public static final float DEATH_ADDER_SPEED = 70f;
-    public static final int DEATH_ADDER_HEALTH = 1000;
-    public static final int DEATH_ADDER_HEALTH_HARD = 2000;
+    public static final int DEATH_ADDER_HEALTH = 2000;
+    public static final int DEATH_ADDER_HEALTH_HARD = 4000;
     public static final int DEATH_ADDER_STRENGTH = 400;
     public static final int DEATH_ADDER_STRENGTH_HARD = 500;
     public static final float DEATH_ADDER_IDLE_DURATION = 0.15f;
+    public static final int DEATH_ADDER_HIT_FRAMES = 3;
+    public static final float DEATH_ADDER_HIT_DURATION = 0.1f;
+    public static final int DEATH_ADDER_DEAD_FRAMES = 5;
+    public static final float DEATH_ADDER_DEAD_DURATION = 0.1f;
     //    public static final int KAIN_TURN_FRAMES = 3;
 //    public static final float KAIN_TURN_DURATION = 0.1f;
 //    public static final float KAIN_WALK_DURATION = 0.15f;
@@ -262,4 +288,5 @@ public class Constants {
 //    public static final String KAIN_ATTACK = "kain_attack";
 //    public static final String KAIN_JUMP_ATTACK = "kain_jump_attack";
     public static final String DEATH_ADDER_HIT = "death_adder_hit";
+    public static final String DEATH_ADDER_DEAD = "death_adder_knockdown";
 }
