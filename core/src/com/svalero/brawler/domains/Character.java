@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.utils.IDGenerator;
-
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
@@ -18,6 +17,7 @@ public abstract class Character implements Disposable {
     protected Vector2 position;
     protected float stateTime = 0;
     protected int health;
+    protected int attackStrength;
     protected float speed;
     protected Body body;
     protected float width;
@@ -34,9 +34,46 @@ public abstract class Character implements Disposable {
     protected float jumpUpDuration;
     protected float jumpDownDuration;
     protected float jumpStrength;
-    protected Animation<TextureRegion> getCurrentAnimation;
     protected Fixture attackFixture;
     protected boolean hasAttackedThisJump = false;
+    protected World world;
+    protected String idleKey;
+    protected String turnKey;
+    protected String walkKey;
+    protected String runKey;
+    protected String blockUpKey;
+    protected String blockDownKey;
+    protected String crouchDownKey;
+    protected String crouchUpKey;
+    protected String jumpUpKey;
+    protected String jumpDownKey;
+    protected String landKey;
+    protected String attackKey;
+    protected String jumpAttackKey;
+    protected String hitKey;
+    protected String blockMoveSoundKey;
+    protected String jumpSoundKey;
+    protected String attackSoundKey;
+    protected int turnFrames;
+    protected float turnDuration;
+    protected int blockFrames;
+    protected float blockDuration;
+    protected int crouchFrames;
+    protected float crouchDuration;
+    protected int landFrames;
+    protected float landDuration;
+    protected int attackFrames;
+    protected float attackDuration;
+    protected int jumpAttackFrames;
+    protected float jumpAttackDuration;
+    protected float attackOffsetX;
+    protected float attackOffsetY;
+    protected float attackWidth;
+    protected float attackHeight;
+    protected float jumpAttackOffsetX;
+    protected float jumpAttackOffsetY;
+    protected float jumpAttackWidth;
+    protected float jumpAttackHeight;
 
     public enum State {
         IDLE,
@@ -54,15 +91,26 @@ public abstract class Character implements Disposable {
         BLOCK_UP,
         BLOCK,
         BLOCK_DOWN,
-        HIT
+        HIT,
+        DEAD
     }
 
     public Character(World world, Vector2 position,
-                     String characterAtlas, int health, float speed, float width, float height,
+                     String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
-                     float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleAnimationKey) {
+                     float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleKey, String turnKey,
+                     String walkKey, String runKey, String blockUpKey, String blockDownKey, String crouchDownKey,
+                     String crouchUpKey, String jumpUpKey, String jumpDownKey, String landKey, String attackKey,
+                     String jumpAttackKey, String hitKey, String blockMoveSoundKey, String jumpSoundKey,
+                     String attackSoundKey, int turnFrames, float turnDuration, int blockFrames, float blockDuration,
+                     int crouchFrames, float crouchDuration, int landFrames, float landDuration, int attackFrames,
+                     float attackDuration, int jumpAttackFrames, float jumpAttackDuration, float attackOffsetX,
+                     float attackOffsetY, float attackWidth, float attackHeight, float jumpAttackOffsetX,
+                     float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight) {
+        this.world = world;
         this.position = position;
         this.health = health;
+        this.attackStrength = attackStrength;
         this.speed = speed;
         this.id = IDGenerator.generateUniqueId();
         this.width = width;
@@ -73,18 +121,57 @@ public abstract class Character implements Disposable {
         this.correctionX = correctionX;
         this.correctionY = correctionY;
         this.idleDuration = idleDuration;
+        this.idleKey = idleKey;
         this.jumpUpDuration = jumpUpDuration;
         this.jumpDownDuration = jumpDownDuration;
         this.jumpStrength = jumpStrength;
-        createBody(world, characterAtlas, idleAnimationKey);
+        this.turnKey = turnKey;
+        this.walkKey = walkKey;
+        this.runKey = runKey;
+        this.blockUpKey = blockUpKey;
+        this.blockDownKey = blockDownKey;
+        this.crouchDownKey = crouchDownKey;
+        this.crouchUpKey = crouchUpKey;
+        this.jumpUpKey = jumpUpKey;
+        this.jumpDownKey = jumpDownKey;
+        this.landKey = landKey;
+        this.attackKey = attackKey;
+        this.jumpAttackKey = jumpAttackKey;
+        this.hitKey = hitKey;
+        this.blockMoveSoundKey = blockMoveSoundKey;
+        this.jumpSoundKey = jumpSoundKey;
+        this.attackSoundKey = attackSoundKey;
+        this.turnFrames = turnFrames;
+        this.turnDuration = turnDuration;
+        this.blockFrames = blockFrames;
+        this.blockDuration = blockDuration;
+        this.crouchFrames = crouchFrames;
+        this.crouchDuration = crouchDuration;
+        this.landFrames = landFrames;
+        this.landDuration = landDuration;
+        this.attackFrames = attackFrames;
+        this.attackDuration = attackDuration;
+        this.jumpAttackFrames = jumpAttackFrames;
+        this.jumpAttackDuration = jumpAttackDuration;
+        this.attackOffsetX = attackOffsetX;
+        this.attackOffsetY = attackOffsetY;
+        this.attackWidth = attackWidth;
+        this.attackHeight = attackHeight;
+        this.jumpAttackOffsetX = jumpAttackOffsetX;
+        this.jumpAttackOffsetY = jumpAttackOffsetY;
+        this.jumpAttackWidth = jumpAttackWidth;
+        this.jumpAttackHeight = jumpAttackHeight;
+
+        createBody(world, characterAtlas);
     }
 
     public Character(World world, Vector2 position,
-                     String characterAtlas, int health, float speed, float width, float height,
+                     String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
-                     String idleAnimationKey) {
+                     String idleKey, String hitKey) {
         this.position = position;
         this.health = health;
+        this.attackStrength = attackStrength;
         this.speed = speed;
         this.id = IDGenerator.generateUniqueId();
         this.width = width;
@@ -95,13 +182,15 @@ public abstract class Character implements Disposable {
         this.correctionX = correctionX;
         this.correctionY = correctionY;
         this.idleDuration = idleDuration;
-        this.currentAnimation = AnimationManager.getAnimation(idleAnimationKey);
-        createBody(world, characterAtlas, idleAnimationKey);
+        this.currentAnimation = AnimationManager.getAnimation(idleKey);
+        this.idleKey = idleKey;
+        this.hitKey = hitKey;
+        createBody(world, characterAtlas);
     }
 
-    protected void createBody(World world, String characterAtlas, String idleAnimationKey) {
+    protected void createBody(World world, String characterAtlas) {
         textureAtlas = new TextureAtlas(Gdx.files.internal(characterAtlas));
-        currentAnimation = getAnimation(idleAnimationKey);
+        currentAnimation = getAnimation(idleKey);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -121,47 +210,40 @@ public abstract class Character implements Disposable {
         fixtureDef.density = 1f;
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0.0f;
-        fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_CHARACTER;
         if (this instanceof Player) {
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER;
+            fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_PLAYER;
+            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_ENEMY;
         } else if (this instanceof Enemy) {
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND;
+            fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ENEMY;
+            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_ATTACK_PLAYER;
         }
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
-
-        PolygonShape sensorShape = new PolygonShape();
-        Vector2 sensorPosition = new Vector2(0f, -height / 2f);
-        sensorShape.setAsBox(width / 2f, 0.1f, sensorPosition, 0f);
-        FixtureDef sensorFixtureDef = new FixtureDef();
-        sensorFixtureDef.shape = sensorShape;
-        sensorFixtureDef.isSensor = true;
-        sensorFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_CHARACTER;
-        sensorFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ATTACK;
-        body.createFixture(sensorFixtureDef).setUserData(this);
-        sensorShape.dispose();
     }
 
     public void createAttackFixture(float offsetX, float offsetY, float attackWidth, float attackHeight) {
         PolygonShape attackShape = new PolygonShape();
-
         attackShape.setAsBox(attackWidth / 2, attackHeight / 2, new Vector2(offsetX, offsetY), 0);
 
         FixtureDef attackFixtureDef = new FixtureDef();
         attackFixtureDef.shape = attackShape;
-        attackFixtureDef.isSensor = true;
+        attackFixtureDef.isSensor = false;
         if (this instanceof Player) {
-            attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK;
+            attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK_PLAYER;
+            attackFixtureDef.filter.maskBits = COLLIDER_CATEGORY_ENEMY;
         } else if (this instanceof Enemy) {
-            attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_CHARACTER;
+            attackFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK_ENEMY;
+            attackFixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER;
         }
 
         if (attackFixture != null) {
             body.destroyFixture(attackFixture);
         }
 
+        AttackFixtureData fixtureData = new AttackFixtureData(this);
         attackFixture = body.createFixture(attackFixtureDef);
-        attackFixture.setUserData(this);
+        attackFixture.setUserData(fixtureData);
+
         attackShape.dispose();
     }
 
@@ -210,6 +292,15 @@ public abstract class Character implements Disposable {
         }
     }
 
+    public void getHit(int strength) {
+        health = health - strength;
+        if (health <= 0) {
+            dispose();
+        }
+        currentAnimation = AnimationManager.getAnimation(hitKey);
+        setCurrentState(State.HIT);
+    }
+
     public void setHasAttackedThisJump(boolean hasAttackedThisJump) { this.hasAttackedThisJump = hasAttackedThisJump; }
 
     public boolean isFacingLeft() { return facingLeft; }
@@ -222,6 +313,14 @@ public abstract class Character implements Disposable {
 
     public int getId() { return id; }
 
+    public int getAttackStrength() { return attackStrength; }
+
     @Override
-    public void dispose() { textureAtlas.dispose(); }
+    public void dispose() {
+        textureAtlas.dispose();
+        if (world != null && body != null) {
+            world.destroyBody(body);
+            body = null;
+        }
+    }
 }

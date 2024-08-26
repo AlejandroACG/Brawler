@@ -173,22 +173,38 @@ public class LevelManager {
                     }
                 }
 
-                // Detección de colisión de ataques normales
-//                if (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataA instanceof Enemy && userDataB instanceof Player) {
-//                    handleAttackHit((Character) userDataA, (Character) userDataB);
-//                } else if (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK && userDataB instanceof Enemy && userDataA instanceof Player) {
-//                    handleAttackHit((Character) userDataB, (Character) userDataA);
-//                }
+                // Detección de colisión de ataques
+                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureB.getUserData() instanceof Enemy) ||
+                        (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureB.getUserData() instanceof Player)) {
+                    handleAttackHit((AttackFixtureData) fixtureA.getUserData(), (Character) fixtureB.getUserData());
+                } else if ((fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureA.getUserData() instanceof Enemy) ||
+                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureA.getUserData() instanceof Player)) {
+                    handleAttackHit((AttackFixtureData) fixtureB.getUserData(), (Character) fixtureA.getUserData());
+                }
             }
 
-            private void handleAttackHit(Character attacker, Character victim) {
+            private void handleAttackHit(AttackFixtureData attackData, Character victim) {
+                if (!attackData.getHitEnemyIds().contains(victim.getId())) {
+                    victim.getHit(attackData.getAttacker().getAttackStrength());
+                    attackData.getHitEnemyIds().add(victim.getId());
+                }
             }
 
             @Override
             public void endContact(Contact contact) {}
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
+            public void preSolve(Contact contact, Manifold oldManifold) {
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
+
+                if (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER ||
+                        fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY ||
+                        fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER ||
+                        fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY) {
+                    contact.setEnabled(false);
+                }
+            }
 
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {}

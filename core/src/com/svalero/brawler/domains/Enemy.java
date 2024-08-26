@@ -9,25 +9,36 @@ import static com.svalero.brawler.utils.Constants.*;
 public class Enemy extends Character {
     private float walkingSoundTimer = WALKING_SOUND_TIMER;
 
-    public Enemy(World world, Vector2 position, String characterAtlas, int health, float speed, float width, float height,
+    public Enemy(World world, Vector2 position, String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                   float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
-                  String idleAnimationKey) {
-        super(world, position, characterAtlas, health, speed, width, height, frameWidth, frameHeight, correctionX, correctionY,
-                idleDuration, idleAnimationKey);
+                  String idleAnimationKey, String hitKey) {
+        super(world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth, frameHeight, correctionX, correctionY,
+                idleDuration, idleAnimationKey, hitKey);
     }
 
     public void update(float dt) {
-//        manageInput(dt);
+        manageAI(dt);
 
-        Vector2 velocity = body.getLinearVelocity();
-        setCurrentStateWithoutReset(State.WALK);
-        currentAnimation = getAnimation(BISHAMON_WALK);
-        velocity.x = speed;
-        body.setLinearVelocity(velocity.x, velocity.y);
-
+//        Vector2 velocity = body.getLinearVelocity();
+//        setCurrentStateWithoutReset(State.WALK);
+//        currentAnimation = getAnimation(BISHAMON_WALK);
+//        velocity.x = speed;
+//        body.setLinearVelocity(velocity.x, velocity.y);
+//
         Vector2 bodyPosition = body.getPosition();
         position.set(bodyPosition.x, bodyPosition.y);
         stateTime += dt;
+    }
+
+    public void manageAI(float dt ){
+        Vector2 velocity = body.getLinearVelocity();
+
+        // HIT
+        if (currentState == State.HIT) {
+            if (stateTime >= KAIN_TURN_FRAMES * KAIN_TURN_DURATION) {
+                setCurrentStateWithoutReset(Character.State.WALK);
+            }
+        }
     }
 
 //    public void manageInput(float dt) {

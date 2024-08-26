@@ -23,16 +23,18 @@ public class AnimationManager {
         animations.put(KAIN_CROUCH_DOWN, new Animation<>(KAIN_CROUCH_DURATION, kainAtlas.findRegions("crouch"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_CROUCH_UP, new Animation<>(KAIN_CROUCH_DURATION, kainAtlas.findRegions("crouch"), Animation.PlayMode.REVERSED));
         animations.put(KAIN_JUMP_UP, new Animation<>(KAIN_JUMP_UP_DURATION, kainAtlas.findRegions("jump_up"), Animation.PlayMode.NORMAL));
-        animations.put(KAIN_JUMP, new Animation<>(KAIN_JUMP_DOWN_DURATION, kainAtlas.findRegions("jump_down"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_JUMP_DOWN, new Animation<>(KAIN_JUMP_DOWN_DURATION, kainAtlas.findRegions("jump_down"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_LAND, new Animation<>(KAIN_LAND_DURATION, kainAtlas.findRegions("land"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_ATTACK, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_JUMP_ATTACK, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("jump_attack"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_HIT, new Animation<>(KAIN_HIT_DURATION, kainAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
 
         // BISHAMON
         TextureAtlas bishamonAtlas = ResourceManager.getAtlas(BISHAMON_ATLAS);
 
         animations.put(BISHAMON_IDLE, new Animation<>(BISHAMON_IDLE_DURATION, bishamonAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
         animations.put(BISHAMON_WALK, new Animation<>(BISHAMON_IDLE_DURATION, bishamonAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
+        animations.put(BISHAMON_HIT, new Animation<>(BISHAMON_HIT_DURATION, kainAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
 
         // HSIEN KO
         TextureAtlas hsienKoAtlas = ResourceManager.getAtlas(HSIEN_KO_ATLAS);
