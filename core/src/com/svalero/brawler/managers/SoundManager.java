@@ -1,11 +1,13 @@
 package com.svalero.brawler.managers;
 
 import com.badlogic.gdx.audio.Sound;
+import com.svalero.brawler.domains.LongSoundInstance;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class SoundManager {
-    private static final Map<String, Long> longSoundIds = new HashMap<>();
+    private static final Map<String, LongSoundInstance> longSoundData = new HashMap<>();
 
     public static void playSound(String path) {
         if (!ConfigurationManager.mute) {
@@ -26,19 +28,35 @@ public class SoundManager {
     public static void playLongSound(String path, String instanceKey) {
         if (!ConfigurationManager.mute) {
             Sound sound = ResourceManager.getSound(path);
-            if (sound != null && !longSoundIds.containsKey(instanceKey)) {
+            if (sound != null && !longSoundData.containsKey(instanceKey)) {
                 long soundId = sound.loop();
-                longSoundIds.put(instanceKey, soundId);
+                longSoundData.put(instanceKey, new LongSoundInstance(sound, soundId, path));
             }
         }
     }
 
     public static void stopLongSound(String path, String instanceKey) {
-        Sound sound = ResourceManager.getSound(path);
-        Long soundId = longSoundIds.get(instanceKey);
-        if (sound != null && soundId != null) {
-            sound.stop(soundId);  // Detiene solo esa instancia
-            longSoundIds.remove(instanceKey);
+        LongSoundInstance soundInstance = longSoundData.get(instanceKey);
+        if (soundInstance != null) {
+            Sound sound = soundInstance.getSound();
+            long soundId = soundInstance.getSoundId();
+            if (sound != null) {
+                sound.stop(soundId);
+            }
+            longSoundData.remove(instanceKey);
         }
+    }
+
+    public static void stopAllLongSounds() {
+        for (Map.Entry<String, LongSoundInstance> entry : new HashMap<>(longSoundData).entrySet()) {
+            LongSoundInstance soundInstance = entry.getValue();
+            Sound sound = soundInstance.getSound();
+            long soundId = soundInstance.getSoundId();
+
+            if (sound != null && soundId != 0) {
+                sound.stop(soundId);
+            }
+        }
+        longSoundData.clear();
     }
 }

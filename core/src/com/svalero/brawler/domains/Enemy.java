@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.managers.LevelManager;
+import com.svalero.brawler.managers.SoundManager;
+
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
@@ -18,22 +20,16 @@ public class Enemy extends Character {
     public Enemy(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
                  int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
                  float correctionX, float correctionY, float idleDuration, String idleKey, String hitKey,
-                 int hitFrames, float hitDuration, String hitSoundKey, String deadKey, String deadSoundKey,
+                 int hitFrames, float hitDuration, String hitSoundPath, String deadKey, String deadSoundPath,
                  int deadFrames, float deadDuration, String turnKey, int turnFrames, float turnDuration) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth,
                 frameHeight, correctionX, correctionY, idleDuration, idleKey, hitKey, hitFrames, hitDuration,
-                hitSoundKey, deadKey, deadSoundKey, deadFrames, deadDuration, turnKey, turnFrames, turnDuration);
+                hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration, turnKey, turnFrames, turnDuration);
     }
 
     public void update(float dt) {
         manageAI(dt);
 
-//        Vector2 velocity = body.getLinearVelocity();
-//        setCurrentStateWithoutReset(State.WALK);
-//        currentAnimation = getAnimation(BISHAMON_WALK);
-//        velocity.x = speed;
-//        body.setLinearVelocity(velocity.x, velocity.y);
-//
         Vector2 bodyPosition = body.getPosition();
         position.set(bodyPosition.x, bodyPosition.y);
         stateTime += dt;
@@ -67,6 +63,8 @@ public class Enemy extends Character {
                 turnTimer = 0.0f;
                 chance = false;
             }
+
+            // Walk
 
         // TURN
         } else if (currentState == State.TURN) {

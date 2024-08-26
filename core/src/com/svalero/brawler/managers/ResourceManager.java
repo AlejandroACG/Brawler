@@ -61,9 +61,7 @@ public class ResourceManager {
         return assets.get(path, TextureAtlas.class);
     }
 
-    public static Sound getSound(String path) {
-        return assets.get(path, Sound.class);
-    }
+    public static Sound getSound(String path) { return assets.get(path, Sound.class); }
 
     public static Music getMusic(String path) { return assets.get(path, Music.class); }
 

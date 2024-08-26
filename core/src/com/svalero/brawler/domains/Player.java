@@ -23,21 +23,21 @@ public abstract class Player extends Character {
                   float jumpDownDuration, float jumpStrength, String idleKey, String turnKey, String walkKey,
                   String runKey, String blockUpKey, String blockDownKey, String crouchDownKey, String crouchUpKey,
                   String jumpUpKey, String jumpDownKey, String landKey, String attackKey, String jumpAttackKey,
-                  String hitKey, String blockMoveSoundKey, String jumpSoundKey, String attackSoundKey, int turnFrames,
-                  float turnDuration, int blockFrames, float blockDuration, int crouchFrames, float crouchDuration,
-                  int landFrames, float landDuration, int hitFrames, float hitDuration, int attackFrames,
-                  float attackDuration, int jumpAttackFrames, float jumpAttackDuration, float attackOffsetX,
-                  float attackOffsetY, float attackWidth, float attackHeight, float jumpAttackOffsetX,
-                  float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight, String hitSoundKey,
-                  String deadKey, String deadSoundKey, int deadFrames, float deadDuration) {
+                  String hitKey, String blockMoveSoundPath, String jumpSoundPath, String attackSoundPath,
+                  int turnFrames, float turnDuration, int blockFrames, float blockDuration, int crouchFrames,
+                  float crouchDuration, int landFrames, float landDuration, int hitFrames, float hitDuration,
+                  int attackFrames, float attackDuration, int jumpAttackFrames, float jumpAttackDuration,
+                  float attackOffsetX, float attackOffsetY, float attackWidth, float attackHeight,
+                  float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight,
+                  String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames, float deadDuration) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth, frameHeight,
                 correctionX, correctionY, idleDuration, jumpUpDuration, jumpDownDuration, jumpStrength, idleKey,
                 turnKey, walkKey, runKey, blockUpKey, blockDownKey, crouchDownKey, crouchUpKey, jumpUpKey, jumpDownKey,
-                landKey, attackKey, jumpAttackKey, hitKey, blockMoveSoundKey, jumpSoundKey, attackSoundKey, turnFrames,
+                landKey, attackKey, jumpAttackKey, hitKey, blockMoveSoundPath, jumpSoundPath, attackSoundPath, turnFrames,
                 turnDuration, blockFrames, blockDuration, crouchFrames, crouchDuration, landFrames, landDuration,
                 hitFrames, hitDuration, attackFrames, attackDuration, jumpAttackFrames, jumpAttackDuration,
                 attackOffsetX, attackOffsetY, attackWidth, attackHeight, jumpAttackOffsetX, jumpAttackOffsetY,
-                jumpAttackWidth, jumpAttackHeight, hitSoundKey, deadKey, deadSoundKey, deadFrames, deadDuration);
+                jumpAttackWidth, jumpAttackHeight, hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration);
     }
 
     public void update(float dt) {
@@ -142,7 +142,7 @@ public abstract class Player extends Character {
                 currentAnimation = getAnimation(blockUpKey);
                 velocity.x = 0;
                 setCurrentState(State.BLOCK_UP);
-                SoundManager.playSound(blockMoveSoundKey);
+                SoundManager.playSound(blockMoveSoundPath);
             }
 
             // Crouch
@@ -155,7 +155,7 @@ public abstract class Player extends Character {
             // Jump
             if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
                 velocity.y = jumpStrength;
-                SoundManager.playSound(jumpSoundKey);
+                SoundManager.playSound(jumpSoundPath);
                 setCurrentState(State.JUMP_UP);
             }
 
@@ -163,7 +163,7 @@ public abstract class Player extends Character {
             if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
                 velocity.x = 0;
                 currentAnimation = getAnimation(attackKey);
-                SoundManager.playSound(attackSoundKey);
+                SoundManager.playSound(attackSoundPath);
                 setCurrentState(State.ATTACK);
 
                 launchAttack();
@@ -196,7 +196,7 @@ public abstract class Player extends Character {
             }
         } else if (currentState == State.BLOCK) {
             if (!Gdx.input.isKeyPressed(Input.Keys.K)) {
-                SoundManager.playSound(blockMoveSoundKey);
+                SoundManager.playSound(blockMoveSoundPath);
                 currentAnimation = getAnimation(blockDownKey);
                 setCurrentState(State.BLOCK_DOWN);
             }
@@ -250,7 +250,7 @@ public abstract class Player extends Character {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !hasAttackedThisJump) {
                 currentAnimation = getAnimation(jumpAttackKey);
-                SoundManager.playSound(attackSoundKey);
+                SoundManager.playSound(attackSoundPath);
                 setCurrentState(State.JUMP_ATTACK);
                 setHasAttackedThisJump(true);
 

@@ -54,12 +54,12 @@ public abstract class Character implements Disposable {
     protected String attackKey;
     protected String jumpAttackKey;
     protected String hitKey;
-    protected String blockMoveSoundKey;
-    protected String jumpSoundKey;
-    protected String attackSoundKey;
-    protected String hitSoundKey;
+    protected String blockMoveSoundPath;
+    protected String jumpSoundPath;
+    protected String attackSoundPath;
+    protected String hitSoundPath;
     protected String deadKey;
-    protected String deadSoundKey;
+    protected String deadSoundPath;
     protected int turnFrames;
     protected float turnDuration;
     protected int blockFrames;
@@ -112,13 +112,13 @@ public abstract class Character implements Disposable {
                      float jumpUpDuration, float jumpDownDuration, float jumpStrength, String idleKey, String turnKey,
                      String walkKey, String runKey, String blockUpKey, String blockDownKey, String crouchDownKey,
                      String crouchUpKey, String jumpUpKey, String jumpDownKey, String landKey, String attackKey,
-                     String jumpAttackKey, String hitKey, String blockMoveSoundKey, String jumpSoundKey,
-                     String attackSoundKey, int turnFrames, float turnDuration, int blockFrames, float blockDuration,
+                     String jumpAttackKey, String hitKey, String blockMoveSoundPath, String jumpSoundPath,
+                     String attackSoundPath, int turnFrames, float turnDuration, int blockFrames, float blockDuration,
                      int crouchFrames, float crouchDuration, int landFrames, float landDuration, int hitFrames,
                      float hitDuration, int attackFrames, float attackDuration, int jumpAttackFrames,
                      float jumpAttackDuration, float attackOffsetX, float attackOffsetY, float attackWidth,
                      float attackHeight, float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth,
-                     float jumpAttackHeight, String hitSoundKey, String deadKey, String deadSoundKey, int deadFrames,
+                     float jumpAttackHeight, String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames,
                      float deadDuration) {
         this.levelManager = levelManager;
         this.world = world;
@@ -152,9 +152,9 @@ public abstract class Character implements Disposable {
         this.attackKey = attackKey;
         this.jumpAttackKey = jumpAttackKey;
         this.hitKey = hitKey;
-        this.blockMoveSoundKey = blockMoveSoundKey;
-        this.jumpSoundKey = jumpSoundKey;
-        this.attackSoundKey = attackSoundKey;
+        this.blockMoveSoundPath = blockMoveSoundPath;
+        this.jumpSoundPath = jumpSoundPath;
+        this.attackSoundPath = attackSoundPath;
         this.turnFrames = turnFrames;
         this.turnDuration = turnDuration;
         this.blockFrames = blockFrames;
@@ -177,9 +177,9 @@ public abstract class Character implements Disposable {
         this.jumpAttackOffsetY = jumpAttackOffsetY;
         this.jumpAttackWidth = jumpAttackWidth;
         this.jumpAttackHeight = jumpAttackHeight;
-        this.hitSoundKey = hitSoundKey;
+        this.hitSoundPath = hitSoundPath;
         this.deadKey = deadKey;
-        this.deadSoundKey = deadSoundKey;
+        this.deadSoundPath = deadSoundPath;
         this.deadFrames = deadFrames;
         this.deadDuration = deadDuration;
 
@@ -189,8 +189,8 @@ public abstract class Character implements Disposable {
     public Character(LevelManager levelManager, World world, Vector2 position,
                      String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
-                     String idleKey, String hitKey, int hitFrames, float hitDuration, String hitSoundKey,
-                     String deadKey, String deadSoundKey, int deadFrames, float deadDuration, String turnKey,
+                     String idleKey, String hitKey, int hitFrames, float hitDuration, String hitSoundPath,
+                     String deadKey, String deadSoundPath, int deadFrames, float deadDuration, String turnKey,
                      int turnFrames, float turnDuration) {
         this.levelManager = levelManager;
         this.position = position;
@@ -211,9 +211,9 @@ public abstract class Character implements Disposable {
         this.hitKey = hitKey;
         this.hitFrames = hitFrames;
         this.hitDuration = hitDuration;
-        this.hitSoundKey = hitSoundKey;
+        this.hitSoundPath = hitSoundPath;
         this.deadKey = deadKey;
-        this.deadSoundKey = deadSoundKey;
+        this.deadSoundPath = deadSoundPath;
         this.deadFrames = deadFrames;
         this.deadDuration = deadDuration;
         this.turnKey = turnKey;
@@ -332,11 +332,11 @@ public abstract class Character implements Disposable {
             facingLeft = attackFromLeft;
             setCurrentState(State.DEAD);
             currentAnimation = getAnimation(deadKey);
-            SoundManager.playSound(deadSoundKey);
+            SoundManager.playSound(deadSoundPath);
         } else {
             currentAnimation = AnimationManager.getAnimation(hitKey);
             SoundManager.playSound(HIT_SOUND);
-            SoundManager.playSound(hitSoundKey);
+            SoundManager.playSound(hitSoundPath);
             setCurrentState(State.HIT);
         }
     }
