@@ -138,8 +138,8 @@ public class Constants {
     public static final float BISHAMON_HIT_DURATION = 0.16f;
     public static final int BISHAMON_DEAD_FRAMES = 9;
     public static final float BISHAMON_DEAD_DURATION = 0.1f;
-//    public static final int KAIN_TURN_FRAMES = 3;
-//    public static final float KAIN_TURN_DURATION = 0.1f;
+    public static final int BISHAMON_TURN_FRAMES = 3;
+    public static final float BISHAMON_TURN_DURATION = 0.1f;
 //    public static final float KAIN_WALK_DURATION = 0.15f;
 //    public static final float KAIN_WALKING_SOUND_TIMER = 0.20f;
 //    public static final float KAIN_BLOCK_DURATION = 0.1f;
@@ -163,7 +163,7 @@ public class Constants {
 //    public static final float KAIN_JUMP_ATTACK_OFFSET_X = (KAIN_WIDTH / 2 + KAIN_JUMP_ATTACK_WIDTH / 2);
 //    public static final float KAIN_JUMP_ATTACK_OFFSET_Y = (-(KAIN_JUMP_ATTACK_HEIGHT / 2) + 9);
     public static final String BISHAMON_IDLE = "bishamon_idle";
-//    public static final String KAIN_TURN = "kain_turn";
+    public static final String BISHAMON_TURN = "bishamon_turn";
     public static final String BISHAMON_WALK = "bishamon_walk";
 //    public static final String KAIN_BLOCK_UP = "kain_block_up";
 //    public static final String KAIN_BLOCK_DOWN = "kain_block_down";
@@ -195,8 +195,8 @@ public class Constants {
     public static final float HSIEN_KO_HIT_DURATION = 0.16f;
     public static final int HSIEN_KO_DEAD_FRAMES = 10;
     public static final float HSIEN_KO_DEAD_DURATION = 0.1f;
-    //    public static final int KAIN_TURN_FRAMES = 3;
-//    public static final float KAIN_TURN_DURATION = 0.1f;
+    public static final int HSIEN_KO_TURN_FRAMES = 3;
+    public static final float HSIEN_KO_TURN_DURATION = 0.1f;
 //    public static final float KAIN_WALK_DURATION = 0.15f;
 //    public static final float KAIN_WALKING_SOUND_TIMER = 0.20f;
 //    public static final float KAIN_BLOCK_DURATION = 0.1f;
@@ -220,7 +220,7 @@ public class Constants {
 //    public static final float KAIN_JUMP_ATTACK_OFFSET_X = (KAIN_WIDTH / 2 + KAIN_JUMP_ATTACK_WIDTH / 2);
 //    public static final float KAIN_JUMP_ATTACK_OFFSET_Y = (-(KAIN_JUMP_ATTACK_HEIGHT / 2) + 9);
     public static final String HSIEN_KO_IDLE = "hsien_ko_idle";
-//    public static final String KAIN_TURN = "kain_turn";
+    public static final String HSIEN_KO_TURN = "hsien_ko_turn";
 //    public static final String KAIN_WALK = "kain_walk";
 //    public static final String KAIN_BLOCK_UP = "kain_block_up";
 //    public static final String KAIN_BLOCK_DOWN = "kain_block_down";
@@ -252,8 +252,8 @@ public class Constants {
     public static final float DEATH_ADDER_HIT_DURATION = 0.16f;
     public static final int DEATH_ADDER_DEAD_FRAMES = 5;
     public static final float DEATH_ADDER_DEAD_DURATION = 0.2f;
-    //    public static final int KAIN_TURN_FRAMES = 3;
-//    public static final float KAIN_TURN_DURATION = 0.1f;
+    public static final int DEATH_ADDER_TURN_FRAMES = 5;
+    public static final float DEATH_ADDER_TURN_DURATION = 0.1f;
 //    public static final float KAIN_WALK_DURATION = 0.15f;
 //    public static final float KAIN_WALKING_SOUND_TIMER = 0.20f;
 //    public static final float KAIN_BLOCK_DURATION = 0.1f;
@@ -277,7 +277,7 @@ public class Constants {
 //    public static final float KAIN_JUMP_ATTACK_OFFSET_X = (KAIN_WIDTH / 2 + KAIN_JUMP_ATTACK_WIDTH / 2);
 //    public static final float KAIN_JUMP_ATTACK_OFFSET_Y = (-(KAIN_JUMP_ATTACK_HEIGHT / 2) + 9);
     public static final String DEATH_ADDER_IDLE = "death_adder_idle";
-//    public static final String KAIN_TURN = "kain_turn";
+    public static final String DEATH_ADDER_TURN = "death_adder_turn";
 //    public static final String KAIN_WALK = "kain_walk";
 //    public static final String KAIN_BLOCK_UP = "kain_block_up";
 //    public static final String KAIN_BLOCK_DOWN = "kain_block_down";

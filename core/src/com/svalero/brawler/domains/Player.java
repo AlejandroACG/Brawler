@@ -321,10 +321,6 @@ public abstract class Player extends Character {
                     velocity.x = -140f;
                 }
             }
-            if (stateTime >= (deadFrames - 1) * deadDuration) {
-                velocity.y = 0;
-                velocity.x = 0;
-            }
         }
 
         // Erase unused attack fixtures

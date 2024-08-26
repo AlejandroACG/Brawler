@@ -1,22 +1,28 @@
 package com.svalero.brawler.domains;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.managers.LevelManager;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Enemy extends Character {
+    boolean chance;
+    private float turnTimerMark = 2.0f;
+    private float turnTimer = 0.0f;
     private float walkingSoundTimer = WALKING_SOUND_TIMER;
 
     public Enemy(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
                  int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
                  float correctionX, float correctionY, float idleDuration, String idleKey, String hitKey,
                  int hitFrames, float hitDuration, String hitSoundKey, String deadKey, String deadSoundKey,
-                 int deadFrames, float deadDuration) {
+                 int deadFrames, float deadDuration, String turnKey, int turnFrames, float turnDuration) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth,
                 frameHeight, correctionX, correctionY, idleDuration, idleKey, hitKey, hitFrames, hitDuration,
-                hitSoundKey, deadKey, deadSoundKey, deadFrames, deadDuration);
+                hitSoundKey, deadKey, deadSoundKey, deadFrames, deadDuration, turnKey, turnFrames, turnDuration);
     }
 
     public void update(float dt) {
@@ -40,11 +46,36 @@ public class Enemy extends Character {
         if (currentState == State.IDLE || currentState == State.WALK || currentState == State.RUN) {
             boolean isPlayerLeft = levelManager.getPlayer().getPosition().x < this.getPosition().x;
 
+            // Turn
+            if (facingLeft != isPlayerLeft && turnTimer >= turnTimerMark) {
+                chance = Math.random() < 0.5;
+            } else {
+                turnTimer += dt;
+            }
+            if (!facingLeft && isPlayerLeft && chance) {
+                setCurrentState(State.TURN);
+                velocity.x = 0;
+                currentAnimation = getAnimation(turnKey);
+                facingLeft = true;
+                turnTimer = 0.0f;
+                chance = false;
+            } else if (facingLeft && !isPlayerLeft && chance) {
+                setCurrentState(State.TURN);
+                velocity.x = 0;
+                currentAnimation = getAnimation(turnKey);
+                facingLeft = false;
+                turnTimer = 0.0f;
+                chance = false;
+            }
 
-        }
-
+        // TURN
+        } else if (currentState == State.TURN) {
+            if (stateTime >= turnFrames * turnDuration) {
+                currentAnimation = AnimationManager.getAnimation(idleKey);
+                setCurrentStateWithoutReset(State.IDLE);
+            }
         // HIT
-        if (currentState == State.HIT) {
+        } else if (currentState == State.HIT) {
             velocity.x = 0;
             if (stateTime >= hitFrames * hitDuration) {
                 currentAnimation = getAnimation(idleKey);

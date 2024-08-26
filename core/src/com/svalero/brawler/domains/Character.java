@@ -190,7 +190,8 @@ public abstract class Character implements Disposable {
                      String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
                      String idleKey, String hitKey, int hitFrames, float hitDuration, String hitSoundKey,
-                     String deadKey, String deadSoundKey, int deadFrames, float deadDuration) {
+                     String deadKey, String deadSoundKey, int deadFrames, float deadDuration, String turnKey,
+                     int turnFrames, float turnDuration) {
         this.levelManager = levelManager;
         this.position = position;
         this.health = health;
@@ -215,6 +216,9 @@ public abstract class Character implements Disposable {
         this.deadSoundKey = deadSoundKey;
         this.deadFrames = deadFrames;
         this.deadDuration = deadDuration;
+        this.turnKey = turnKey;
+        this.turnFrames = turnFrames;
+        this.turnDuration = turnDuration;
 
         createBody(world, characterAtlas);
     }
