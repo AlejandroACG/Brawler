@@ -36,6 +36,13 @@ public class Enemy extends Character {
     public void manageAI(float dt) {
         Vector2 velocity = body.getLinearVelocity();
 
+        // IDLE / WALK
+        if (currentState == State.IDLE || currentState == State.WALK || currentState == State.RUN) {
+            boolean isPlayerLeft = levelManager.getPlayer().getPosition().x < this.getPosition().x;
+
+
+        }
+
         // HIT
         if (currentState == State.HIT) {
             velocity.x = 0;
@@ -54,10 +61,6 @@ public class Enemy extends Character {
                 } else {
                     velocity.x = -140f;
                 }
-            }
-            if (stateTime >= (deadFrames - 1) * deadDuration) {
-                velocity.y = 0;
-                velocity.x = 0;
             }
         }
 

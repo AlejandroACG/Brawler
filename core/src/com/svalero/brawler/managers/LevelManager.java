@@ -173,6 +173,16 @@ public class LevelManager {
                     }
                 }
 
+                // Detección de colisión con el suelo al caer derrotado
+                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataB instanceof Character) ||
+                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataA instanceof Character)) {
+
+                    Character character = (Character) (fixtureA.getUserData() instanceof Character ? fixtureA.getUserData() : fixtureB.getUserData());
+                    if (character.getCurrentState() == State.DEAD) {
+                        character.stayDead();
+                    }
+                }
+
                 // Detección de colisión de ataques
                 if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureB.getUserData() instanceof Enemy) ||
                         (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureB.getUserData() instanceof Player)) {

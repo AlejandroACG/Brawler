@@ -102,7 +102,8 @@ public abstract class Character implements Disposable {
         BLOCK,
         BLOCK_DOWN,
         HIT,
-        DEAD
+        DEAD,
+        VICTORY
     }
 
     public Character(LevelManager levelManager, World world, Vector2 position,
@@ -334,6 +335,14 @@ public abstract class Character implements Disposable {
             SoundManager.playSound(hitSoundKey);
             setCurrentState(State.HIT);
         }
+    }
+
+    public void stayDead() {
+        Vector2 velocity = body.getLinearVelocity();
+        velocity.y = 0;
+        velocity.x = 0;
+
+        body.setLinearVelocity(velocity.x, velocity.y);
     }
 
     public void setHasAttackedThisJump(boolean hasAttackedThisJump) { this.hasAttackedThisJump = hasAttackedThisJump; }

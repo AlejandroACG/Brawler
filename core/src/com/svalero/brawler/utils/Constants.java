@@ -99,10 +99,10 @@ public class Constants {
     public static final float KAIN_JUMP_ATTACK_HEIGHT = 37f * KAIN_SCALE;
     public static final float KAIN_JUMP_ATTACK_OFFSET_X = KAIN_WIDTH / 2 + KAIN_JUMP_ATTACK_WIDTH / 2;
     public static final float KAIN_JUMP_ATTACK_OFFSET_Y = -(KAIN_JUMP_ATTACK_HEIGHT / 2) + (9 * KAIN_SCALE);
-    public static final int KAIN_HIT_FRAMES = 2;
-    public static final float KAIN_HIT_DURATION = 0.1f;
+    public static final int KAIN_HIT_FRAMES = 3;
+    public static final float KAIN_HIT_DURATION = 0.16f;
     public static final int KAIN_DEAD_FRAMES = 6;
-    public static final float KAIN_DEAD_DURATION = 0.1f;
+    public static final float KAIN_DEAD_DURATION = 0.2f;
     public static final String KAIN_IDLE = "kain_idle";
     public static final String KAIN_TURN = "kain_turn";
     public static final String KAIN_WALK = "kain_walk";
@@ -120,7 +120,7 @@ public class Constants {
     public static final String KAIN_DEAD = "kain_knockdown";
 
     // Bishamon
-    public static final float BISHAMON_SCALE = 0.6f;
+    public static final float BISHAMON_SCALE = 0.55f;
     public static final float BISHAMON_WIDTH = 92f * BISHAMON_SCALE;
     public static final float BISHAMON_HEIGHT = 98f * BISHAMON_SCALE;
     public static final float BISHAMON_FRAME_WIDTH = 306f * BISHAMON_SCALE;
@@ -133,8 +133,9 @@ public class Constants {
     public static final int BISHAMON_STRENGTH = 250;
     public static final int BISHAMON_STRENGTH_HARD = 500;
     public static final float BISHAMON_IDLE_DURATION = 0.15f;
-    public static final int BISHAMON_HIT_FRAMES = 2;
-    public static final float BISHAMON_HIT_DURATION = 0.1f;
+    public static final float BISHAMON_WALK_DURATION = 0.15f;
+    public static final int BISHAMON_HIT_FRAMES = 3;
+    public static final float BISHAMON_HIT_DURATION = 0.16f;
     public static final int BISHAMON_DEAD_FRAMES = 9;
     public static final float BISHAMON_DEAD_DURATION = 0.1f;
 //    public static final int KAIN_TURN_FRAMES = 3;
@@ -190,8 +191,8 @@ public class Constants {
     public static final int HSIEN_KO_STRENGTH = 200;
     public static final int HSIEN_KO_STRENGTH_HARD = 400;
     public static final float HSIEN_KO_IDLE_DURATION = 0.15f;
-    public static final int HSIEN_KO_HIT_FRAMES = 2;
-    public static final float HSIEN_KO_HIT_DURATION = 0.1f;
+    public static final int HSIEN_KO_HIT_FRAMES = 3;
+    public static final float HSIEN_KO_HIT_DURATION = 0.16f;
     public static final int HSIEN_KO_DEAD_FRAMES = 10;
     public static final float HSIEN_KO_DEAD_DURATION = 0.1f;
     //    public static final int KAIN_TURN_FRAMES = 3;
@@ -247,10 +248,10 @@ public class Constants {
     public static final int DEATH_ADDER_STRENGTH = 400;
     public static final int DEATH_ADDER_STRENGTH_HARD = 500;
     public static final float DEATH_ADDER_IDLE_DURATION = 0.15f;
-    public static final int DEATH_ADDER_HIT_FRAMES = 3;
-    public static final float DEATH_ADDER_HIT_DURATION = 0.1f;
+    public static final int DEATH_ADDER_HIT_FRAMES = 5;
+    public static final float DEATH_ADDER_HIT_DURATION = 0.16f;
     public static final int DEATH_ADDER_DEAD_FRAMES = 5;
-    public static final float DEATH_ADDER_DEAD_DURATION = 0.1f;
+    public static final float DEATH_ADDER_DEAD_DURATION = 0.2f;
     //    public static final int KAIN_TURN_FRAMES = 3;
 //    public static final float KAIN_TURN_DURATION = 0.1f;
 //    public static final float KAIN_WALK_DURATION = 0.15f;
