@@ -86,6 +86,8 @@ public abstract class Character implements Disposable {
     protected float jumpAttackOffsetY;
     protected float jumpAttackWidth;
     protected float jumpAttackHeight;
+    protected float specialAttackCooldown;
+    protected float specialAttackDistance;
 
     public enum State {
         IDLE,
@@ -200,7 +202,8 @@ public abstract class Character implements Disposable {
                      String deadKey, String deadSoundPath, int deadFrames, float deadDuration, String turnKey,
                      int turnFrames, float turnDuration, int attackFrames, float attackDuration, float attackWidth,
                      float attackHeight, float attackOffsetX, float attackOffsetY, String walkKey,
-                     String attackSoundPath, String attackKey, String victoryKey, String victorySoundPath) {
+                     String attackSoundPath, String attackKey, String victoryKey, String victorySoundPath,
+                     float specialAttackDistance) {
         this.levelManager = levelManager;
         this.position = position;
         this.maxHealth = health;
@@ -240,6 +243,8 @@ public abstract class Character implements Disposable {
         this.attackKey = attackKey;
         this.victoryKey = victoryKey;
         this.victorySoundPath = victorySoundPath;
+        this.specialAttackCooldown = ConfigurationManager.hard ? SPECIAL_ATTACK_COOLDOWN : SPECIAL_ATTACK_COOLDOWN_HARD;
+        this.specialAttackDistance = specialAttackDistance;
 
         createBody(world, characterAtlas);
     }

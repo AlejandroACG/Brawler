@@ -17,6 +17,10 @@
     "system": {
       "font": "caladea-font",
       "fontColor": "white"
+    },
+    "red-label": {
+      "font": "aetherius-font",
+      "fontColor": "red"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {

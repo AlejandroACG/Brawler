@@ -47,7 +47,7 @@ public class GameOverScreen implements Screen {
 
         Label gameOverLabel = new Label("GAME OVER", game.getSkin());
         gameOverLabel.setAlignment(Align.center);
-        Label scoreLabel = new Label(String.valueOf(currentScore), game.getSkin());
+        Label scoreLabel = new Label(String.valueOf(currentScore), game.getSkin(), "red-label");
         scoreLabel.setAlignment(Align.center);
 
         TextButton retryButton = new TextButton("RETRY", game.getSkin());

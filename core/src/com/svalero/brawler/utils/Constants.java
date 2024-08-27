@@ -8,6 +8,8 @@ public class Constants {
     // Timers
     public static final long DOUBLE_CLICK_THRESHOLD = 300;
     public static final float WALKING_SOUND_TIMER = 0.20f;
+    public static final float SPECIAL_ATTACK_COOLDOWN = 8.0f;
+    public static final float SPECIAL_ATTACK_COOLDOWN_HARD = 3.0f;
 
     // Fonts
     public static final String AETHERIUS_FONT = "aetherius-font";
@@ -217,6 +219,7 @@ public class Constants {
     public static final float BISHAMON_ATTACK_HEIGHT = 104f * BISHAMON_SCALE;
     public static final float BISHAMON_ATTACK_OFFSET_X = (BISHAMON_WIDTH / 2 + BISHAMON_ATTACK_WIDTH / 2);
     public static final float BISHAMON_ATTACK_OFFSET_Y = (BISHAMON_ATTACK_HEIGHT / 2) - 39 * BISHAMON_SCALE;
+    public static final float BISHAMON_SPECIAL_ATTACK_DISTANCE = BISHAMON_WIDTH * 4;
 //    public static final int KAIN_JUMP_ATTACK_FRAMES = 8;
 //    public static final float KAIN_JUMP_ATTACK_DURATION = 0.1f;
 //    public static final float KAIN_JUMP_ATTACK_WIDTH = 58f;
@@ -255,6 +258,7 @@ public class Constants {
     public static final float HSIEN_KO_ATTACK_HEIGHT = 29f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_ATTACK_OFFSET_X = (HSIEN_KO_WIDTH / 2 + HSIEN_KO_ATTACK_WIDTH / 2);
     public static final float HSIEN_KO_ATTACK_OFFSET_Y = (HSIEN_KO_ATTACK_HEIGHT / 2) + 15 * HSIEN_KO_SCALE;
+    public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = Float.POSITIVE_INFINITY;
 //    public static final int KAIN_JUMP_ATTACK_FRAMES = 8;
 //    public static final float KAIN_JUMP_ATTACK_DURATION = 0.1f;
 //    public static final float KAIN_JUMP_ATTACK_WIDTH = 58f;
@@ -293,6 +297,7 @@ public class Constants {
     public static final float DEATH_ADDER_ATTACK_HEIGHT = 91f * DEATH_ADDER_SCALE;
     public static final float DEATH_ADDER_ATTACK_OFFSET_X = (DEATH_ADDER_WIDTH / 2 + DEATH_ADDER_ATTACK_WIDTH / 2);
     public static final float DEATH_ADDER_ATTACK_OFFSET_Y = (DEATH_ADDER_ATTACK_HEIGHT / 2) - 13 * DEATH_ADDER_SCALE;
+    public static final float DEATH_ADDER_SPECIAL_ATTACK_DISTANCE = Float.POSITIVE_INFINITY;
 //    public static final int KAIN_JUMP_ATTACK_FRAMES = 8;
 //    public static final float KAIN_JUMP_ATTACK_DURATION = 0.1f;
 //    public static final float KAIN_JUMP_ATTACK_WIDTH = 58f;

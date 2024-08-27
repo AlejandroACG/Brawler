@@ -52,7 +52,6 @@ public abstract class Player extends Character {
     // TODO agachado y alternarlos?
     // TODO Faltan ataques crouch y el movimiento especial
     // TODO Faltan bloqueos
-    // TODO Daño
     // TODO Pause
     // TODO Todo el tema de agacharse
     // TODO Darle ángulo al fixture del ataque aéreo para mejorar la hitbox
@@ -308,6 +307,7 @@ public abstract class Player extends Character {
         }
 
         // DEAD
+        // TODO Prevenir lo de las muertes en el aire
         if (currentState == State.DEAD) {
             if (stateTime == 0) {
                 velocity.y = 100f;
