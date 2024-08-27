@@ -30,6 +30,7 @@ public class AnimationManager {
         animations.put(KAIN_JUMP_ATTACK, new Animation<>(KAIN_ATTACK_DURATION, kainAtlas.findRegions("jump_attack"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_HIT, new Animation<>(KAIN_HIT_DURATION, kainAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_DEAD, new Animation<>(KAIN_DEAD_DURATION, kainAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
+        animations.put(KAIN_VICTORY, new Animation<>(KAIN_VICTORY_DURATION, kainAtlas.findRegions("victory"), Animation.PlayMode.NORMAL));
 
         // BISHAMON
         TextureAtlas bishamonAtlas = ResourceManager.getAtlas(BISHAMON_ATLAS);
@@ -40,6 +41,7 @@ public class AnimationManager {
         animations.put(BISHAMON_ATTACK, new Animation<>(BISHAMON_ATTACK_DURATION, bishamonAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(BISHAMON_HIT, new Animation<>(BISHAMON_HIT_DURATION, bishamonAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(BISHAMON_DEAD, new Animation<>(BISHAMON_DEAD_DURATION, bishamonAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
+        animations.put(BISHAMON_VICTORY, new Animation<>(BISHAMON_VICTORY_DURATION, bishamonAtlas.findRegions("victory"), Animation.PlayMode.NORMAL));
 
         // HSIEN KO
         TextureAtlas hsienKoAtlas = ResourceManager.getAtlas(HSIEN_KO_ATLAS);
@@ -50,6 +52,7 @@ public class AnimationManager {
         animations.put(HSIEN_KO_ATTACK, new Animation<>(HSIEN_KO_ATTACK_DURATION, hsienKoAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(HSIEN_KO_HIT, new Animation<>(HSIEN_KO_HIT_DURATION, hsienKoAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(HSIEN_KO_DEAD, new Animation<>(HSIEN_KO_DEAD_DURATION, hsienKoAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
+        animations.put(HSIEN_KO_VICTORY, new Animation<>(HSIEN_KO_VICTORY_DURATION, hsienKoAtlas.findRegions("victory"), Animation.PlayMode.NORMAL));
 
         // DEATH ADDER
         TextureAtlas deathAdderAtlas = ResourceManager.getAtlas(DEATH_ADDER_ATLAS);
@@ -60,6 +63,7 @@ public class AnimationManager {
         animations.put(DEATH_ADDER_ATTACK, new Animation<>(DEATH_ADDER_ATTACK_DURATION, deathAdderAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(DEATH_ADDER_HIT, new Animation<>(DEATH_ADDER_HIT_DURATION, deathAdderAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(DEATH_ADDER_DEAD, new Animation<>(DEATH_ADDER_DEAD_DURATION, deathAdderAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
+        animations.put(DEATH_ADDER_VICTORY, new Animation<>(DEATH_ADDER_VICTORY_DURATION, deathAdderAtlas.findRegions("victory"), Animation.PlayMode.NORMAL));
 
         // EFFECTS
         TextureAtlas effectsAtlas = ResourceManager.getAtlas(EFFECTS_ATLAS);

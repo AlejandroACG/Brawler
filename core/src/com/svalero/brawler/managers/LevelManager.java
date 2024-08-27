@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.svalero.brawler.Brawler;
 import com.svalero.brawler.domains.*;
 import com.svalero.brawler.domains.Character;
+import com.svalero.brawler.screens.GameOverScreen;
 import com.svalero.brawler.utils.ParallaxLayer;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,10 @@ public class LevelManager {
     private CameraManager cameraManager;
     private final Array<ParallaxLayer> parallaxLayers = new Array<>();
     private String backgroundMusic;
+    private boolean isDefeated = false;
+    private float defeatTimer = 10.0f;
+    private boolean enemyCelebrationTriggered = false;
+    private float enemyCelebrationTimer = 1.0f;
 
     public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter) {
         this.game = game;
@@ -225,6 +230,36 @@ public class LevelManager {
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
+    }
+
+    public void checkDefeatCondition(float dt) {
+        if (player.getCurrentState() == State.DEAD && !isDefeated) {
+            isDefeated = true;
+        }
+
+        if (isDefeated && !enemyCelebrationTriggered) {
+            enemyCelebrationTimer -= dt;
+            if (enemyCelebrationTimer <= 0) {
+                enemyCelebrationTriggered = true;
+                for (Enemy enemy : getEnemies().values()) {
+                    if (enemy.getCurrentState() != State.DEAD) {
+                        enemy.setCurrentState(State.VICTORY);
+                    }
+                }
+                MusicManager.stopMusic();
+                MusicManager.startMusic(GAME_OVER_MUSIC);
+            }
+        }
+
+        if (enemyCelebrationTriggered) {
+            defeatTimer -= dt;
+            if (defeatTimer <= 0) {
+                triggerGameOver();
+            }
+        }    }
+
+    private void triggerGameOver() {
+        game.setScreen(new GameOverScreen(game));
     }
 
     public float getMapWidth() {

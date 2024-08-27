@@ -3,6 +3,7 @@ package com.svalero.brawler.domains;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.AnimationManager;
+import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
@@ -23,12 +24,13 @@ public class Enemy extends Character {
                  int hitFrames, float hitDuration, String hitSoundPath, String deadKey, String deadSoundPath,
                  int deadFrames, float deadDuration, String turnKey, int turnFrames, float turnDuration,
                  int attackFrames, float attackDuration, float attackWidth, float attackHeight, float attackOffsetX,
-                 float attackOffsetY, String walkKey, String attackSoundPath, String attackKey) {
+                 float attackOffsetY, String walkKey, String attackSoundPath, String attackKey, String victoryKey,
+                 String victorySoundPath) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth,
                 frameHeight, correctionX, correctionY, idleDuration, idleKey, hitKey, hitFrames, hitDuration,
                 hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration, turnKey, turnFrames, turnDuration,
                 attackFrames, attackDuration, attackWidth, attackHeight, attackOffsetX, attackOffsetY, walkKey,
-                attackSoundPath, attackKey);
+                attackSoundPath, attackKey, victoryKey, victorySoundPath);
     }
 
     public void update(float dt) {
@@ -54,7 +56,7 @@ public class Enemy extends Character {
 
             // Chance of turning
             if (facingLeft != isPlayerLeft && turnTimer >= timerMark) {
-                chance = Math.random() < TURN_CHANCE;
+                chance = Math.random() < (ConfigurationManager.hard ? TURN_CHANCE_HARD : TURN_CHANCE);
                 turnTimer = 0.0f;
             } else {
                 turnTimer += dt;
@@ -80,7 +82,7 @@ public class Enemy extends Character {
                 if (currentState == State.IDLE && distanceX >= attackWidth) {
                     // Chance to start walking
                     if (walkTimer >= timerMark) {
-                        chance = Math.random() < WALK_CHANCE;
+                        chance = Math.random() < (ConfigurationManager.hard ? WALK_CHANCE_HARD : WALK_CHANCE);
                         walkTimer = 0.0f;
                     } else {
                         walkTimer += dt;
@@ -101,7 +103,7 @@ public class Enemy extends Character {
                 // Chance of random stop
                 } else if (currentState == State.WALK && distanceX > attackWidth) {
                     if (stopTimer >= timerMark) {
-                        chance = Math.random() < STOP_CHANCE;
+                        chance = Math.random() < (ConfigurationManager.hard ? STOP_CHANCE_HARD : STOP_CHANCE);
                         stopTimer = 0.0f;
                     } else {
                         stopTimer += dt;
@@ -119,7 +121,7 @@ public class Enemy extends Character {
                 // Chance of attack
                 } else if (currentState == State.IDLE && distanceX < attackWidth) {
                     if (attackTimer >= timerMark) {
-                        chance = Math.random() < ATTACK_CHANCE;
+                        chance = Math.random() < (ConfigurationManager.hard ? ATTACK_CHANCE_HARD : ATTACK_CHANCE);
                         attackTimer = 0.0f;
                     } else {
                         attackTimer += dt;
@@ -187,6 +189,14 @@ public class Enemy extends Character {
         // Erase unused attack fixtures
         if (currentState != State.ATTACK) {
             clearAttackFixture();
+        }
+
+        // VICTORY
+        if (currentState == State.VICTORY) {
+            if (stateTime == 0) {
+                currentAnimation = getAnimation(victoryKey);
+                SoundManager.playSound(victorySoundPath);
+            }
         }
 
         body.setLinearVelocity(velocity.x, velocity.y);

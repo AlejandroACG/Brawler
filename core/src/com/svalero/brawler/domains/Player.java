@@ -29,7 +29,8 @@ public abstract class Player extends Character {
                   int attackFrames, float attackDuration, int jumpAttackFrames, float jumpAttackDuration,
                   float attackOffsetX, float attackOffsetY, float attackWidth, float attackHeight,
                   float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight,
-                  String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames, float deadDuration) {
+                  String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames, float deadDuration,
+                  String victoryKey, String victorySoundPath) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth, frameHeight,
                 correctionX, correctionY, idleDuration, jumpUpDuration, jumpDownDuration, jumpStrength, idleKey,
                 turnKey, walkKey, runKey, blockUpKey, blockDownKey, crouchDownKey, crouchUpKey, jumpUpKey, jumpDownKey,
@@ -37,7 +38,8 @@ public abstract class Player extends Character {
                 turnDuration, blockFrames, blockDuration, crouchFrames, crouchDuration, landFrames, landDuration,
                 hitFrames, hitDuration, attackFrames, attackDuration, jumpAttackFrames, jumpAttackDuration,
                 attackOffsetX, attackOffsetY, attackWidth, attackHeight, jumpAttackOffsetX, jumpAttackOffsetY,
-                jumpAttackWidth, jumpAttackHeight, hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration);
+                jumpAttackWidth, jumpAttackHeight, hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration,
+                victoryKey, victorySoundPath);
     }
 
     public void update(float dt) {
@@ -343,6 +345,14 @@ public abstract class Player extends Character {
                 runningSoundTimer -= dt;
             } else {
                 SoundManager.stopLongSound(runKey);
+            }
+        }
+
+        // VICTORY
+        if (currentState == State.VICTORY) {
+            if (stateTime == 0) {
+                currentAnimation = getAnimation(victoryKey);
+                SoundManager.playSound(victorySoundPath);
             }
         }
 

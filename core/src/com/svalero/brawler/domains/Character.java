@@ -62,6 +62,8 @@ public abstract class Character implements Disposable {
     protected String hitSoundPath;
     protected String deadKey;
     protected String deadSoundPath;
+    protected String victoryKey;
+    protected String victorySoundPath;
     protected int turnFrames;
     protected float turnDuration;
     protected int blockFrames;
@@ -122,7 +124,7 @@ public abstract class Character implements Disposable {
                      float jumpAttackDuration, float attackOffsetX, float attackOffsetY, float attackWidth,
                      float attackHeight, float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth,
                      float jumpAttackHeight, String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames,
-                     float deadDuration) {
+                     float deadDuration, String victoryKey, String victorySoundPath) {
         this.levelManager = levelManager;
         this.world = world;
         this.position = position;
@@ -185,6 +187,8 @@ public abstract class Character implements Disposable {
         this.deadSoundPath = deadSoundPath;
         this.deadFrames = deadFrames;
         this.deadDuration = deadDuration;
+        this.victoryKey = victoryKey;
+        this.victorySoundPath = victorySoundPath;
 
         createBody(world, characterAtlas);
     }
@@ -197,7 +201,7 @@ public abstract class Character implements Disposable {
                      String deadKey, String deadSoundPath, int deadFrames, float deadDuration, String turnKey,
                      int turnFrames, float turnDuration, int attackFrames, float attackDuration, float attackWidth,
                      float attackHeight, float attackOffsetX, float attackOffsetY, String walkKey,
-                     String attackSoundPath, String attackKey) {
+                     String attackSoundPath, String attackKey, String victoryKey, String victorySoundPath) {
         this.levelManager = levelManager;
         this.position = position;
         this.health = health;
@@ -234,6 +238,8 @@ public abstract class Character implements Disposable {
         this.walkKey = walkKey;
         this.attackSoundPath = attackSoundPath;
         this.attackKey = attackKey;
+        this.victoryKey = victoryKey;
+        this.victorySoundPath = victorySoundPath;
 
         createBody(world, characterAtlas);
     }

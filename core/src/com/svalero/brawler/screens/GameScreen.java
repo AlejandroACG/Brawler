@@ -20,6 +20,7 @@ public class GameScreen implements Screen {
     private LevelManager levelManager;
     private RenderManager renderManager;
     private int currentLevel;
+    private int currentScore;
     private Box2DDebugRenderer debugRenderer;
 
     public GameScreen(Brawler game, int currentLevel) {
@@ -41,6 +42,7 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        levelManager.checkDefeatCondition(dt);
         actionManager.update(dt);
         cameraManager.handleCamera();
         renderManager.drawFrame();

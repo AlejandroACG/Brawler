@@ -21,15 +21,19 @@ public class ResourceManager {
         assets.load(KAIN_BLOCK_MOVE_SOUND, Sound.class);
         assets.load(KAIN_HIT_SOUND, Sound.class);
         assets.load(KAIN_DEAD_SOUND, Sound.class);
+        assets.load(KAIN_VICTORY_SOUND, Sound.class);
         assets.load(BISHAMON_ATTACK_SOUND, Sound.class);
         assets.load(BISHAMON_HIT_SOUND, Sound.class);
         assets.load(BISHAMON_DEAD_SOUND, Sound.class);
+        assets.load(BISHAMON_VICTORY_SOUND, Sound.class);
         assets.load(HSIEN_KO_ATTACK_SOUND, Sound.class);
         assets.load(HSIEN_KO_HIT_SOUND, Sound.class);
         assets.load(HSIEN_KO_DEAD_SOUND, Sound.class);
+        assets.load(HSIEN_KO_VICTORY_SOUND, Sound.class);
         assets.load(DEATH_ADDER_ATTACK_SOUND, Sound.class);
         assets.load(DEATH_ADDER_HIT_SOUND, Sound.class);
         assets.load(DEATH_ADDER_DEAD_SOUND, Sound.class);
+        assets.load(DEATH_ADDER_VICTORY_SOUND, Sound.class);
         assets.load(HIT_SOUND, Sound.class);
         assets.load(LAND_SOUND, Sound.class);
         assets.load(WALKING_ON_GRASS_SOUND, Sound.class);
@@ -38,6 +42,7 @@ public class ResourceManager {
         // Cargar música
         assets.load(MENU_MUSIC, Music.class);
         assets.load(LEVEL_1_MUSIC, Music.class);
+        assets.load(GAME_OVER_MUSIC, Music.class);
 
         // Cargar texturas
         assets.load(MAIN_MENU_BACKGROUND, Texture.class);
