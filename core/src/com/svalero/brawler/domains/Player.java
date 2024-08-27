@@ -13,7 +13,6 @@ public abstract class Player extends Character {
     private float walkingSoundTimer = WALKING_SOUND_TIMER;
     private long lastKeyPressTimeA = 0;
     private long lastKeyPressTimeD = 0;
-    private boolean isRunning = false;
 
     public Player(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
                   int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
@@ -64,12 +63,11 @@ public abstract class Player extends Character {
         // Stop WALK / RUN
         if ((currentState == State.WALK || currentState == State.RUN) &&
                 (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))) {
-            setCurrentStateWithoutReset(State.IDLE);
+            velocity = goIdle(velocity);
         }
 
         // IDLE / WALK / RUN
         if (currentState == State.IDLE || currentState == State.WALK || currentState == State.RUN) {
-            currentAnimation = getAnimation(idleKey);
 
             // Walking / running left
             if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
@@ -164,12 +162,6 @@ public abstract class Player extends Character {
                 launchAttack();
             }
 
-            // Idle
-            if (currentState == State.IDLE) {
-                isRunning = false;
-                velocity.x = 0;
-            }
-
         // TURN
         } else if (currentState == State.TURN) {
             if ((Gdx.input.isKeyJustPressed(Input.Keys.A) && currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD)
@@ -197,7 +189,7 @@ public abstract class Player extends Character {
             }
         } else if (currentState == State.BLOCK_DOWN) {
             if (stateTime >= blockFrames * blockDuration) {
-                setCurrentStateWithoutReset(State.IDLE);
+                velocity = goIdle(velocity);
             }
 
         // CROUCH DOWN
@@ -221,7 +213,7 @@ public abstract class Player extends Character {
         // CROUCH UP
         } else if (currentState == State.CROUCH_UP) {
             if (stateTime >= crouchFrames * crouchDuration) {
-                setCurrentStateWithoutReset(State.IDLE);
+                velocity = goIdle(velocity);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 currentAnimation = getAnimation(crouchDownKey);
@@ -264,7 +256,7 @@ public abstract class Player extends Character {
                 SoundManager.playSound(LAND_SOUND);
             }
             if (stateTime >= landFrames * landDuration) {
-                setCurrentState(State.IDLE);
+                velocity = goIdle(velocity);
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D)) {
                     setCurrentState(State.WALK);
                 }
@@ -278,7 +270,7 @@ public abstract class Player extends Character {
         // ATTACK
         if (currentState == State.ATTACK) {
             if (stateTime >= attackFrames * attackDuration) {
-                setCurrentState(State.IDLE);
+                velocity = goIdle(velocity);
                 if (attackFixture != null) {
                     clearAttackFixture();
                 }
@@ -307,12 +299,16 @@ public abstract class Player extends Character {
 
         // HIT
         if (currentState == State.HIT) {
+            body.setGravityScale(0);
             velocity.x = 0;
+            velocity.y = 0;
             if (stateTime >= hitFrames * hitDuration) {
+                body.setGravityScale(1);
                 if (isOnGround) {
                     currentAnimation = getAnimation(idleKey);
-                    setCurrentStateWithoutReset(State.IDLE);
+                    velocity = goIdle(velocity);
                 } else {
+                    velocity.x = -1;
                     currentAnimation = getAnimation(jumpDownKey);
                     setCurrentStateWithoutReset(State.JUMP_DOWN);
                 }
@@ -325,6 +321,7 @@ public abstract class Player extends Character {
                 if (isOnGround) {
                     velocity.y = 100f;
                 } else {
+                    body.setGravityScale(1);
                     velocity.y = 0f;
                 }
                 if (facingLeft) {

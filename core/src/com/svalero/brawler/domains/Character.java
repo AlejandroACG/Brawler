@@ -89,6 +89,13 @@ public abstract class Character implements Disposable {
     protected float specialAttackCooldown;
     protected float specialAttackDistance;
     protected boolean isOnGround = true;
+    protected boolean isRunning = false;
+    protected boolean turnChance = false;
+    protected boolean walkChance = false;
+    protected boolean randomStopChance = false;
+    protected boolean specialStopChance = false;
+    protected boolean attackStopChance = false;
+    protected boolean attackChance = false;
 
     public enum State {
         IDLE,
@@ -397,6 +404,15 @@ public abstract class Character implements Disposable {
         velocity.x = 0;
 
         body.setLinearVelocity(velocity.x, velocity.y);
+    }
+
+    protected Vector2 goIdle(Vector2 velocity) {
+        setCurrentStateWithoutReset(State.IDLE);
+        currentAnimation = getAnimation(idleKey);
+        velocity.x = 0;
+        isRunning = false;
+
+        return velocity;
     }
 
     public void setHasAttackedThisJump(boolean hasAttackedThisJump) { this.hasAttackedThisJump = hasAttackedThisJump; }

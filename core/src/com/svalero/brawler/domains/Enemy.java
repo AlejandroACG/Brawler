@@ -9,12 +9,6 @@ import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Enemy extends Character {
-    boolean turnChance = false;
-    boolean walkChance = false;
-    boolean randomStopChance = false;
-    boolean specialStopChance = false;
-    boolean attackStopChance = false;
-    boolean attackChance = false;
     private float turnTimer = 0.0f;
     private float walkTimer = 0.0f;
     private float stopTimer = 0.0f;
@@ -210,14 +204,6 @@ public class Enemy extends Character {
         } else {
             specialStopTimer += dt;
         }
-    }
-
-    protected Vector2 goIdle(Vector2 velocity) {
-        setCurrentStateWithoutReset(State.IDLE);
-        currentAnimation = getAnimation(idleKey);
-        velocity.x = 0;
-
-        return velocity;
     }
 
     protected void shouldAttack(float dt) {
