@@ -356,8 +356,8 @@ public abstract class Character implements Disposable {
         int newScore;
         if (this instanceof Player) {
             newScore = ConfigurationManager.hard ? previousScore - 10 : previousScore - 20;
-            if (levelManager.getCurrentScore() >= 0) {
-                levelManager.setCurrentScore(0);
+            if (newScore <= 0) {
+                newScore = 0;
             }
         } else {
             newScore = ConfigurationManager.hard ? previousScore + 60 : previousScore + 40;
