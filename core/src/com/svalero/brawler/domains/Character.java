@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
-import com.svalero.brawler.managers.AnimationManager;
-import com.svalero.brawler.managers.EffectManager;
-import com.svalero.brawler.managers.LevelManager;
-import com.svalero.brawler.managers.SoundManager;
+import com.svalero.brawler.managers.*;
 import com.svalero.brawler.utils.IDGenerator;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
@@ -355,14 +352,17 @@ public abstract class Character implements Disposable {
 
     public void getHit(int strength, boolean attackFromLeft, Vector2 contactPoint) {
         health = health - strength;
+        int previousScore = levelManager.getCurrentScore();
+        int newScore;
         if (this instanceof Player) {
-            levelManager.setCurrentScore(levelManager.getCurrentScore() - 20);
+            newScore = ConfigurationManager.hard ? previousScore - 10 : previousScore - 20;
             if (levelManager.getCurrentScore() >= 0) {
                 levelManager.setCurrentScore(0);
             }
         } else {
-            levelManager.setCurrentScore(levelManager.getCurrentScore() + 40);
+            newScore = ConfigurationManager.hard ? previousScore + 60 : previousScore + 40;
         }
+        levelManager.setCurrentScore(newScore);
         if (health <= 0) {
             facingLeft = attackFromLeft;
             setCurrentState(State.DEAD);
