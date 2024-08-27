@@ -9,21 +9,28 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.svalero.brawler.Brawler;
 import com.svalero.brawler.managers.MusicManager;
 import com.svalero.brawler.managers.ResourceManager;
-
 import static com.svalero.brawler.utils.Constants.*;
 
 public class GameOverScreen implements Screen {
     private final Brawler game;
     private Stage stage;
+    private int currentLevel;
+    private int initialScore;
+    private int currentScore;
 
-    public GameOverScreen(Brawler game) {
+    public GameOverScreen(Brawler game, int currentLevel, int initialScore, int currentScore) {
         this.game = game;
+        this.currentLevel = currentLevel;
+        this.initialScore = initialScore;
+        this.currentScore = currentScore;
     }
 
     @Override
@@ -38,13 +45,18 @@ public class GameOverScreen implements Screen {
         Table table = new Table(game.getSkin());
         table.setBackground(ResourceManager.getTableBackground());
 
+        Label gameOverLabel = new Label("GAME OVER", game.getSkin());
+        gameOverLabel.setAlignment(Align.center);
+        Label scoreLabel = new Label(String.valueOf(currentScore), game.getSkin());
+        scoreLabel.setAlignment(Align.center);
+
         TextButton retryButton = new TextButton("RETRY", game.getSkin());
         retryButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 MusicManager.stopMusic();
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(game, 1)); // Cambia el 1 por el nivel actual si es necesario
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(game, currentLevel, initialScore));
             }
         });
 
@@ -62,8 +74,9 @@ public class GameOverScreen implements Screen {
         float buttonHeight = stage.getHeight() * buttonHeightRatio;
 
         table.add().center().width(buttonWidth).height(buttonHeight).pad(5).row();
+        table.add(gameOverLabel).center().width(buttonWidth).height(buttonHeight).pad(5).row();
+        table.add(scoreLabel).center().width(buttonWidth).height(buttonHeight).pad(5).row();
         table.add(retryButton).center().width(buttonWidth).height(buttonHeight).pad(5).row();
-        table.add().center().width(buttonWidth).height(buttonHeight).pad(5).row();
         table.add(mainMenuButton).center().width(buttonWidth).height(buttonHeight).pad(5).row();
         table.add().center().width(buttonWidth).height(buttonHeight).pad(5).row();
 

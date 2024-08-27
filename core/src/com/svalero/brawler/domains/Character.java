@@ -355,6 +355,14 @@ public abstract class Character implements Disposable {
 
     public void getHit(int strength, boolean attackFromLeft, Vector2 contactPoint) {
         health = health - strength;
+        if (this instanceof Player) {
+            levelManager.setCurrentScore(levelManager.getCurrentScore() - 20);
+            if (levelManager.getCurrentScore() >= 0) {
+                levelManager.setCurrentScore(0);
+            }
+        } else {
+            levelManager.setCurrentScore(levelManager.getCurrentScore() + 40);
+        }
         if (health <= 0) {
             facingLeft = attackFromLeft;
             setCurrentState(State.DEAD);

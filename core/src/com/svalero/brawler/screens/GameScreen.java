@@ -20,13 +20,13 @@ public class GameScreen implements Screen {
     private LevelManager levelManager;
     private RenderManager renderManager;
     private int currentLevel;
-    private int currentScore;
+    private int initialScore = 0;
     private Box2DDebugRenderer debugRenderer;
 
-    public GameScreen(Brawler game, int currentLevel) {
+    public GameScreen(Brawler game, int currentLevel, int initialScore) {
         this.game = game;
         this.currentLevel = currentLevel;
-        levelManager = new LevelManager(game, currentLevel, KAIN);
+        levelManager = new LevelManager(game, currentLevel, KAIN, initialScore);
         cameraManager = new CameraManager(levelManager);
         levelManager.setCameraManager(cameraManager);
         levelManager.setBackground();

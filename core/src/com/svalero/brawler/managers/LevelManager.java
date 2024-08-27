@@ -23,6 +23,8 @@ import com.svalero.brawler.domains.Character.*;
 public class LevelManager {
     private Brawler game;
     private int currentLevel;
+    private int initialScore;
+    private int currentScore;
     private World world;
     private Map<Integer, Character> characters;
     private Map<Integer, Enemy> enemies;
@@ -39,9 +41,11 @@ public class LevelManager {
     private boolean enemyCelebrationTriggered = false;
     private float enemyCelebrationTimer = 1.0f;
 
-    public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter) {
+    public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter, int initialScore) {
         this.game = game;
         this.currentLevel = currentLevel;
+        this.initialScore = initialScore;
+        this.currentScore = initialScore;
         world = new World(new Vector2(0, GRAVITY), true);
         characters = new HashMap<>();
         enemies = new HashMap<>();
@@ -258,17 +262,11 @@ public class LevelManager {
             }
         }    }
 
-    private void triggerGameOver() {
-        game.setScreen(new GameOverScreen(game));
-    }
+    private void triggerGameOver() { game.setScreen(new GameOverScreen(game, currentLevel, initialScore, currentScore)); }
 
-    public float getMapWidth() {
-        return mapWidth;
-    }
+    public float getMapWidth() { return mapWidth; }
 
-    public float getMapHeight() {
-        return mapHeight;
-    }
+    public float getMapHeight() { return mapHeight; }
 
     public Map<Integer, Character> getCharacters() { return characters; }
 
@@ -276,15 +274,13 @@ public class LevelManager {
 
     public Player getPlayer() { return player; }
 
-    public World getWorld() {
-        return world;
-    }
+    public World getWorld() { return world; }
 
-    public TiledMap getMap() {
-        return map;
-    }
+    public TiledMap getMap() { return map; }
 
-    public Array<ParallaxLayer> getParallaxLayers() {
-        return parallaxLayers;
-    }
+    public Array<ParallaxLayer> getParallaxLayers() { return parallaxLayers; }
+
+    public int getCurrentScore() { return currentScore; }
+
+    public void setCurrentScore(int currentScore) { this.currentScore = currentScore; }
 }
