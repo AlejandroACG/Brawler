@@ -18,7 +18,8 @@ public abstract class Character implements Disposable {
     protected Vector2 position;
     protected float stateTime = 0;
     protected EffectManager effectManager;
-    protected int health;
+    protected int maxHealth;
+    protected int currentHealth;
     protected int attackStrength;
     protected float speed;
     protected Body body;
@@ -125,7 +126,8 @@ public abstract class Character implements Disposable {
         this.levelManager = levelManager;
         this.world = world;
         this.position = position;
-        this.health = health;
+        this.maxHealth = health;
+        this.currentHealth = health;
         this.attackStrength = attackStrength;
         this.speed = speed;
         this.id = IDGenerator.generateUniqueId();
@@ -201,7 +203,8 @@ public abstract class Character implements Disposable {
                      String attackSoundPath, String attackKey, String victoryKey, String victorySoundPath) {
         this.levelManager = levelManager;
         this.position = position;
-        this.health = health;
+        this.maxHealth = health;
+        this.currentHealth = health;
         this.attackStrength = attackStrength;
         this.speed = speed;
         this.id = IDGenerator.generateUniqueId();
@@ -351,7 +354,7 @@ public abstract class Character implements Disposable {
     }
 
     public void getHit(int strength, boolean attackFromLeft, Vector2 contactPoint) {
-        health = health - strength;
+        currentHealth = currentHealth - strength;
         int previousScore = levelManager.getCurrentScore();
         int newScore;
         if (this instanceof Player) {
@@ -363,7 +366,7 @@ public abstract class Character implements Disposable {
             newScore = ConfigurationManager.hard ? previousScore + 60 : previousScore + 40;
         }
         levelManager.setCurrentScore(newScore);
-        if (health <= 0) {
+        if (currentHealth <= 0) {
             facingLeft = attackFromLeft;
             setCurrentState(State.DEAD);
             currentAnimation = getAnimation(deadKey);
@@ -415,5 +418,7 @@ public abstract class Character implements Disposable {
 
     public EffectManager getEffectManager() { return effectManager; }
 
-    public int getHealth() { return health; }
+    public int getMaxHealth() { return maxHealth; }
+
+    public int getCurrentHealth() { return currentHealth; }
 }

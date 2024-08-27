@@ -4,9 +4,14 @@ public class Constants {
     public static final float ASPECT_RATIO = 16f / 9f;
     public static final float GRAVITY = -175f;
     public static final boolean DEBUG_MODE = true;
+
+    // Timers
     public static final long DOUBLE_CLICK_THRESHOLD = 300;
     public static final float WALKING_SOUND_TIMER = 0.20f;
     public static final float RUNNING_SOUND_TIMER = 0.20f;
+
+    // Fonts
+    public static final String AETHERIUS_FONT = "aetherius-font";
 
     // Buttons
     public static final float buttonWidthRatio = 0.4f;
@@ -31,6 +36,7 @@ public class Constants {
     public static final String HSIEN_KO_ATLAS = "textures/hsien-ko.atlas";
     public static final String DEATH_ADDER_ATLAS = "textures/death-adder.atlas";
     public static final String EFFECTS_ATLAS = "textures/effects.atlas";
+    public static final String UI_ATLAS = "textures/ui.atlas";
 
     // Sounds
     public static final String KAIN_ATTACK_SOUND = "sounds/kain-attack.mp3";
@@ -60,6 +66,11 @@ public class Constants {
     public static final String MENU_MUSIC = "music/menu-music.mp3";
     public static final String LEVEL_1_MUSIC = "music/level-1-music.mp3";
     public static final String GAME_OVER_MUSIC = "music/game-over-music.mp3";
+
+    // UI
+    public static final String HEALTH_GLOBE_BACKGROUND = "health_globe_background";
+    public static final String HEALTH_GLOBE_BORDER = "health_globe_border";
+    public static final String HEALTH_GLOBE_FILL = "health_globe_fill";
 
     // Chance
     public static final float TURN_CHANCE = 0.5f;

@@ -53,6 +53,7 @@ public class ResourceManager {
         assets.load(HSIEN_KO_ATLAS, TextureAtlas.class);
         assets.load(DEATH_ADDER_ATLAS, TextureAtlas.class);
         assets.load(EFFECTS_ATLAS, TextureAtlas.class);
+        assets.load(UI_ATLAS, TextureAtlas.class);
     }
 
     public static void finishLoading() {

@@ -1,0 +1,9 @@
+ui.png
+size:1024,512
+repeat:none
+health_globe_background
+bounds:658,2,326,326
+health_globe_border
+bounds:2,2,326,326
+health_globe_fill
+bounds:330,2,326,326

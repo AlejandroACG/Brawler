@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
         levelManager.setCameraManager(cameraManager);
         levelManager.setBackground();
         actionManager = new ActionManager(levelManager);
-        renderManager = new RenderManager(levelManager, cameraManager);
+        renderManager = new RenderManager(levelManager, cameraManager, game);
         if (DEBUG_MODE) {
             debugRenderer = new Box2DDebugRenderer();
         }
