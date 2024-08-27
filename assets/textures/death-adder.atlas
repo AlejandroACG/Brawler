@@ -213,7 +213,7 @@ index:3
 bounds:2,510,246,206
 turn
 index:0
-bounds:1242,1342,246,206
+bounds:250,302,246,206
 turn
 index:2
 bounds:250,94,246,206
@@ -240,7 +240,7 @@ index:3
 bounds:1490,1758,246,206
 victory
 index:8
-bounds:1490,1550,246,206
+bounds:1242,1342,246,206
 victory
 index:0
 bounds:2,94,246,206
@@ -267,7 +267,7 @@ index:0
 bounds:2,302,246,206
 walk
 index:5
-bounds:250,302,246,206
+bounds:1490,1550,246,206
 walk
 index:2
 bounds:1738,1550,246,206

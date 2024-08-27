@@ -42,6 +42,7 @@ public abstract class Player extends Character {
 
     public void update(float dt) {
         manageInput(dt);
+        effectManager.update(dt);
         Vector2 bodyPosition = body.getPosition();
         position.set(bodyPosition.x, bodyPosition.y);
         stateTime += dt;
@@ -65,7 +66,6 @@ public abstract class Player extends Character {
         if ((currentState == State.WALK || currentState == State.RUN) &&
                 (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))) {
             setCurrentStateWithoutReset(State.IDLE);
-            isRunning = true;
         }
 
         // IDLE / WALK / RUN
@@ -333,7 +333,7 @@ public abstract class Player extends Character {
             if (walkingSoundTimer > 0) {
                 walkingSoundTimer -= dt;
             } else {
-                SoundManager.stopLongSound(WALKING_ON_GRASS_SOUND, walkKey);
+                SoundManager.stopLongSound(walkKey);
             }
         }
 
@@ -342,17 +342,11 @@ public abstract class Player extends Character {
             if (runningSoundTimer > 0) {
                 runningSoundTimer -= dt;
             } else {
-                SoundManager.stopLongSound(WALKING_ON_GRASS_SOUND, runKey);
+                SoundManager.stopLongSound(runKey);
             }
         }
 
-
         body.setLinearVelocity(velocity.x, velocity.y);
-    }
-
-    protected void launchAttack() {
-        float offsetX = facingLeft ? -attackOffsetX : attackOffsetX;
-        createAttackFixture(offsetX, attackOffsetY, attackWidth, attackHeight);
     }
 
     protected void launchJumpAttack() {

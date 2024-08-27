@@ -186,18 +186,23 @@ public class LevelManager {
                 // Detección de colisión de ataques
                 if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureB.getUserData() instanceof Enemy) ||
                         (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureB.getUserData() instanceof Player)) {
+
                     boolean attackFromLeft = fixtureA.getBody().getPosition().x < fixtureB.getBody().getPosition().x;
-                    handleAttackHit((Character) fixtureA.getUserData(), (Character) fixtureB.getUserData(), attackFromLeft);
+                    handleAttackHit((Character) fixtureA.getUserData(), (Character) fixtureB.getUserData(),
+                            attackFromLeft, contact.getWorldManifold().getPoints()[0]);
+
                 } else if ((fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureA.getUserData() instanceof Enemy) ||
                         (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureA.getUserData() instanceof Player)) {
+
                     boolean attackFromLeft = fixtureB.getBody().getPosition().x < fixtureA.getBody().getPosition().x;
-                    handleAttackHit((Character) fixtureB.getUserData(), (Character) fixtureA.getUserData(), attackFromLeft);
+                    handleAttackHit((Character) fixtureB.getUserData(), (Character) fixtureA.getUserData(),
+                            attackFromLeft, contact.getWorldManifold().getPoints()[0]);
                 }
             }
 
-            private void handleAttackHit(Character attacker, Character victim, boolean attackFromLeft) {
+            private void handleAttackHit(Character attacker, Character victim, boolean attackFromLeft, Vector2 contactPoint) {
                 if (victim.getCurrentState() != State.HIT && victim.getCurrentState() != State.DEAD) {
-                    victim.getHit(attacker.getAttackStrength(), attackFromLeft);
+                    victim.getHit(attacker.getAttackStrength(), attackFromLeft, contactPoint);
                 }
             }
 

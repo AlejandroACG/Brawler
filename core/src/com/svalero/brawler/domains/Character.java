@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.svalero.brawler.managers.AnimationManager;
+import com.svalero.brawler.managers.EffectManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 import com.svalero.brawler.utils.IDGenerator;
@@ -19,6 +20,7 @@ public abstract class Character implements Disposable {
     protected TextureAtlas textureAtlas;
     protected Vector2 position;
     protected float stateTime = 0;
+    protected EffectManager effectManager;
     protected int health;
     protected int attackStrength;
     protected float speed;
@@ -106,6 +108,7 @@ public abstract class Character implements Disposable {
         VICTORY
     }
 
+    // For players
     public Character(LevelManager levelManager, World world, Vector2 position,
                      String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
@@ -186,12 +189,15 @@ public abstract class Character implements Disposable {
         createBody(world, characterAtlas);
     }
 
+    // For enemies
     public Character(LevelManager levelManager, World world, Vector2 position,
                      String characterAtlas, int health, int attackStrength, float speed, float width, float height,
                      float frameWidth, float frameHeight, float correctionX, float correctionY, float idleDuration,
                      String idleKey, String hitKey, int hitFrames, float hitDuration, String hitSoundPath,
                      String deadKey, String deadSoundPath, int deadFrames, float deadDuration, String turnKey,
-                     int turnFrames, float turnDuration) {
+                     int turnFrames, float turnDuration, int attackFrames, float attackDuration, float attackWidth,
+                     float attackHeight, float attackOffsetX, float attackOffsetY, String walkKey,
+                     String attackSoundPath, String attackKey) {
         this.levelManager = levelManager;
         this.position = position;
         this.health = health;
@@ -219,6 +225,15 @@ public abstract class Character implements Disposable {
         this.turnKey = turnKey;
         this.turnFrames = turnFrames;
         this.turnDuration = turnDuration;
+        this.attackFrames = attackFrames;
+        this.attackDuration = attackDuration;
+        this.attackWidth = attackWidth;
+        this.attackHeight = attackHeight;
+        this.attackOffsetX = attackOffsetX;
+        this.attackOffsetY = attackOffsetY;
+        this.walkKey = walkKey;
+        this.attackSoundPath = attackSoundPath;
+        this.attackKey = attackKey;
 
         createBody(world, characterAtlas);
     }
@@ -233,6 +248,7 @@ public abstract class Character implements Disposable {
         bodyDef.fixedRotation = true;
 
         body = world.createBody(bodyDef);
+        this.effectManager = new EffectManager(body);
 
         createBodyFixtures();
     }
@@ -319,6 +335,11 @@ public abstract class Character implements Disposable {
         return currentAnimation.getKeyFrame(stateTime);
     }
 
+    protected void launchAttack() {
+        float offsetX = facingLeft ? -attackOffsetX : attackOffsetX;
+        createAttackFixture(offsetX, attackOffsetY, attackWidth, attackHeight);
+    }
+
     protected void clearAttackFixture() {
         if (attackFixture != null) {
             body.destroyFixture(attackFixture);
@@ -326,18 +347,24 @@ public abstract class Character implements Disposable {
         }
     }
 
-    public void getHit(int strength, boolean attackFromLeft) {
+    public void getHit(int strength, boolean attackFromLeft, Vector2 contactPoint) {
         health = health - strength;
         if (health <= 0) {
             facingLeft = attackFromLeft;
             setCurrentState(State.DEAD);
             currentAnimation = getAnimation(deadKey);
             SoundManager.playSound(deadSoundPath);
+
+            effectManager.createVisualEffect(position, BLOOD_BIG_WIDTH, BLOOD_BIG_HEIGHT,
+                    BLOOD_BIG_DURATION, BLOOD_BIG, attackFromLeft);
         } else {
             currentAnimation = AnimationManager.getAnimation(hitKey);
             SoundManager.playSound(HIT_SOUND);
             SoundManager.playSound(hitSoundPath);
             setCurrentState(State.HIT);
+
+            effectManager.createVisualEffect(position, BLOOD_SMALL_WIDTH, BLOOD_SMALL_HEIGHT,
+                    BLOOD_SMALL_DURATION, BLOOD_SMALL, attackFromLeft);
         }
     }
 
@@ -365,9 +392,14 @@ public abstract class Character implements Disposable {
 
     @Override
     public void dispose() {
+        effectManager.dispose();
         if (world != null && body != null) {
             world.destroyBody(body);
             body = null;
         }
+    }
+
+    public EffectManager getEffectManager() {
+        return effectManager;
     }
 }

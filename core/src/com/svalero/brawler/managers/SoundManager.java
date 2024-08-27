@@ -35,7 +35,7 @@ public class SoundManager {
         }
     }
 
-    public static void stopLongSound(String path, String instanceKey) {
+    public static void stopLongSound(String instanceKey) {
         LongSoundInstance soundInstance = longSoundData.get(instanceKey);
         if (soundInstance != null) {
             Sound sound = soundInstance.getSound();

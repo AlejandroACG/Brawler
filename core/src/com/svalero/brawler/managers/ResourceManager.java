@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import static com.svalero.brawler.utils.Constants.*;
+import static com.svalero.brawler.utils.Constants.HSIEN_KO_ATTACK_SOUND;
 
 public class ResourceManager {
     public static AssetManager assets = new AssetManager();
@@ -20,10 +21,13 @@ public class ResourceManager {
         assets.load(KAIN_BLOCK_MOVE_SOUND, Sound.class);
         assets.load(KAIN_HIT_SOUND, Sound.class);
         assets.load(KAIN_DEAD_SOUND, Sound.class);
+        assets.load(BISHAMON_ATTACK_SOUND, Sound.class);
         assets.load(BISHAMON_HIT_SOUND, Sound.class);
         assets.load(BISHAMON_DEAD_SOUND, Sound.class);
+        assets.load(HSIEN_KO_ATTACK_SOUND, Sound.class);
         assets.load(HSIEN_KO_HIT_SOUND, Sound.class);
         assets.load(HSIEN_KO_DEAD_SOUND, Sound.class);
+        assets.load(DEATH_ADDER_ATTACK_SOUND, Sound.class);
         assets.load(DEATH_ADDER_HIT_SOUND, Sound.class);
         assets.load(DEATH_ADDER_DEAD_SOUND, Sound.class);
         assets.load(HIT_SOUND, Sound.class);
@@ -43,6 +47,7 @@ public class ResourceManager {
         assets.load(BISHAMON_ATLAS, TextureAtlas.class);
         assets.load(HSIEN_KO_ATLAS, TextureAtlas.class);
         assets.load(DEATH_ADDER_ATLAS, TextureAtlas.class);
+        assets.load(EFFECTS_ATLAS, TextureAtlas.class);
     }
 
     public static void finishLoading() {

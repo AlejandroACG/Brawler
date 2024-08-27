@@ -1,6 +1,7 @@
 package com.svalero.brawler.managers;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.svalero.brawler.domains.Character;
 import com.svalero.brawler.domains.Enemy;
 import com.svalero.brawler.utils.ParallaxLayer;
 
@@ -31,6 +32,9 @@ public class RenderManager {
             enemy.draw(batch);
         }
         levelManager.getPlayer().draw(batch);
+        for (Character character : levelManager.getCharacters().values()) {
+            character.getEffectManager().drawEffects(batch);
+        }
         batch.end();
     }
 

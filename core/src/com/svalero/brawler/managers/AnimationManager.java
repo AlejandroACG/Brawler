@@ -37,6 +37,7 @@ public class AnimationManager {
         animations.put(BISHAMON_IDLE, new Animation<>(BISHAMON_IDLE_DURATION, bishamonAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
         animations.put(BISHAMON_WALK, new Animation<>(BISHAMON_WALK_DURATION, bishamonAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
         animations.put(BISHAMON_TURN, new Animation<>(BISHAMON_TURN_DURATION, bishamonAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
+        animations.put(BISHAMON_ATTACK, new Animation<>(BISHAMON_ATTACK_DURATION, bishamonAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(BISHAMON_HIT, new Animation<>(BISHAMON_HIT_DURATION, bishamonAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(BISHAMON_DEAD, new Animation<>(BISHAMON_DEAD_DURATION, bishamonAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
 
@@ -44,7 +45,9 @@ public class AnimationManager {
         TextureAtlas hsienKoAtlas = ResourceManager.getAtlas(HSIEN_KO_ATLAS);
 
         animations.put(HSIEN_KO_IDLE, new Animation<>(HSIEN_KO_IDLE_DURATION, hsienKoAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
+        animations.put(HSIEN_KO_WALK, new Animation<>(HSIEN_KO_WALK_DURATION, hsienKoAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
         animations.put(HSIEN_KO_TURN, new Animation<>(HSIEN_KO_TURN_DURATION, hsienKoAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
+        animations.put(HSIEN_KO_ATTACK, new Animation<>(HSIEN_KO_ATTACK_DURATION, hsienKoAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(HSIEN_KO_HIT, new Animation<>(HSIEN_KO_HIT_DURATION, hsienKoAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(HSIEN_KO_DEAD, new Animation<>(HSIEN_KO_DEAD_DURATION, hsienKoAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
 
@@ -52,9 +55,18 @@ public class AnimationManager {
         TextureAtlas deathAdderAtlas = ResourceManager.getAtlas(DEATH_ADDER_ATLAS);
 
         animations.put(DEATH_ADDER_IDLE, new Animation<>(DEATH_ADDER_IDLE_DURATION, deathAdderAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
+        animations.put(DEATH_ADDER_WALK, new Animation<>(DEATH_ADDER_WALK_DURATION, deathAdderAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
         animations.put(DEATH_ADDER_TURN, new Animation<>(DEATH_ADDER_TURN_DURATION, deathAdderAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
+        animations.put(DEATH_ADDER_ATTACK, new Animation<>(DEATH_ADDER_ATTACK_DURATION, deathAdderAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
         animations.put(DEATH_ADDER_HIT, new Animation<>(DEATH_ADDER_HIT_DURATION, deathAdderAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(DEATH_ADDER_DEAD, new Animation<>(DEATH_ADDER_DEAD_DURATION, deathAdderAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
+
+        // EFFECTS
+        TextureAtlas effectsAtlas = ResourceManager.getAtlas(EFFECTS_ATLAS);
+
+        animations.put(BLOOD_SMALL, new Animation<>(BLOOD_SMALL_DURATION, effectsAtlas.findRegions("blood_small"), Animation.PlayMode.NORMAL));
+        animations.put(BLOOD_BIG, new Animation<>(BLOOD_BIG_DURATION, effectsAtlas.findRegions("blood_big"), Animation.PlayMode.NORMAL));
+        animations.put(BLOCK, new Animation<>(BLOCK_DURATION, effectsAtlas.findRegions("block"), Animation.PlayMode.NORMAL));
     }
 
     public static Animation<TextureRegion> getAnimation(String key) { return animations.get(key); }

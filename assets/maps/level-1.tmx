@@ -51,8 +51,8 @@
   </object>
   <object id="20" x="279.761" y="239.91">
    <properties>
-    <property name="tag" value="death-adder"/>
+    <property name="tag" value="bishamon"/>
    </properties>
   </object>
- </objectgroup>
+</objectgroup>
 </map>

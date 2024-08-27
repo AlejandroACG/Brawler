@@ -2,13 +2,16 @@ package com.svalero.brawler.domains;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
 
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Kain extends Player {
     public Kain(LevelManager levelManager, World world, Vector2 position) {
-        super(levelManager, world, position, KAIN_ATLAS, KAIN_HEALTH, KAIN_ATTACK_STRENGTH, KAIN_SPEED, KAIN_WIDTH,
+        super(levelManager, world, position, KAIN_ATLAS,
+                ConfigurationManager.hard ? KAIN_HEALTH_HARD : KAIN_HEALTH,
+                KAIN_ATTACK_STRENGTH, KAIN_SPEED, KAIN_WIDTH,
                 KAIN_HEIGHT, KAIN_FRAME_WIDTH, KAIN_FRAME_HEIGHT, KAIN_DRAW_CORRECTION_X, KAIN_DRAW_CORRECTION_Y,
                 KAIN_IDLE_DURATION, KAIN_WALK_DURATION, KAIN_JUMP_UP_DURATION, KAIN_JUMP_STRENGTH, KAIN_IDLE,
                 KAIN_TURN, KAIN_WALK, KAIN_RUN, KAIN_BLOCK_UP, KAIN_BLOCK_DOWN, KAIN_CROUCH_DOWN, KAIN_CROUCH_UP,
