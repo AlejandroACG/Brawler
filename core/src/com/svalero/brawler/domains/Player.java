@@ -13,6 +13,7 @@ public abstract class Player extends Character {
     private float walkingSoundTimer = WALKING_SOUND_TIMER;
     private long lastKeyPressTimeA = 0;
     private long lastKeyPressTimeD = 0;
+    protected boolean isRunning = false;
 
     public Player(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
                   int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
@@ -64,6 +65,7 @@ public abstract class Player extends Character {
         if ((currentState == State.WALK || currentState == State.RUN) &&
                 (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))) {
             velocity = goIdle(velocity);
+            isRunning = false;
         }
 
         // IDLE / WALK / RUN
@@ -72,25 +74,15 @@ public abstract class Player extends Character {
             // Walking / running left
             if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
                 if (currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD || currentState == State.RUN) {
-                    velocity.x = -speed * 2;
-                    setCurrentState(State.RUN);
-                    isRunning = true;
-                    currentAnimation = getAnimation(runKey);
-                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
+                    velocity = goRun(velocity);
                 }
                 lastKeyPressTimeA = currentTime;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 if (!isFacingLeft()) {
-                    setCurrentState(State.TURN);
-                    velocity.x = 0;
-                    currentAnimation = getAnimation(turnKey);
-                    facingLeft = true;
+                    velocity = goTurn(velocity);
                 } else if (currentState == State.RUN) {
-                    velocity.x = -speed * 2;
-                    setCurrentState(State.RUN);
-                    currentAnimation = getAnimation(runKey);
-                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
+                    velocity = goRun(velocity);
                 } else {
                     velocity.x = -speed;
                     setCurrentState(State.WALK);
@@ -112,10 +104,7 @@ public abstract class Player extends Character {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 if (isFacingLeft()) {
-                    setCurrentState(State.TURN);
-                    velocity.x = 0;
-                    currentAnimation = getAnimation(turnKey);
-                    facingLeft = false;
+                    velocity = goTurn(velocity);
                 } else if (currentState == State.RUN) {
                     velocity.x = speed * 2;
                     setCurrentState(State.RUN);
@@ -362,10 +351,7 @@ public abstract class Player extends Character {
 
         // VICTORY
         if (currentState == State.VICTORY) {
-            if (stateTime == 0) {
-                currentAnimation = getAnimation(victoryKey);
-                SoundManager.playSound(victorySoundPath);
-            }
+            velocity = doVictory(velocity);
         }
 
         body.setLinearVelocity(velocity.x, velocity.y);
@@ -380,5 +366,14 @@ public abstract class Player extends Character {
         setStateTime(0);
         setCurrentState(State.LAND);
         setHasAttackedThisJump(false);
+    }
+
+    protected Vector2 goRun(Vector2 velocity) {
+        velocity.x = facingLeft ? -speed * 2 : speed * 2;
+        setCurrentState(State.RUN);
+        isRunning = true;
+        currentAnimation = getAnimation(runKey);
+        SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
+        return velocity;
     }
 }

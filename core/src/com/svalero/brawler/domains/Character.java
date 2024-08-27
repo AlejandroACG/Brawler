@@ -89,13 +89,6 @@ public abstract class Character implements Disposable {
     protected float specialAttackCooldown;
     protected float specialAttackDistance;
     protected boolean isOnGround = true;
-    protected boolean isRunning = false;
-    protected boolean turnChance = false;
-    protected boolean walkChance = false;
-    protected boolean randomStopChance = false;
-    protected boolean specialStopChance = false;
-    protected boolean attackStopChance = false;
-    protected boolean attackChance = false;
     protected boolean markToFallDead = false;
 
     public enum State {
@@ -411,7 +404,6 @@ public abstract class Character implements Disposable {
         setCurrentStateWithoutReset(State.IDLE);
         currentAnimation = getAnimation(idleKey);
         velocity.x = 0;
-        isRunning = false;
 
         return velocity;
     }
@@ -437,6 +429,24 @@ public abstract class Character implements Disposable {
             world.destroyBody(body);
             body = null;
         }
+    }
+
+    protected Vector2 doVictory (Vector2 velocity) {
+        velocity.x = 0;
+        if (stateTime == 0) {
+            currentAnimation = getAnimation(victoryKey);
+            SoundManager.playSound(victorySoundPath);
+        }
+        return velocity;
+    }
+
+    protected Vector2 goTurn(Vector2 velocity) {
+        setCurrentState(State.TURN);
+        velocity.x = 0;
+        currentAnimation = getAnimation(turnKey);
+        facingLeft = !facingLeft;
+
+        return velocity;
     }
 
     public EffectManager getEffectManager() { return effectManager; }

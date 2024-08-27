@@ -16,6 +16,12 @@ public class Enemy extends Character {
     private float attackTimer = 0.0f;
     protected float timeSinceLastSpecial = 0.0f;
     private float walkingSoundTimer = WALKING_SOUND_TIMER;
+    protected boolean turnChance = false;
+    protected boolean walkChance = false;
+    protected boolean randomStopChance = false;
+    protected boolean specialStopChance = false;
+    protected boolean attackStopChance = false;
+    protected boolean attackChance = false;
 
     public Enemy(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
                  int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
@@ -54,9 +60,11 @@ public class Enemy extends Character {
         if (currentState == State.IDLE || currentState == State.WALK) {
             shouldTurn(isPlayerLeft, dt);
             if (!facingLeft && isPlayerLeft && turnChance) {
-                velocity = goTurn(velocity, true);
+                velocity = goTurn(velocity);
+                turnChance = false;
             } else if (facingLeft && !isPlayerLeft && turnChance) {
-                velocity = goTurn(velocity, false);
+                velocity = goTurn(velocity);
+                turnChance = false;
             }
             if (facingLeft == isPlayerLeft) {
                 if (currentState == State.IDLE && distanceX >= attackWidth) {
@@ -137,17 +145,10 @@ public class Enemy extends Character {
         }
 
         // Erase unused attack fixtures
-        if (currentState != State.ATTACK) {
-            clearAttackFixture();
-        }
+        if (currentState != State.ATTACK) { clearAttackFixture(); }
 
         // VICTORY
-        if (currentState == State.VICTORY) {
-            if (stateTime == 0) {
-                currentAnimation = getAnimation(victoryKey);
-                SoundManager.playSound(victorySoundPath);
-            }
-        }
+        if (currentState == State.VICTORY) { velocity = doVictory(velocity); }
 
         body.setLinearVelocity(velocity.x, velocity.y);
     }
@@ -159,17 +160,6 @@ public class Enemy extends Character {
         } else {
             turnTimer += dt;
         }
-    }
-
-    protected Vector2 goTurn(Vector2 velocity, boolean left) {
-        setCurrentState(State.TURN);
-        velocity.x = 0;
-        currentAnimation = getAnimation(turnKey);
-        facingLeft = left;
-        turnTimer = 0.0f;
-        turnChance = false;
-
-        return velocity;
     }
 
     protected void shouldWalk(float dt) {
