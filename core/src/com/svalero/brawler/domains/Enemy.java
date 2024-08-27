@@ -11,7 +11,6 @@ import static com.svalero.brawler.utils.Constants.*;
 
 public class Enemy extends Character {
     boolean chance;
-    private final float timerMark = 1.75f;
     private float turnTimer = 0.0f;
     private float walkTimer = 0.0f;
     private float stopTimer = 0.0f;
@@ -55,7 +54,7 @@ public class Enemy extends Character {
         if (currentState == State.IDLE || currentState == State.WALK) {
 
             // Chance of turning
-            if (facingLeft != isPlayerLeft && turnTimer >= timerMark) {
+            if (facingLeft != isPlayerLeft && turnTimer >= CHANCE_TIMERS_MARK) {
                 chance = Math.random() < (ConfigurationManager.hard ? TURN_CHANCE_HARD : TURN_CHANCE);
                 turnTimer = 0.0f;
             } else {
@@ -81,7 +80,7 @@ public class Enemy extends Character {
                 // WALK
                 if (currentState == State.IDLE && distanceX >= attackWidth) {
                     // Chance to start walking
-                    if (walkTimer >= timerMark) {
+                    if (walkTimer >= CHANCE_TIMERS_MARK) {
                         chance = Math.random() < (ConfigurationManager.hard ? WALK_CHANCE_HARD : WALK_CHANCE);
                         walkTimer = 0.0f;
                     } else {
@@ -102,8 +101,8 @@ public class Enemy extends Character {
                     }
                 // Chance of random stop
                 } else if (currentState == State.WALK && distanceX > attackWidth) {
-                    if (stopTimer >= timerMark) {
-                        chance = Math.random() < (ConfigurationManager.hard ? STOP_CHANCE_HARD : STOP_CHANCE);
+                    if (stopTimer >= CHANCE_TIMERS_MARK) {
+                        chance = Math.random() < (ConfigurationManager.hard ? RANDOM_STOP_CHANCE_HARD : RANDOM_STOP_CHANCE);
                         stopTimer = 0.0f;
                     } else {
                         stopTimer += dt;
@@ -120,7 +119,7 @@ public class Enemy extends Character {
                     velocity.x = 0;
                 // Chance of attack
                 } else if (currentState == State.IDLE && distanceX < attackWidth) {
-                    if (attackTimer >= timerMark) {
+                    if (attackTimer >= CHANCE_TIMERS_MARK) {
                         chance = Math.random() < (ConfigurationManager.hard ? ATTACK_CHANCE_HARD : ATTACK_CHANCE);
                         attackTimer = 0.0f;
                     } else {

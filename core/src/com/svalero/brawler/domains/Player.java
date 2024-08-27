@@ -6,13 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
-
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 
 public abstract class Player extends Character {
     private float walkingSoundTimer = WALKING_SOUND_TIMER;
-    private float runningSoundTimer = RUNNING_SOUND_TIMER;
     private long lastKeyPressTimeA = 0;
     private long lastKeyPressTimeD = 0;
     private boolean isRunning = false;
@@ -82,7 +80,6 @@ public abstract class Player extends Character {
                     isRunning = true;
                     currentAnimation = getAnimation(runKey);
                     SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
-                    runningSoundTimer = RUNNING_SOUND_TIMER;
                 }
                 lastKeyPressTimeA = currentTime;
             }
@@ -97,7 +94,6 @@ public abstract class Player extends Character {
                     setCurrentState(State.RUN);
                     currentAnimation = getAnimation(runKey);
                     SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
-                    runningSoundTimer = RUNNING_SOUND_TIMER;
                 } else {
                     velocity.x = -speed;
                     setCurrentState(State.WALK);
@@ -114,7 +110,6 @@ public abstract class Player extends Character {
                     setCurrentState(State.RUN);
                     currentAnimation = getAnimation(runKey);
                     SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
-                    runningSoundTimer = RUNNING_SOUND_TIMER;
                 }
                 lastKeyPressTimeD = currentTime;
             }
@@ -129,7 +124,6 @@ public abstract class Player extends Character {
                     setCurrentState(State.RUN);
                     currentAnimation = getAnimation(runKey);
                     SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
-                    runningSoundTimer = RUNNING_SOUND_TIMER;
                 } else {
                     velocity.x = speed;
                     setCurrentState(State.WALK);
@@ -330,6 +324,7 @@ public abstract class Player extends Character {
             clearAttackFixture();
         }
 
+        // TODO Estaría bien también un timer antes de empezar, para que no suene en el frame antes de que se active State.RUN
         // Stop walking sound
         if (currentState != State.WALK) {
             if (walkingSoundTimer > 0) {
@@ -341,11 +336,7 @@ public abstract class Player extends Character {
 
         // Stop running sound
         if (currentState != State.RUN) {
-            if (runningSoundTimer > 0) {
-                runningSoundTimer -= dt;
-            } else {
-                SoundManager.stopLongSound(runKey);
-            }
+            SoundManager.stopLongSound(runKey);
         }
 
         // VICTORY

@@ -83,12 +83,12 @@ public class RenderManager {
         renderHealthGlobe(healthPercent);
 
         font.draw(batch, "Level: " + levelManager.getCurrentLevel()
-                + "\nScore: " + levelManager.getCurrentScore(), 210, Gdx.graphics.getHeight() - 50);
+                + "\nScore: " + levelManager.getCurrentScore(), 210, Gdx.graphics.getHeight() - 60);
     }
 
     private void renderHealthGlobe(float healthPercent) {
         float globeX = 20;
-        float globeY = Gdx.graphics.getHeight() - 180;
+        float globeY = Gdx.graphics.getHeight() - 190;
         float globeSize = 170;
 
         batch.draw(healthGlobeBackground, globeX, globeY, globeSize, globeSize);

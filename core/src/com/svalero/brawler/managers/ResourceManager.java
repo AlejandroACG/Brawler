@@ -47,6 +47,7 @@ public class ResourceManager {
         // Cargar texturas
         assets.load(MAIN_MENU_BACKGROUND, Texture.class);
         assets.load(TABLE_BACKGROUND, Texture.class);
+        assets.load(TUTORIAL_PICTURE, Texture.class);
         assets.load(LEVEL_1_BACKGROUND, TextureAtlas.class);
         assets.load(KAIN_ATLAS, TextureAtlas.class);
         assets.load(BISHAMON_ATLAS, TextureAtlas.class);

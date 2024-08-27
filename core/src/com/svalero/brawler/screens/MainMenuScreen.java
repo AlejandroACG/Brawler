@@ -59,11 +59,11 @@ public class MainMenuScreen implements Screen {
         });
 
         TextButton tutorialButton = new TextButton("TUTORIAL", game.getSkin());
-        configButton.addListener(new ClickListener() {
+        tutorialButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
-//                ((Game) Gdx.app.getApplicationListener()).setScreen(new TutorialScreen(game));
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new TutorialScreen(game));
             }
         });
 
