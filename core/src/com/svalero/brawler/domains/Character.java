@@ -88,6 +88,7 @@ public abstract class Character implements Disposable {
     protected float jumpAttackHeight;
     protected float specialAttackCooldown;
     protected float specialAttackDistance;
+    protected boolean isOnGround = true;
 
     public enum State {
         IDLE,
@@ -426,4 +427,8 @@ public abstract class Character implements Disposable {
     public int getMaxHealth() { return maxHealth; }
 
     public int getCurrentHealth() { return currentHealth; }
+
+    public boolean isOnGround() { return isOnGround; }
+
+    public void setOnGround(boolean onGround) { isOnGround = onGround; }
 }

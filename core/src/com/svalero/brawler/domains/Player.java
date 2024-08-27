@@ -228,28 +228,32 @@ public abstract class Player extends Character {
                 setCurrentState(State.CROUCH_DOWN);
             }
 
-        // JUMP UP
+        // JUMP
         } else if (currentState == State.JUMP_UP || currentState == State.JUMP_DOWN) {
-            if (velocity.y > 0) {
-                currentAnimation = getAnimation(jumpUpKey);
-                setCurrentState(State.JUMP_UP);
-            } else if (velocity.y <= 0) {
-                currentAnimation = getAnimation(jumpDownKey);
-                setCurrentState(State.JUMP_DOWN);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                velocity.x = body.getLinearVelocity().x + speed * 0.05f;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                velocity.x = body.getLinearVelocity().x - speed * 0.05f;
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !hasAttackedThisJump) {
-                currentAnimation = getAnimation(jumpAttackKey);
-                SoundManager.playSound(attackSoundPath);
-                setCurrentState(State.JUMP_ATTACK);
-                setHasAttackedThisJump(true);
+            if (currentState == State.JUMP_DOWN && isOnGround) {
+                goLand();
+            } else {
+                if (velocity.y > 0) {
+                    currentAnimation = getAnimation(jumpUpKey);
+                    setCurrentState(State.JUMP_UP);
+                } else if (velocity.y <= 0) {
+                    currentAnimation = getAnimation(jumpDownKey);
+                    setCurrentState(State.JUMP_DOWN);
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    velocity.x = body.getLinearVelocity().x + speed * 0.05f;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                    velocity.x = body.getLinearVelocity().x - speed * 0.05f;
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.J) && !hasAttackedThisJump) {
+                    currentAnimation = getAnimation(jumpAttackKey);
+                    SoundManager.playSound(attackSoundPath);
+                    setCurrentState(State.JUMP_ATTACK);
+                    setHasAttackedThisJump(true);
 
-                launchJumpAttack();
+                    launchJumpAttack();
+                }
             }
 
         // LAND
@@ -287,10 +291,14 @@ public abstract class Player extends Character {
             velocity.x = 0;
             body.setGravityScale(0);
             if (stateTime >= jumpAttackFrames * jumpAttackDuration) {
-                setCurrentState(State.JUMP_DOWN);
                 body.setGravityScale(1);
-                stateTime = jumpDownDuration;
-                velocity.y = -1;
+                if (isOnGround) {
+                    goLand();
+                } else {
+                    setCurrentState(State.JUMP_DOWN);
+                    stateTime = jumpDownDuration;
+                    velocity.y = -1;
+                }
                 if (attackFixture != null) {
                     clearAttackFixture();
                 }
@@ -301,20 +309,32 @@ public abstract class Player extends Character {
         if (currentState == State.HIT) {
             velocity.x = 0;
             if (stateTime >= hitFrames * hitDuration) {
-                currentAnimation = getAnimation(idleKey);
-                setCurrentStateWithoutReset(State.IDLE);
+                if (isOnGround) {
+                    currentAnimation = getAnimation(idleKey);
+                    setCurrentStateWithoutReset(State.IDLE);
+                } else {
+                    currentAnimation = getAnimation(jumpDownKey);
+                    setCurrentStateWithoutReset(State.JUMP_DOWN);
+                }
             }
         }
 
         // DEAD
-        // TODO Prevenir lo de las muertes en el aire
         if (currentState == State.DEAD) {
             if (stateTime == 0) {
-                velocity.y = 100f;
+                if (isOnGround) {
+                    velocity.y = 100f;
+                } else {
+                    velocity.y = 0f;
+                }
                 if (facingLeft) {
                     velocity.x = 140f;
                 } else {
                     velocity.x = -140f;
+                }
+            } else {
+                if (isOnGround) {
+                    stayDead();
                 }
             }
         }
@@ -353,5 +373,11 @@ public abstract class Player extends Character {
     protected void launchJumpAttack() {
         float offsetX = facingLeft ? -jumpAttackOffsetX : jumpAttackOffsetX;
         createAttackFixture(offsetX, jumpAttackOffsetY, jumpAttackWidth, jumpAttackHeight);
+    }
+
+    protected void goLand() {
+        setStateTime(0);
+        setCurrentState(State.LAND);
+        setHasAttackedThisJump(false);
     }
 }

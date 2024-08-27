@@ -171,22 +171,7 @@ public class LevelManager {
                         (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataA instanceof Character)) {
 
                     Character character = (Character) (fixtureA.getUserData() instanceof Character ? fixtureA.getUserData() : fixtureB.getUserData());
-                    if (character.getCurrentState() == State.JUMP_DOWN || character.getCurrentState() == State.JUMP_UP ||
-                            character.getCurrentState() == State.JUMP_ATTACK) {
-                        character.setStateTime(0);
-                        character.setCurrentState(State.LAND);
-                        character.setHasAttackedThisJump(false);
-                    }
-                }
-
-                // Detección de colisión con el suelo al caer derrotado
-                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataB instanceof Character) ||
-                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataA instanceof Character)) {
-
-                    Character character = (Character) (fixtureA.getUserData() instanceof Character ? fixtureA.getUserData() : fixtureB.getUserData());
-                    if (character.getCurrentState() == State.DEAD) {
-                        character.stayDead();
-                    }
+                    character.setOnGround(true);
                 }
 
                 // Detección de colisión de ataques
@@ -213,7 +198,18 @@ public class LevelManager {
             }
 
             @Override
-            public void endContact(Contact contact) {}
+            public void endContact(Contact contact) {
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
+                Object userDataA = fixtureA.getUserData();
+                Object userDataB = fixtureB.getUserData();
+
+                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataB instanceof Character) ||
+                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataA instanceof Character)) {
+                    Character character = (Character) (userDataA instanceof Character ? userDataA : userDataB);
+                    character.setOnGround(false);
+                }
+            }
 
             @Override
             public void preSolve(Contact contact, Manifold oldManifold) {
