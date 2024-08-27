@@ -59,14 +59,11 @@ public class LevelManager {
                 backgroundMusic = LEVEL_1_MUSIC;
         }
 
-        // TODO loadCurrentLevel
-        // TODO restartCurrentLevel (retry/restart/exit)
         MusicManager.startMusic(backgroundMusic);
         loadColliders();
         loadCharacters(selectedCharacter);
 
         setContactListener();
-
 
     }
 
@@ -283,4 +280,6 @@ public class LevelManager {
     public int getCurrentScore() { return currentScore; }
 
     public void setCurrentScore(int currentScore) { this.currentScore = currentScore; }
+
+    public int getCurrentLevel() { return currentLevel; }
 }

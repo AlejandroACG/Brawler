@@ -61,7 +61,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        renderManager.getBatch().dispose();
+        renderManager.dispose();
         for (Map.Entry<Integer, Character> character : levelManager.getCharacters().entrySet()) {
             character.getValue().dispose();
         }

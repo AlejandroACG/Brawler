@@ -413,7 +413,7 @@ public abstract class Character implements Disposable {
         }
     }
 
-    public EffectManager getEffectManager() {
-        return effectManager;
-    }
+    public EffectManager getEffectManager() { return effectManager; }
+
+    public int getHealth() { return health; }
 }

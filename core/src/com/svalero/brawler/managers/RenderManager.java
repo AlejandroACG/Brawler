@@ -1,4 +1,7 @@
 package com.svalero.brawler.managers;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.svalero.brawler.domains.Character;
@@ -7,16 +10,18 @@ import com.svalero.brawler.utils.ParallaxLayer;
 
 public class RenderManager {
     private SpriteBatch batch;
+    private BitmapFont font;
     private OrthogonalTiledMapRenderer mapRenderer;
     private LevelManager levelManager;
     private CameraManager cameraManager;
 
     public RenderManager(LevelManager levelManager, CameraManager cameraManager) {
-        batch = new SpriteBatch();
         this.levelManager = levelManager;
-        mapRenderer = new OrthogonalTiledMapRenderer(levelManager.getMap());
         this.cameraManager = cameraManager;
-
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        font.getData().setScale(2);
+        mapRenderer = new OrthogonalTiledMapRenderer(levelManager.getMap());
     }
 
     public void drawFrame() {
@@ -36,6 +41,11 @@ public class RenderManager {
             character.getEffectManager().drawEffects(batch);
         }
         batch.end();
+
+        batch.setProjectionMatrix(cameraManager.getUICamera().combined);
+        batch.begin();
+        renderUI(levelManager);
+        batch.end();
     }
 
     public void drawBackground() {
@@ -46,7 +56,15 @@ public class RenderManager {
         batch.end();
     }
 
-    public SpriteBatch getBatch() {
-        return batch;
+    private void renderUI(LevelManager levelManager) {
+        font.getData().setScale(1);
+        font.draw(batch, "Health: " + levelManager.getPlayer().getHealth(), 20, Gdx.graphics.getHeight() - 20);
+        font.draw(batch, "Level: " + levelManager.getCurrentLevel(), 20, Gdx.graphics.getHeight() - 50);
+        font.draw(batch, "Score: " + levelManager.getCurrentScore(), 20, Gdx.graphics.getHeight() - 80);
+    }
+
+    public void dispose() {
+        batch.dispose();
+        font.dispose();
     }
 }
