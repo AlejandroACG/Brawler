@@ -90,6 +90,7 @@ public abstract class Character implements Disposable {
     protected float specialAttackDistance;
     protected boolean isOnGround = true;
     protected boolean markToFallDead = false;
+    protected float walkingSoundTimer = WALKING_SOUND_TIMER;
 
     public enum State {
         IDLE,
@@ -436,6 +437,31 @@ public abstract class Character implements Disposable {
         if (stateTime == 0) {
             currentAnimation = getAnimation(victoryKey);
             SoundManager.playSound(victorySoundPath);
+        }
+        return velocity;
+    }
+
+    protected Vector2 goAttack(Vector2 velocity) {
+        velocity.x = 0;
+        currentAnimation = getAnimation(attackKey);
+        SoundManager.playSound(attackSoundPath);
+        setCurrentState(State.ATTACK);
+
+        // TODO Se puede implementar una lógica adicional para que en casos como Bishamon el fixture de
+        // TODO daño solo aparezca a partir de X fotograma.
+        launchAttack();
+        return velocity;
+    }
+
+    protected Vector2 goWalk(Vector2 velocity) {
+        setCurrentState(State.WALK);
+        currentAnimation = getAnimation(walkKey);
+        SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, walkKey);
+        walkingSoundTimer = WALKING_SOUND_TIMER;
+        if (facingLeft) {
+            velocity.x = -speed;
+        } else {
+            velocity.x = speed;
         }
         return velocity;
     }

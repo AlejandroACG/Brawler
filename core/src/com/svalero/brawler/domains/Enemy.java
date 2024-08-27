@@ -9,13 +9,12 @@ import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Enemy extends Character {
-    private float turnTimer = 0.0f;
-    private float walkTimer = 0.0f;
-    private float stopTimer = 0.0f;
-    private float specialStopTimer = 0.0f;
-    private float attackTimer = 0.0f;
+    protected float turnTimer = 0.0f;
+    protected float walkTimer = 0.0f;
+    protected float stopTimer = 0.0f;
+    protected float specialStopTimer = 0.0f;
+    protected float attackTimer = 0.0f;
     protected float timeSinceLastSpecial = 0.0f;
-    private float walkingSoundTimer = WALKING_SOUND_TIMER;
     protected boolean turnChance = false;
     protected boolean walkChance = false;
     protected boolean randomStopChance = false;
@@ -171,21 +170,6 @@ public class Enemy extends Character {
         }
     }
 
-    protected Vector2 goWalk(Vector2 velocity) {
-        setCurrentState(State.WALK);
-        currentAnimation = getAnimation(walkKey);
-        SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, walkKey);
-        walkingSoundTimer = WALKING_SOUND_TIMER;
-
-        if (facingLeft) {
-            velocity.x = -speed;
-        } else {
-            velocity.x = speed;
-        }
-
-        return velocity;
-    }
-
     protected void shouldRandomStop(float dt) {
         if (stopTimer >= CHANCE_TIMERS_MARK) {
             randomStopChance = Math.random() < (ConfigurationManager.hard ? RANDOM_STOP_CHANCE_HARD : RANDOM_STOP_CHANCE);
@@ -211,18 +195,6 @@ public class Enemy extends Character {
         } else {
             attackTimer += dt;
         }
-    }
-
-    protected Vector2 goAttack(Vector2 velocity) {
-        velocity.x = 0;
-        currentAnimation = getAnimation(attackKey);
-        SoundManager.playSound(attackSoundPath);
-        setCurrentState(State.ATTACK);
-
-        // TODO Se puede implementar una lógica adicional para que en casos como Bishamon el fixture de
-        // TODO daño solo aparezca a partir de X fotograma.
-        launchAttack();
-        return velocity;
     }
 
     protected void resetChances() {

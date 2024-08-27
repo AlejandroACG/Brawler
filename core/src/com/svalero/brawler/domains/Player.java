@@ -10,9 +10,8 @@ import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 
 public abstract class Player extends Character {
-    private float walkingSoundTimer = WALKING_SOUND_TIMER;
-    private long lastKeyPressTimeA = 0;
-    private long lastKeyPressTimeD = 0;
+    protected long lastKeyPressTimeA = 0;
+    protected long lastKeyPressTimeD = 0;
     protected boolean isRunning = false;
 
     public Player(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
@@ -84,21 +83,13 @@ public abstract class Player extends Character {
                 } else if (currentState == State.RUN) {
                     velocity = goRun(velocity);
                 } else {
-                    velocity.x = -speed;
-                    setCurrentState(State.WALK);
-                    currentAnimation = getAnimation(walkKey);
-                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, walkKey);
-                    walkingSoundTimer = WALKING_SOUND_TIMER;
+                    velocity = goWalk(velocity);
                 }
             }
             // Walking / running right
             if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
                 if (currentTime - lastKeyPressTimeD < DOUBLE_CLICK_THRESHOLD || currentState == State.RUN) {
-                    velocity.x = speed * 2;
-                    isRunning = true;
-                    setCurrentState(State.RUN);
-                    currentAnimation = getAnimation(runKey);
-                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
+                    velocity = goRun(velocity);
                 }
                 lastKeyPressTimeD = currentTime;
             }
@@ -106,16 +97,9 @@ public abstract class Player extends Character {
                 if (isFacingLeft()) {
                     velocity = goTurn(velocity);
                 } else if (currentState == State.RUN) {
-                    velocity.x = speed * 2;
-                    setCurrentState(State.RUN);
-                    currentAnimation = getAnimation(runKey);
-                    SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
+                    velocity = goRun(velocity);
                 } else {
-                    velocity.x = speed;
-                    setCurrentState(State.WALK);
-                    currentAnimation = getAnimation(walkKey);
-                    SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, walkKey);
-                    walkingSoundTimer = WALKING_SOUND_TIMER;
+                    velocity = goWalk(velocity);
                 }
             }
 
@@ -143,12 +127,7 @@ public abstract class Player extends Character {
 
             // Attack
             if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
-                velocity.x = 0;
-                currentAnimation = getAnimation(attackKey);
-                SoundManager.playSound(attackSoundPath);
-                setCurrentState(State.ATTACK);
-
-                launchAttack();
+                velocity = goAttack(velocity);
             }
 
         // TURN
@@ -159,9 +138,9 @@ public abstract class Player extends Character {
             }
             if (stateTime >= turnFrames * turnDuration) {
                 if (isRunning) {
-                    setCurrentStateWithoutReset(State.RUN);
+                    velocity = goRun(velocity);
                 } else {
-                    setCurrentStateWithoutReset(State.WALK);
+                    velocity = goWalk(velocity);
                 }
             }
 
