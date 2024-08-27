@@ -318,10 +318,10 @@ public abstract class Player extends Character {
         // DEAD
         if (currentState == State.DEAD) {
             if (stateTime == 0) {
+                body.setGravityScale(1);
                 if (isOnGround) {
                     velocity.y = 100f;
                 } else {
-                    body.setGravityScale(1);
                     velocity.y = 0f;
                 }
                 if (facingLeft) {
@@ -329,7 +329,11 @@ public abstract class Player extends Character {
                 } else {
                     velocity.x = -140f;
                 }
-            } else {
+            }
+            if (!isOnGround) {
+                markToFallDead = true;
+            }
+            if (markToFallDead) {
                 if (isOnGround) {
                     stayDead();
                 }

@@ -96,6 +96,7 @@ public abstract class Character implements Disposable {
     protected boolean specialStopChance = false;
     protected boolean attackStopChance = false;
     protected boolean attackChance = false;
+    protected boolean markToFallDead = false;
 
     public enum State {
         IDLE,

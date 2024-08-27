@@ -117,6 +117,14 @@ public class Enemy extends Character {
                     velocity.x = -140f;
                 }
             }
+            if (!isOnGround) {
+                markToFallDead = true;
+            }
+            if (markToFallDead) {
+                if (isOnGround) {
+                    stayDead();
+                }
+            }
         }
 
         // Stop walking sound
