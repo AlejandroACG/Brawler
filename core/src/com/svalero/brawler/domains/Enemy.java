@@ -29,12 +29,12 @@ public class Enemy extends Character {
                  int deadFrames, float deadDuration, String turnKey, int turnFrames, float turnDuration,
                  int attackFrames, float attackDuration, float attackWidth, float attackHeight, float attackOffsetX,
                  float attackOffsetY, String walkKey, String attackSoundPath, String attackKey, String victoryKey,
-                 String victorySoundPath, float specialAttackDistance) {
+                 String victorySoundPath, float specialAttackDistance, float attackDistance) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth,
                 frameHeight, correctionX, correctionY, idleDuration, idleKey, hitKey, hitFrames, hitDuration,
                 hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration, turnKey, turnFrames, turnDuration,
                 attackFrames, attackDuration, attackWidth, attackHeight, attackOffsetX, attackOffsetY, walkKey,
-                attackSoundPath, attackKey, victoryKey, victorySoundPath, specialAttackDistance);
+                attackSoundPath, attackKey, victoryKey, victorySoundPath, specialAttackDistance, attackDistance);
     }
 
     public void update(float dt) {
@@ -71,7 +71,7 @@ public class Enemy extends Character {
                 turnChance = false;
             }
             if (facingLeft == isPlayerLeft) {
-                if (currentState == State.WALK && distanceX > attackWidth) {
+                if (currentState == State.WALK && distanceX > attackDistance) {
                     shouldRandomStop(dt);
                     if (randomStopChance) {
                         velocity = goIdle(velocity);
@@ -90,16 +90,16 @@ public class Enemy extends Character {
                         specialAttackCooldown = specialAttackCooldownReset;
                     }
                 }
-                if (currentState == State.WALK && distanceX < attackWidth) {
+                if (currentState == State.WALK && distanceX < attackDistance) {
                     velocity = goIdle(velocity);
                 }
-                if (currentState == State.IDLE && distanceX < attackWidth) {
+                if (currentState == State.IDLE && distanceX < attackDistance) {
                     shouldAttack(dt);
                     if (attackChance) {
                         velocity = goAttack(velocity);
                     }
                 }
-                if (currentState == State.IDLE && distanceX >= attackWidth) {
+                if (currentState == State.IDLE && distanceX >= attackDistance) {
                     shouldWalk(dt);
                     if (walkChance) {
                         velocity = goWalk(velocity);
