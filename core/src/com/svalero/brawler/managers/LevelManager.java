@@ -14,6 +14,7 @@ import com.svalero.brawler.domains.*;
 import com.svalero.brawler.domains.Character;
 import com.svalero.brawler.screens.GameOverScreen;
 import com.svalero.brawler.screens.GameScreen;
+import com.svalero.brawler.screens.VictoryScreen;
 import com.svalero.brawler.utils.ParallaxLayer;
 import java.util.HashMap;
 import java.util.Map;
@@ -327,7 +328,7 @@ public class LevelManager {
         if (currentLevel < NUMBER_OF_LEVELS) {
             game.setScreen(new GameScreen(game, ++currentLevel, currentScore));
         } else {
-            // TODO Pantalla de victoria
+            game.setScreen(new VictoryScreen(game, currentScore));
         }
     }
 
