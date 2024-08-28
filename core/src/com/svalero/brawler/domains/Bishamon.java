@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
-import com.svalero.brawler.managers.SoundManager;
-
+import static com.svalero.brawler.domains.Character.State.*;
+import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Bishamon extends Enemy implements SpecialAttackable {
@@ -25,6 +25,45 @@ public class Bishamon extends Enemy implements SpecialAttackable {
 
     @Override
     public void goSpecialAttack() {
-        SoundManager.playSound(DEATH_ADDER_DEAD_SOUND);
+        setCurrentState(SPECIAL_ATTACK_PREP);
+        currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK_PREP);
+    }
+
+    @Override
+    public Vector2 handleSpecialAttack(float dt, Vector2 velocity) {
+        if (currentState == SPECIAL_ATTACK_PREP) {
+            if (stateTime >= BISHAMON_SPECIAL_ATTACK_PREP_FRAMES * BISHAMON_SPECIAL_ATTACK_PREP_DURATION) {
+
+                setCurrentState(SPECIAL_ATTACK);
+                currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK);
+
+                velocity.x = isFacingLeft() ? -200 : 200;
+
+                // TODO El launchAttack() podría modificarse para incluir variaciones como ésta. Ahora mismo es excesivamente
+                //  específico
+                float offsetX = facingLeft ? -BISHAMON_SPECIAL_ATTACK_OFFSET_X : BISHAMON_SPECIAL_ATTACK_OFFSET_X;
+                createAttackFixture(offsetX, BISHAMON_SPECIAL_ATTACK_OFFSET_Y, BISHAMON_SPECIAL_ATTACK_WIDTH, BISHAMON_SPECIAL_ATTACK_HEIGHT);
+            }
+        }
+
+        if (currentState == SPECIAL_ATTACK) {
+            velocity.x = isFacingLeft() ? -200 : 200;
+            if (stateTime >= BISHAMON_SPECIAL_ATTACK_FRAMES * BISHAMON_SPECIAL_ATTACK_DURATION) {
+                velocity.x = 0;
+                setCurrentState(SPECIAL_ATTACK_POST);
+                currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK_POST);
+            }
+        }
+
+        if (currentState == SPECIAL_ATTACK_POST) {
+            if (attackFixture != null) {
+                clearAttackFixture();
+            }
+            if (stateTime >= BISHAMON_SPECIAL_ATTACK_POST_FRAMES * BISHAMON_SPECIAL_ATTACK_POST_DURATION) {
+                setCurrentState(IDLE);
+                currentAnimation = getAnimation(idleKey);
+            }
+        }
+        return velocity;
     }
 }

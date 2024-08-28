@@ -39,6 +39,9 @@ public class AnimationManager {
         animations.put(BISHAMON_WALK, new Animation<>(BISHAMON_WALK_DURATION, bishamonAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
         animations.put(BISHAMON_TURN, new Animation<>(BISHAMON_TURN_DURATION, bishamonAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
         animations.put(BISHAMON_ATTACK, new Animation<>(BISHAMON_ATTACK_DURATION, bishamonAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
+        animations.put(BISHAMON_SPECIAL_ATTACK_PREP, new Animation<>(BISHAMON_SPECIAL_ATTACK_PREP_DURATION, bishamonAtlas.findRegions("special_prep"), Animation.PlayMode.LOOP));
+        animations.put(BISHAMON_SPECIAL_ATTACK, new Animation<>(BISHAMON_SPECIAL_ATTACK_DURATION, bishamonAtlas.findRegions("special"), Animation.PlayMode.NORMAL));
+        animations.put(BISHAMON_SPECIAL_ATTACK_POST, new Animation<>(BISHAMON_SPECIAL_ATTACK_POST_DURATION, bishamonAtlas.findRegions("special_post"), Animation.PlayMode.NORMAL));
         animations.put(BISHAMON_HIT, new Animation<>(BISHAMON_HIT_DURATION, bishamonAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(BISHAMON_DEAD, new Animation<>(BISHAMON_DEAD_DURATION, bishamonAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
         animations.put(BISHAMON_VICTORY, new Animation<>(BISHAMON_VICTORY_DURATION, bishamonAtlas.findRegions("victory"), Animation.PlayMode.NORMAL));

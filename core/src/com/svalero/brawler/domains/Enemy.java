@@ -122,6 +122,11 @@ public class Enemy extends Character {
                 }
             }
 
+            // SPECIAL ATTACK
+        } else if (currentState == State.SPECIAL_ATTACK || currentState == State.SPECIAL_ATTACK_PREP
+                || currentState == State.SPECIAL_ATTACK_POST) {
+            velocity = handleSpecialAttack(dt, velocity);
+
         // HIT
         } else if (currentState == State.HIT) {
             velocity.x = 0;
@@ -159,7 +164,7 @@ public class Enemy extends Character {
         }
 
         // Erase unused attack fixtures
-        if (currentState != State.ATTACK) { clearAttackFixture(); }
+        if (currentState != State.ATTACK && currentState != State.SPECIAL_ATTACK) { clearAttackFixture(); }
 
         // VICTORY
         if (currentState == State.VICTORY) { velocity = doVictory(velocity); }
@@ -223,6 +228,8 @@ public class Enemy extends Character {
     }
 
     protected void goSpecialAttack() {}
+
+    protected Vector2 handleSpecialAttack(float dt, Vector2 velocity) { return velocity; }
 
     protected void resetChances() {
         turnChance = false;

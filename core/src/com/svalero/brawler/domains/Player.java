@@ -55,7 +55,7 @@ public abstract class Player extends Character {
     // TODO Pause
     // TODO Todo el tema de agacharse
     // TODO Darle ángulo al fixture del ataque aéreo para mejorar la hitbox
-    // TODO Mejorar la lógica de mantener A y D a la vez
+    // TODO Se puede reducir código en la lógica de A y D
     // TODO Seguir encapsulando de ser necesario
 
     public void manageInput(float dt) {
