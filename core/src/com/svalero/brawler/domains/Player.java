@@ -13,6 +13,7 @@ public abstract class Player extends Character {
     protected long lastKeyPressTimeA = 0;
     protected long lastKeyPressTimeD = 0;
     protected boolean isRunning = false;
+    private boolean turnBlocked = false;
 
     public Player(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
                   int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
@@ -71,6 +72,8 @@ public abstract class Player extends Character {
         // IDLE / WALK / RUN
         if (currentState == State.IDLE || currentState == State.WALK || currentState == State.RUN) {
 
+            turnBlocked = Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.D);
+
             // Walking / running left
             if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
                 if (currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD || currentState == State.RUN) {
@@ -80,7 +83,10 @@ public abstract class Player extends Character {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 if (!isFacingLeft()) {
-                    velocity = goTurn(velocity);
+                    if (!turnBlocked) {
+                        velocity = goTurn(velocity);
+                    }
+                    turnBlocked = false;
                 } else if (currentState == State.RUN) {
                     velocity = goRun(velocity);
                 } else {
@@ -96,7 +102,10 @@ public abstract class Player extends Character {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 if (isFacingLeft()) {
-                    velocity = goTurn(velocity);
+                    if (!turnBlocked) {
+                        velocity = goTurn(velocity);
+                    }
+                    turnBlocked = false;
                 } else if (currentState == State.RUN) {
                     velocity = goRun(velocity);
                 } else {
@@ -133,14 +142,15 @@ public abstract class Player extends Character {
 
         // TURN
         } else if (currentState == State.TURN) {
-            if ((Gdx.input.isKeyJustPressed(Input.Keys.A) && currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD)
-                    || (Gdx.input.isKeyJustPressed(Input.Keys.D) && currentTime - lastKeyPressTimeD < DOUBLE_CLICK_THRESHOLD)) {
+            if ((Gdx.input.isKeyJustPressed(Input.Keys.A) && currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD
+                    && !(Gdx.input.isKeyJustPressed(Input.Keys.D)))
+                    || (Gdx.input.isKeyJustPressed(Input.Keys.D) && (currentTime - lastKeyPressTimeD < DOUBLE_CLICK_THRESHOLD
+                && !Gdx.input.isKeyJustPressed(Input.Keys.A)))) {
                 isRunning = true;
             }
             if (stateTime >= turnFrames * turnDuration) {
                 if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    velocity = goTurn(velocity);
-                    stateTime = 0;
+                    velocity = goIdle(velocity);
                 } else if (((facingLeft && Gdx.input.isKeyPressed(Input.Keys.A)) ||
                         (!facingLeft && Gdx.input.isKeyPressed(Input.Keys.D)))) {
                     if (isRunning) {
