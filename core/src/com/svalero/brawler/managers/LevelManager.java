@@ -13,6 +13,7 @@ import com.svalero.brawler.Brawler;
 import com.svalero.brawler.domains.*;
 import com.svalero.brawler.domains.Character;
 import com.svalero.brawler.screens.GameOverScreen;
+import com.svalero.brawler.screens.GameScreen;
 import com.svalero.brawler.utils.ParallaxLayer;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,10 @@ public class LevelManager {
     private float defeatTimer = 10.0f;
     private boolean enemyCelebrationTriggered = false;
     private float enemyCelebrationTimer = 1.0f;
+    private boolean isVictorious = false;
+    private float victoryTimer = 5.0f;
+    private boolean playerCelebrationTriggered = false;
+    private float playerCelebrationTimer = 1.0f;
 
     public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter, int initialScore) {
         this.game = game;
@@ -66,6 +71,7 @@ public class LevelManager {
                 break;
         }
 
+        MusicManager.stopMusic();
         MusicManager.startMusic(backgroundMusic);
         loadColliders();
         loadCharacters(selectedCharacter);
@@ -281,7 +287,49 @@ public class LevelManager {
             if (defeatTimer <= 0) {
                 triggerGameOver();
             }
-        }    }
+        }
+    }
+
+    public void checkVictoryCondition(float dt) {
+        if (!isVictorious) {
+            boolean allEnemiesDead = true;
+
+            for (Enemy enemy : enemies.values()) {
+                if (enemy.getCurrentState() != State.DEAD) {
+                    allEnemiesDead = false;
+                    break;
+                }
+            }
+
+            if (allEnemiesDead && player.isOnGround()) {
+                isVictorious = true;
+            }
+        }
+
+        if (isVictorious && !playerCelebrationTriggered) {
+            playerCelebrationTimer -= dt;
+            if (playerCelebrationTimer <= 0) {
+                playerCelebrationTriggered = true;
+                player.setCurrentState(State.VICTORY);
+                MusicManager.stopMusic();
+            }
+        }
+
+        if (playerCelebrationTriggered) {
+            victoryTimer -= dt;
+            if (victoryTimer <= 0) {
+                triggerNextLevel();
+            }
+        }
+    }
+
+    private void triggerNextLevel() {
+        if (currentLevel < NUMBER_OF_LEVELS) {
+            game.setScreen(new GameScreen(game, ++currentLevel, currentScore));
+        } else {
+            // TODO Pantalla de victoria
+        }
+    }
 
     private void triggerGameOver() { game.setScreen(new GameOverScreen(game, currentLevel, initialScore, currentScore)); }
 

@@ -4,6 +4,7 @@ public class Constants {
     public static final float ASPECT_RATIO = 16f / 9f;
     public static final float GRAVITY = -175f;
     public static final boolean DEBUG_MODE = true;
+    public static final int NUMBER_OF_LEVELS = 2;
 
     // Timers
     public static final long DOUBLE_CLICK_THRESHOLD = 300;
@@ -71,6 +72,7 @@ public class Constants {
     public static final String MENU_MUSIC = "music/menu-music.mp3";
     public static final String LEVEL_1_MUSIC = "music/level-1-music.mp3";
     public static final String LEVEL_2_MUSIC = "music/level-2-music.mp3";
+    public static final String VICTORY_MUSIC = "music/victory-music.mp3";
     public static final String GAME_OVER_MUSIC = "music/game-over-music.mp3";
 
     // UI

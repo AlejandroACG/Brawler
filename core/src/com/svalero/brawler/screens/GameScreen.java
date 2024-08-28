@@ -43,6 +43,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         levelManager.checkDefeatCondition(dt);
+        levelManager.checkVictoryCondition(dt);
         actionManager.update(dt);
         cameraManager.handleCamera();
         renderManager.drawFrame();

@@ -45,6 +45,7 @@ public class ResourceManager {
         assets.load(MENU_MUSIC, Music.class);
         assets.load(LEVEL_1_MUSIC, Music.class);
         assets.load(LEVEL_2_MUSIC, Music.class);
+        assets.load(VICTORY_MUSIC, Music.class);
         assets.load(GAME_OVER_MUSIC, Music.class);
 
         // Cargar texturas
