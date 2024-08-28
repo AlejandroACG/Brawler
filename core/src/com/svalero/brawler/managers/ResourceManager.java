@@ -38,10 +38,13 @@ public class ResourceManager {
         assets.load(LAND_SOUND, Sound.class);
         assets.load(WALKING_ON_GRASS_SOUND, Sound.class);
         assets.load(RUNNING_ON_GRASS_SOUND, Sound.class);
+        assets.load(WALKING_ON_STONE_SOUND, Sound.class);
+        assets.load(RUNNING_ON_STONE_SOUND, Sound.class);
 
         // Cargar música
         assets.load(MENU_MUSIC, Music.class);
         assets.load(LEVEL_1_MUSIC, Music.class);
+        assets.load(LEVEL_2_MUSIC, Music.class);
         assets.load(GAME_OVER_MUSIC, Music.class);
 
         // Cargar texturas
@@ -49,6 +52,7 @@ public class ResourceManager {
         assets.load(TABLE_BACKGROUND, Texture.class);
         assets.load(TUTORIAL_PICTURE, Texture.class);
         assets.load(LEVEL_1_BACKGROUND, TextureAtlas.class);
+        assets.load(LEVEL_2_BACKGROUND, TextureAtlas.class);
         assets.load(KAIN_ATLAS, TextureAtlas.class);
         assets.load(BISHAMON_ATLAS, TextureAtlas.class);
         assets.load(HSIEN_KO_ATLAS, TextureAtlas.class);

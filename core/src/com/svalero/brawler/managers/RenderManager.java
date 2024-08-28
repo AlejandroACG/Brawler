@@ -33,7 +33,11 @@ public class RenderManager {
         batch = new SpriteBatch();
         font = game.getSkin().getFont(AETHERIUS_FONT);
         font.getData().setScale(1.5f);
-        font.setColor(Color.BLACK);
+        if (levelManager.getCurrentLevel() == 1) {
+            font.setColor(Color.BLACK);
+        } else if (levelManager.getCurrentLevel() == 2) {
+            font.setColor(Color.WHITE);
+        }
         font.setUseIntegerPositions(false);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 

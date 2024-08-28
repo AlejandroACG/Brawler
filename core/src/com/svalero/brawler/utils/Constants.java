@@ -33,6 +33,7 @@ public class Constants {
     public static final String TABLE_BACKGROUND = "textures/table-background.png";
     public static final String TUTORIAL_PICTURE = "textures/tutorial.png";
     public static final String LEVEL_1_BACKGROUND = "textures/level-1-background.atlas";
+    public static final String LEVEL_2_BACKGROUND = "textures/level-2-background.atlas";
     public static final String KAIN_ATLAS = "textures/kain.atlas";
     public static final String BISHAMON_ATLAS = "textures/bishamon.atlas";
     public static final String HSIEN_KO_ATLAS = "textures/hsien-ko.atlas";
@@ -63,10 +64,13 @@ public class Constants {
     public static final String LAND_SOUND = "sounds/land.mp3";
     public static final String WALKING_ON_GRASS_SOUND = "sounds/walking-on-grass.wav";
     public static final String RUNNING_ON_GRASS_SOUND = "sounds/running-on-grass.mp3";
+    public static final String WALKING_ON_STONE_SOUND = "sounds/walking-on-stone.wav";
+    public static final String RUNNING_ON_STONE_SOUND = "sounds/running-on-stone.wav";
 
     // Music
     public static final String MENU_MUSIC = "music/menu-music.mp3";
     public static final String LEVEL_1_MUSIC = "music/level-1-music.mp3";
+    public static final String LEVEL_2_MUSIC = "music/level-2-music.mp3";
     public static final String GAME_OVER_MUSIC = "music/game-over-music.mp3";
 
     // UI
@@ -140,6 +144,13 @@ public class Constants {
     public static final float LEVEL_1_PARALLAX_FACTOR_2 = 0.5f;
     public static final float LEVEL_1_PARALLAX_FACTOR_3 = 0.8f;
     public static final float LEVEL_1_PARALLAX_FACTOR_4 = 1f;
+    public static final String LEVEL_2_MAP = "maps/level-2.tmx";
+    public static final float LEVEL_2_MAP_WIDTH = 960f;
+    public static final float LEVEL_2_MAP_HEIGHT = 272f;
+    public static final float LEVEL_2_PARALLAX_FACTOR_1 = -0.075f;
+    public static final float LEVEL_2_PARALLAX_FACTOR_2 = 0.5f;
+    public static final float LEVEL_2_PARALLAX_FACTOR_3 = 0.8f;
+    public static final float LEVEL_2_PARALLAX_FACTOR_4 = 1f;
 
     // Kain
     public static final float KAIN_SCALE = 0.5f;

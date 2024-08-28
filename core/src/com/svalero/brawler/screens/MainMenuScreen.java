@@ -45,7 +45,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 MusicManager.stopMusic();
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(game, 1, 0));
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(game, 2, 0));
             }
         });
 

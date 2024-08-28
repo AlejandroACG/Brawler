@@ -55,6 +55,7 @@ public abstract class Player extends Character {
     // TODO Todo el tema de agacharse
     // TODO Darle ángulo al fixture del ataque aéreo para mejorar la hitbox
     // TODO Mejorar la lógica de mantener A y D a la vez
+    // TODO Seguir encapsulando de ser necesario
 
     public void manageInput(float dt) {
         Vector2 velocity = body.getLinearVelocity();
@@ -352,7 +353,7 @@ public abstract class Player extends Character {
         setCurrentState(State.RUN);
         isRunning = true;
         currentAnimation = getAnimation(runKey);
-        SoundManager.playLongSound(RUNNING_ON_GRASS_SOUND, runKey);
+        SoundManager.playLongSound(levelManager.getCurrentLevel() == 1 ? RUNNING_ON_GRASS_SOUND : RUNNING_ON_STONE_SOUND, runKey);
         return velocity;
     }
 }

@@ -456,8 +456,9 @@ public abstract class Character implements Disposable {
     protected Vector2 goWalk(Vector2 velocity) {
         setCurrentState(State.WALK);
         currentAnimation = getAnimation(walkKey);
-        SoundManager.playLongSound(WALKING_ON_GRASS_SOUND, walkKey);
-        walkingSoundTimer = WALKING_SOUND_TIMER;
+        // TODO De haber más niveles implementar un switch
+        SoundManager.playLongSound(levelManager.getCurrentLevel() == 1 ? WALKING_ON_GRASS_SOUND : WALKING_ON_STONE_SOUND, walkKey);
+        if (levelManager.getCurrentLevel() == 1) { walkingSoundTimer = WALKING_SOUND_TIMER; }
         if (facingLeft) {
             velocity.x = -speed;
         } else {

@@ -57,6 +57,13 @@ public class LevelManager {
                 mapWidth = LEVEL_1_MAP_WIDTH;
                 mapHeight = LEVEL_1_MAP_HEIGHT;
                 backgroundMusic = LEVEL_1_MUSIC;
+                break;
+            case 2:
+                map = mapLoader.load(LEVEL_2_MAP);
+                mapWidth = LEVEL_2_MAP_WIDTH;
+                mapHeight = LEVEL_2_MAP_HEIGHT;
+                backgroundMusic = LEVEL_2_MUSIC;
+                break;
         }
 
         MusicManager.startMusic(backgroundMusic);
@@ -72,13 +79,18 @@ public class LevelManager {
     }
 
     public void setBackground() {
+        TextureAtlas backgroundAtlas;
+        AtlasRegion parallaxTexture1;
+        AtlasRegion parallaxTexture2;
+        AtlasRegion parallaxTexture3;
+        AtlasRegion parallaxTexture4;
         switch (currentLevel) {
             case 1:
-                TextureAtlas backgroundAtlas = ResourceManager.getAtlas(LEVEL_1_BACKGROUND);
-                AtlasRegion parallaxTexture1 = backgroundAtlas.findRegion("parallax-1");
-                AtlasRegion parallaxTexture2 = backgroundAtlas.findRegion("parallax-2");
-                AtlasRegion parallaxTexture3 = backgroundAtlas.findRegion("parallax-3");
-                AtlasRegion parallaxTexture4 = backgroundAtlas.findRegion("parallax-4");
+                backgroundAtlas = ResourceManager.getAtlas(LEVEL_1_BACKGROUND);
+                parallaxTexture1 = backgroundAtlas.findRegion("parallax-1");
+                parallaxTexture2 = backgroundAtlas.findRegion("parallax-2");
+                parallaxTexture3 = backgroundAtlas.findRegion("parallax-3");
+                parallaxTexture4 = backgroundAtlas.findRegion("parallax-4");
                 parallaxLayers.add(new ParallaxLayer(parallaxTexture4, LEVEL_1_PARALLAX_FACTOR_4, cameraManager,
                         true, 7, 0, -30));
                 parallaxLayers.add(new ParallaxLayer(parallaxTexture3, LEVEL_1_PARALLAX_FACTOR_3, cameraManager,
@@ -87,6 +99,22 @@ public class LevelManager {
                         true, 7, 0, -25));
                 parallaxLayers.add(new ParallaxLayer(parallaxTexture1, LEVEL_1_PARALLAX_FACTOR_1, cameraManager,
                         false, 1, 186, 27));
+                break;
+            case 2:
+                backgroundAtlas = ResourceManager.getAtlas(LEVEL_2_BACKGROUND);
+                parallaxTexture1 = backgroundAtlas.findRegion("parallax-1");
+                parallaxTexture2 = backgroundAtlas.findRegion("parallax-2");
+                parallaxTexture3 = backgroundAtlas.findRegion("parallax-3");
+                parallaxTexture4 = backgroundAtlas.findRegion("parallax-4");
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture4, LEVEL_1_PARALLAX_FACTOR_4, cameraManager,
+                        true, 7, 0, -30));
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture3, LEVEL_1_PARALLAX_FACTOR_3, cameraManager,
+                        true, 3, 0, -25));
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture2, LEVEL_1_PARALLAX_FACTOR_2, cameraManager,
+                        true, 7, 0, -25));
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture1, LEVEL_1_PARALLAX_FACTOR_1, cameraManager,
+                        false, 1, -500, -45));
+                break;
         }
     }
 

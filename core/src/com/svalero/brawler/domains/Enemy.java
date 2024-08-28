@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
-import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Enemy extends Character {
