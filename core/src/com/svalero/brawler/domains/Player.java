@@ -138,10 +138,18 @@ public abstract class Player extends Character {
                 isRunning = true;
             }
             if (stateTime >= turnFrames * turnDuration) {
-                if (isRunning) {
-                    velocity = goRun(velocity);
+                if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    velocity = goTurn(velocity);
+                    stateTime = 0;
+                } else if (((facingLeft && Gdx.input.isKeyPressed(Input.Keys.A)) ||
+                        (!facingLeft && Gdx.input.isKeyPressed(Input.Keys.D)))) {
+                    if (isRunning) {
+                        velocity = goRun(velocity);
+                    } else {
+                        velocity = goWalk(velocity);
+                    }
                 } else {
-                    velocity = goWalk(velocity);
+                    velocity = goIdle(velocity);
                 }
             }
 

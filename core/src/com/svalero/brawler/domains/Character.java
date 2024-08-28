@@ -86,7 +86,8 @@ public abstract class Character implements Disposable {
     protected float jumpAttackOffsetY;
     protected float jumpAttackWidth;
     protected float jumpAttackHeight;
-    protected float specialAttackCooldown;
+    protected float specialAttackCooldown = 0;
+    protected float specialAttackCooldownReset;
     protected float specialAttackDistance;
     protected boolean isOnGround = true;
     protected boolean markToFallDead = false;
@@ -246,7 +247,7 @@ public abstract class Character implements Disposable {
         this.attackKey = attackKey;
         this.victoryKey = victoryKey;
         this.victorySoundPath = victorySoundPath;
-        this.specialAttackCooldown = ConfigurationManager.hard ? SPECIAL_ATTACK_COOLDOWN : SPECIAL_ATTACK_COOLDOWN_HARD;
+        this.specialAttackCooldownReset = ConfigurationManager.hard ? SPECIAL_ATTACK_COOLDOWN_DURATION_HARD : SPECIAL_ATTACK_COOLDOWN_DURATION;
         this.specialAttackDistance = specialAttackDistance;
 
         createBody(world, characterAtlas);

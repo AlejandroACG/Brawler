@@ -13,13 +13,14 @@ public class Enemy extends Character {
     protected float stopTimer = 0.0f;
     protected float specialStopTimer = 0.0f;
     protected float attackTimer = 0.0f;
-    protected float timeSinceLastSpecial = 0.0f;
+    protected float specialAttackTimer = 0.0f;
     protected boolean turnChance = false;
     protected boolean walkChance = false;
     protected boolean randomStopChance = false;
-    protected boolean specialStopChance = false;
+    protected boolean specialAttackStopChance = false;
     protected boolean attackStopChance = false;
     protected boolean attackChance = false;
+    protected boolean specialAttackChance = false;
 
     public Enemy(LevelManager levelManager, World world, Vector2 position, String characterAtlas, int health,
                  int attackStrength, float speed, float width, float height, float frameWidth, float frameHeight,
@@ -54,8 +55,13 @@ public class Enemy extends Character {
         boolean isPlayerLeft = playerPosition.x < thisPosition.x;
         float distanceX = Math.abs((playerPosition.x - thisPosition.x)) - (levelManager.getPlayer().width / 2 + this.width / 2);
 
+        if (specialAttackCooldown > 0) { specialAttackCooldown -= dt; }
+
         // IDLE / WALK
         if (currentState == State.IDLE || currentState == State.WALK) {
+            if (currentState == State.WALK && facingLeft != isPlayerLeft) {
+                velocity = goIdle(velocity);
+            }
             shouldTurn(isPlayerLeft, dt);
             if (!facingLeft && isPlayerLeft && turnChance) {
                 velocity = goTurn(velocity);
@@ -65,33 +71,43 @@ public class Enemy extends Character {
                 turnChance = false;
             }
             if (facingLeft == isPlayerLeft) {
-                if (currentState == State.IDLE && distanceX >= attackWidth) {
-                    shouldWalk(dt);
-                    if (walkChance) {
-                        velocity = goWalk(velocity);
-                    }
-                } else if (currentState == State.WALK && distanceX > attackWidth) {
+                if (currentState == State.WALK && distanceX > attackWidth) {
                     shouldRandomStop(dt);
                     if (randomStopChance) {
                         velocity = goIdle(velocity);
                     }
-                } else if (currentState == State.WALK && timeSinceLastSpecial >= specialAttackCooldown
-                        && distanceX <= specialAttackDistance) {
+                }
+                if (currentState == State.WALK && specialAttackCooldown <= 0 && distanceX <= specialAttackDistance) {
                     shouldSpecialStop(dt);
-                    if (specialStopChance) {
+                    if (specialAttackStopChance) {
                         velocity = goIdle(velocity);
                     }
-                } else if (currentState == State.WALK && distanceX < attackWidth) {
+                }
+                if (currentState == State.IDLE && specialAttackCooldown <= 0 && distanceX < specialAttackDistance) {
+                    shouldSpecialAttack(dt);
+                    if (specialAttackChance) {
+                        goSpecialAttack();
+                        specialAttackCooldown = specialAttackCooldownReset;
+                    }
+                }
+                if (currentState == State.WALK && distanceX < attackWidth) {
                     velocity = goIdle(velocity);
-                } else if (currentState == State.IDLE && distanceX < attackWidth) {
+                }
+                if (currentState == State.IDLE && distanceX < attackWidth) {
                     shouldAttack(dt);
                     if (attackChance) {
                         velocity = goAttack(velocity);
                     }
                 }
+                if (currentState == State.IDLE && distanceX >= attackWidth) {
+                    shouldWalk(dt);
+                    if (walkChance) {
+                        velocity = goWalk(velocity);
+                    }
+                }
             }
 
-        // TURN
+            // TURN
         } else if (currentState == State.TURN) {
             if (stateTime >= turnFrames * turnDuration) {
                 velocity = goIdle(velocity);
@@ -180,12 +196,22 @@ public class Enemy extends Character {
 
     protected void shouldSpecialStop(float dt) {
         if (specialStopTimer >= CHANCE_TIMERS_MARK) {
-            specialStopChance = Math.random() < (ConfigurationManager.hard ? SPECIAL_STOP_CHANCE_HARD : SPECIAL_STOP_CHANCE);
+            specialAttackStopChance = Math.random() < (ConfigurationManager.hard ? SPECIAL_STOP_CHANCE_HARD : SPECIAL_ATTACK_STOP_CHANCE);
             specialStopTimer = 0.0f;
         } else {
             specialStopTimer += dt;
         }
     }
+
+    protected void shouldSpecialAttack(float dt) {
+        if (specialAttackTimer >= CHANCE_TIMERS_MARK) {
+            specialAttackChance = Math.random() < (ConfigurationManager.hard ? SPECIAL_ATTACK_CHANCE_HARD : SPECIAL_ATTACK_CHANCE);
+            specialAttackTimer = 0.0f;
+        } else {
+            specialAttackTimer += dt;
+        }
+    }
+
 
     protected void shouldAttack(float dt) {
         if (attackTimer >= CHANCE_TIMERS_MARK) {
@@ -196,12 +222,15 @@ public class Enemy extends Character {
         }
     }
 
+    protected void goSpecialAttack() {}
+
     protected void resetChances() {
         turnChance = false;
         walkChance = false;
         randomStopChance = false;
-        specialStopChance = false;
+        specialAttackStopChance = false;
         attackStopChance = false;
+        specialAttackChance = false;
         attackChance = false;
     }
 }

@@ -4,10 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
+import com.svalero.brawler.managers.SoundManager;
 
 import static com.svalero.brawler.utils.Constants.*;
 
-public class Bishamon extends Enemy {
+public class Bishamon extends Enemy implements SpecialAttackable {
     public Bishamon(LevelManager levelManager, World world, Vector2 position) {
         super(levelManager, world, position, BISHAMON_ATLAS,
                 ConfigurationManager.hard ? BISHAMON_HEALTH_HARD : BISHAMON_HEALTH,
@@ -20,5 +21,10 @@ public class Bishamon extends Enemy {
                 BISHAMON_ATTACK_HEIGHT, BISHAMON_ATTACK_OFFSET_X, BISHAMON_ATTACK_OFFSET_Y, BISHAMON_WALK,
                 BISHAMON_ATTACK_SOUND, BISHAMON_ATTACK, BISHAMON_VICTORY, BISHAMON_VICTORY_SOUND,
                 BISHAMON_SPECIAL_ATTACK_DISTANCE);
+    }
+
+    @Override
+    public void goSpecialAttack() {
+        SoundManager.playSound(DEATH_ADDER_DEAD_SOUND);
     }
 }

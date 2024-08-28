@@ -9,8 +9,8 @@ public class Constants {
     // Timers
     public static final long DOUBLE_CLICK_THRESHOLD = 300;
     public static final float WALKING_SOUND_TIMER = 0.20f;
-    public static final float SPECIAL_ATTACK_COOLDOWN = 8.0f;
-    public static final float SPECIAL_ATTACK_COOLDOWN_HARD = 3.0f;
+    public static final float SPECIAL_ATTACK_COOLDOWN_DURATION = 8.0f;
+    public static final float SPECIAL_ATTACK_COOLDOWN_DURATION_HARD = 3.0f;
 
     // Fonts
     public static final String AETHERIUS_FONT = "aetherius-font";
@@ -83,17 +83,17 @@ public class Constants {
     // Chance
     public static final float CHANCE_TIMERS_MARK = 1.5f;
     public static final float TURN_CHANCE = 0.5f;
-    public static final float TURN_CHANCE_HARD = 0.9f;
-    public static final float WALK_CHANCE = 0.45f;
+    public static final float TURN_CHANCE_HARD = 1f;
+    public static final float WALK_CHANCE = 0.4f;
     public static final float WALK_CHANCE_HARD = 0.9f;
     public static final float RANDOM_STOP_CHANCE = 0.2f;
-    public static final float RANDOM_STOP_CHANCE_HARD = 0.1f;
-    public static final float SPECIAL_STOP_CHANCE = 0.4f;
-    public static final float SPECIAL_STOP_CHANCE_HARD = 0.9f;
-    public static final float SPECIAL_CHANCE = 0.4f;
-    public static final float SPECIAL_CHANCE_HARD = 0.9f;
+    public static final float RANDOM_STOP_CHANCE_HARD = 0.05f;
+    public static final float SPECIAL_ATTACK_STOP_CHANCE = 0.4f;
+    public static final float SPECIAL_STOP_CHANCE_HARD = 1f;
+    public static final float SPECIAL_ATTACK_CHANCE = 0.6f;
+    public static final float SPECIAL_ATTACK_CHANCE_HARD = 1f;
     public static final float ATTACK_CHANCE = 0.5f;
-    public static final float ATTACK_CHANCE_HARD = 0.9f;
+    public static final float ATTACK_CHANCE_HARD = 1f;
 
     // Stats
     public static final float KAIN_SPEED = 70f;
