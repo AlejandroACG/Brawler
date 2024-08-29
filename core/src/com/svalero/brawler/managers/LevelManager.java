@@ -10,8 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.svalero.brawler.Brawler;
-import com.svalero.brawler.domains.*;
-import com.svalero.brawler.domains.Character;
+import com.svalero.brawler.domains.characters.*;
+import com.svalero.brawler.domains.characters.Character;
+import com.svalero.brawler.domains.projectiles.Projectile;
 import com.svalero.brawler.screens.GameOverScreen;
 import com.svalero.brawler.screens.GameScreen;
 import com.svalero.brawler.screens.VictoryScreen;
@@ -21,7 +22,7 @@ import java.util.*;
 
 import static com.svalero.brawler.utils.Constants.*;
 import com.svalero.brawler.managers.ConfigurationManager.SelectedCharacter;
-import com.svalero.brawler.domains.Character.*;
+import com.svalero.brawler.domains.characters.Character.*;
 
 public class LevelManager {
     private Brawler game;
@@ -47,7 +48,7 @@ public class LevelManager {
     private float victoryTimer = 5.0f;
     private boolean playerCelebrationTriggered = false;
     private float playerCelebrationTimer = 1.0f;
-    private List<Wave> waves;
+    private List<Projectile> projectiles;
     private Array<Body> bodiesToDestroy;
 
     public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter, int initialScore) {
@@ -59,7 +60,7 @@ public class LevelManager {
         characters = new HashMap<>();
         enemies = new HashMap<>();
         mapLoader = new TmxMapLoader();
-        waves = new ArrayList<>();
+        projectiles = new ArrayList<>();
         bodiesToDestroy = new Array<>();
 
         switch (currentLevel) {
@@ -352,9 +353,9 @@ public class LevelManager {
         }
     }
 
-    public void addProjectile(Wave wave) { waves.add(wave); }
+    public void addProjectile(Projectile projectile) { projectiles.add(projectile); }
 
-    public List<Wave> getWaves() { return waves; }
+    public List<Projectile> getProjectiles() { return projectiles; }
 
     private void triggerGameOver() { game.setScreen(new GameOverScreen(game, currentLevel, initialScore, currentScore)); }
 

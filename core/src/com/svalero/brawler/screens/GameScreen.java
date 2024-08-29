@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.svalero.brawler.Brawler;
-import com.svalero.brawler.domains.Character;
+import com.svalero.brawler.domains.characters.Character;
 import com.svalero.brawler.managers.*;
 import java.util.Map;
 import static com.svalero.brawler.managers.ConfigurationManager.SelectedCharacter.*;

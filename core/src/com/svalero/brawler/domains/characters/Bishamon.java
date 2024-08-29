@@ -1,17 +1,18 @@
-package com.svalero.brawler.domains;
+package com.svalero.brawler.domains.characters;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.svalero.brawler.interfaces.SpecialAttackableInterface;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 
-import static com.svalero.brawler.domains.Character.State.*;
+import static com.svalero.brawler.domains.characters.Character.State.*;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
-public class Bishamon extends Enemy implements SpecialAttackable {
+public class Bishamon extends Enemy implements SpecialAttackableInterface {
     public Bishamon(LevelManager levelManager, World world, Vector2 position) {
         super(levelManager, world, position, BISHAMON_ATLAS,
                 ConfigurationManager.hard ? BISHAMON_HEALTH_HARD : BISHAMON_HEALTH,

@@ -1,4 +1,4 @@
-package com.svalero.brawler.domains;
+package com.svalero.brawler.domains.characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -346,14 +346,10 @@ public abstract class Player extends Character {
         }
 
         // Stop running sound
-        if (currentState != State.RUN) {
-            SoundManager.stopLongSound(runKey);
-        }
+        if (currentState != State.RUN) { SoundManager.stopLongSound(runKey); }
 
         // VICTORY
-        if (currentState == State.VICTORY) {
-            velocity = doVictory(velocity);
-        }
+        if (currentState == State.VICTORY) { velocity = doVictory(velocity); }
 
         body.setLinearVelocity(velocity.x, velocity.y);
     }

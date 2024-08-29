@@ -1,17 +1,18 @@
-package com.svalero.brawler.domains;
+package com.svalero.brawler.domains.projectiles;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.svalero.brawler.domains.characters.DeathAdder;
+import com.svalero.brawler.interfaces.ProjectileInterface;
 import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
-
 import static com.svalero.brawler.utils.Constants.*;
 
-public class Wave {
+public class Wave extends Projectile implements ProjectileInterface {
     private World world;
     private Body body;
     private Animation<TextureRegion> animation;
@@ -46,6 +47,7 @@ public class Wave {
         SoundManager.playLongSound(DEATH_ADDER_SPECIAL_ATTACK_WAVE_SOUND, DEATH_ADDER_WAVE);
     }
 
+    @Override
     public void update(float dt) {
         stateTime += dt;
         timeToLive -= dt;
@@ -60,6 +62,7 @@ public class Wave {
 
     public boolean shouldBeDestroyed() { return timeToLive <= 0 || animation.isAnimationFinished(stateTime); }
 
+    @Override
     public void render(SpriteBatch batch) {
         if (body != null) {
             TextureRegion currentFrame = animation.getKeyFrame(stateTime, false);

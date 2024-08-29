@@ -1,4 +1,4 @@
-package com.svalero.brawler.domains;
+package com.svalero.brawler.domains.characters;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;

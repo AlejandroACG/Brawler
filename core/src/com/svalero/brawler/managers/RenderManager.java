@@ -9,11 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.svalero.brawler.Brawler;
-import com.svalero.brawler.domains.Character;
-import com.svalero.brawler.domains.Enemy;
-import com.svalero.brawler.domains.Wave;
+import com.svalero.brawler.domains.characters.Character;
+import com.svalero.brawler.domains.characters.Enemy;
+import com.svalero.brawler.domains.projectiles.Projectile;
 import com.svalero.brawler.utils.ParallaxLayer;
-
 import static com.svalero.brawler.utils.Constants.*;
 
 public class RenderManager {
@@ -68,9 +67,9 @@ public class RenderManager {
             character.getEffectManager().drawEffects(batch);
         }
 
-        if (!levelManager.getWaves().isEmpty()) {
-            for (Wave wave : levelManager.getWaves()) {
-                wave.render(batch);
+        if (!levelManager.getProjectiles().isEmpty()) {
+            for (Projectile projectile : levelManager.getProjectiles()) {
+                projectile.render(batch);
             }
         }
 

@@ -1,7 +1,7 @@
 package com.svalero.brawler.managers;
 
-import com.svalero.brawler.domains.Enemy;
-import com.svalero.brawler.domains.Wave;
+import com.svalero.brawler.domains.characters.Enemy;
+import com.svalero.brawler.domains.projectiles.Projectile;
 
 public class ActionManager {
     LevelManager levelManager;
@@ -13,9 +13,9 @@ public class ActionManager {
     public void update(float dt) {
         levelManager.getWorld().step(1/60f, 6, 2);
 
-        if (!levelManager.getWaves().isEmpty()) {
-            for (Wave wave : levelManager.getWaves()) {
-                wave.update(dt);
+        if (!levelManager.getProjectiles().isEmpty()) {
+            for (Projectile projectile : levelManager.getProjectiles()) {
+                projectile.update(dt);
             }
         }
 

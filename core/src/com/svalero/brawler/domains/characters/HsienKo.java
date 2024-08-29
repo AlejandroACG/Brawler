@@ -1,15 +1,15 @@
-package com.svalero.brawler.domains;
+package com.svalero.brawler.domains.characters;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.svalero.brawler.interfaces.SpecialAttackableInterface;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
-import static com.svalero.brawler.domains.Character.State.*;
+import static com.svalero.brawler.domains.characters.Character.State.*;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
-public class HsienKo extends Enemy implements SpecialAttackable {
+public class HsienKo extends Enemy implements SpecialAttackableInterface {
     public HsienKo(LevelManager levelManager, World world, Vector2 position) {
         super(levelManager, world, position, HSIEN_KO_ATLAS,
                 ConfigurationManager.hard ? HSIEN_KO_HEALTH_HARD : HSIEN_KO_HEALTH,
