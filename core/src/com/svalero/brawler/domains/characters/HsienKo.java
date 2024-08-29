@@ -38,21 +38,13 @@ public class HsienKo extends Enemy implements SpecialAttackableInterface {
 
                 setCurrentStateWithoutReset(SPECIAL_ATTACK);
 
-                Vector2 playerPosition = levelManager.getPlayer().getPosition();
                 Vector2 hsienKoPosition = this.getPosition();
-
-                float deltaX = playerPosition.x - hsienKoPosition.x;
-                float deltaY = playerPosition.y - hsienKoPosition.y;
-                float timeOfFlight = HSIEN_KO_BOMB_DURATION * HSIEN_KO_BOMB_EXPLOSION_FRAME;
-                float gravity = levelManager.getWorld().getGravity().y;
-
-                float velocityX = deltaX / timeOfFlight;
-                float velocityY = (deltaY + 0.5f * gravity * timeOfFlight * timeOfFlight) / timeOfFlight;
 
                 hsienKoPosition.y = hsienKoPosition.y + HSIEN_KO_HEIGHT;
 
-                Bomb bomb = new Bomb(hsienKoPosition, new Vector2(velocityX, velocityY), this,
-                        HSIEN_KO_BOMB_FRAMES * HSIEN_KO_BOMB_DURATION, HSIEN_KO_BOMB, levelManager);
+                Bomb bomb = new Bomb(hsienKoPosition, new Vector2(isFacingLeft() ? - HSIEN_KO_BOMB_SPEED : HSIEN_KO_BOMB_SPEED,
+                        HSIEN_KO_BOMB_SPEED), this, HSIEN_KO_BOMB_FRAMES * HSIEN_KO_BOMB_DURATION,
+                        HSIEN_KO_BOMB, levelManager);
 
                 levelManager.addProjectile(bomb);
             }

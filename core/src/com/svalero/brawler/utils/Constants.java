@@ -283,12 +283,13 @@ public class Constants {
     public static final float HSIEN_KO_ATTACK_HEIGHT = 29f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_ATTACK_OFFSET_X = -(HSIEN_KO_WIDTH / 2) + (HSIEN_KO_ATTACK_WIDTH / 2) - (11 * HSIEN_KO_SCALE);
     public static final float HSIEN_KO_ATTACK_OFFSET_Y = 30 * HSIEN_KO_SCALE;
-    public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = Float.POSITIVE_INFINITY;
+    public static final float HSIEN_KO_BOMB_SPEED = 2000f;
     public static final int HSIEN_KO_SPECIAL_ATTACK_FRAMES = 24;
     public static final float HSIEN_KO_SPECIAL_ATTACK_DURATION = 0.1f;
     public static final int HSIEN_KO_BOMB_FRAMES = 25;
     public static final int HSIEN_KO_BOMB_EXPLOSION_FRAME = 13; // This one takes into account the 0.
-    public static final float HSIEN_KO_BOMB_DURATION = 0.1f;
+    public static final float HSIEN_KO_BOMB_DURATION = 0.2f;
+    public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = HSIEN_KO_BOMB_SPEED * HSIEN_KO_BOMB_FRAMES * HSIEN_KO_BOMB_DURATION;
     public static final float HSIEN_KO_BOMB_FRAME_WIDTH = 161f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_BOMB_FRAME_HEIGHT = 184f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_BOMB_WIDTH = 46f * HSIEN_KO_SCALE;
