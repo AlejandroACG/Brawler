@@ -363,6 +363,9 @@ public abstract class Player extends Character {
         setStateTime(0);
         setCurrentState(State.LAND);
         setHasAttackedThisJump(false);
+        if (stateTime == 0) {
+            SoundManager.playSound(LAND_SOUND);
+        }
     }
 
     protected Vector2 goRun(Vector2 velocity) {

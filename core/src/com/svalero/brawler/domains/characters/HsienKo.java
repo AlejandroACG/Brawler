@@ -2,6 +2,7 @@ package com.svalero.brawler.domains.characters;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.svalero.brawler.domains.projectiles.Bomb;
 import com.svalero.brawler.interfaces.SpecialAttackableInterface;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
@@ -33,10 +34,27 @@ public class HsienKo extends Enemy implements SpecialAttackableInterface {
     @Override
     public Vector2 handleSpecialAttack(float dt, Vector2 velocity) {
         if (currentState == SPECIAL_ATTACK_PREP) {
-            if (stateTime >= 10 * BISHAMON_SPECIAL_ATTACK_PREP_DURATION) {
+            if (stateTime >= 10 * HSIEN_KO_SPECIAL_ATTACK_DURATION) {
 
                 setCurrentStateWithoutReset(SPECIAL_ATTACK);
-                // TODO Aquí se lanza la bomba
+
+                Vector2 playerPosition = levelManager.getPlayer().getPosition();
+                Vector2 hsienKoPosition = this.getPosition();
+
+                float deltaX = playerPosition.x - hsienKoPosition.x;
+                float deltaY = playerPosition.y - hsienKoPosition.y;
+                float timeOfFlight = HSIEN_KO_BOMB_DURATION * HSIEN_KO_BOMB_EXPLOSION_FRAME;
+                float gravity = levelManager.getWorld().getGravity().y;
+
+                float velocityX = deltaX / timeOfFlight;
+                float velocityY = (deltaY + 0.5f * gravity * timeOfFlight * timeOfFlight) / timeOfFlight;
+
+                hsienKoPosition.y = hsienKoPosition.y + HSIEN_KO_HEIGHT;
+
+                Bomb bomb = new Bomb(hsienKoPosition, new Vector2(velocityX, velocityY), this,
+                        HSIEN_KO_BOMB_FRAMES * HSIEN_KO_BOMB_DURATION, HSIEN_KO_BOMB, levelManager);
+
+                levelManager.addProjectile(bomb);
             }
         }
 

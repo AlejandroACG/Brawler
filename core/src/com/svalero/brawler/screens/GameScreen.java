@@ -75,7 +75,7 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() { SoundManager.stopAllLongSounds(); }
 
     @Override
     public void resize(int i, int i1) {}

@@ -39,7 +39,22 @@ public class Wave extends Projectile implements ProjectileInterface {
         bodyDef.gravityScale = 0;
         this.body = world.createBody(bodyDef);
 
-        newFixture(48);
+        PolygonShape shape = new PolygonShape();
+
+        float centerY = -(DEATH_ADDER_WAVE_HEIGHT / 4);
+
+        shape.setAsBox(DEATH_ADDER_WAVE_WIDTH / 2, DEATH_ADDER_WAVE_HEIGHT / 4, new Vector2(0, centerY), 0);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0f;
+        fixtureDef.restitution = 0.5f;
+        fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK_ENEMY;
+        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER;
+
+        body.createFixture(fixtureDef).setUserData(deathAdder);
+        shape.dispose();
 
         float velocityX = facingLeft ? -DEATH_ADDER_WAVE_SPEED : DEATH_ADDER_WAVE_SPEED;
         body.setLinearVelocity(new Vector2(velocityX, 0));
@@ -78,24 +93,6 @@ public class Wave extends Projectile implements ProjectileInterface {
         }
     }
 
-    private void newFixture(float height) {
-        PolygonShape shape = new PolygonShape();
-
-        float centerY = -(DEATH_ADDER_WAVE_HEIGHT / 4);
-
-        shape.setAsBox(DEATH_ADDER_WAVE_WIDTH / 2, DEATH_ADDER_WAVE_HEIGHT / 4, new Vector2(0, centerY), 0);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0f;
-        fixtureDef.restitution = 0.5f;
-        fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK_ENEMY;
-        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER;
-
-        body.createFixture(fixtureDef).setUserData(deathAdder);
-        shape.dispose();
-    }
-
+    @Override
     public void dispose() { world.destroyBody(body); }
 }

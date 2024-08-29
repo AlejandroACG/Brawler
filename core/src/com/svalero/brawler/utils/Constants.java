@@ -26,6 +26,7 @@ public class Constants {
     public static final short COLLIDER_CATEGORY_BORDER = 0x0008;
     public static final short COLLIDER_CATEGORY_ATTACK_PLAYER = 0X0016;
     public static final short COLLIDER_CATEGORY_ATTACK_ENEMY = 0X0032;
+    public static final short COLLIDER_CATEGORY_BOMB_IDLE = 0X0064;
 
     // Resource Manager
     public static final String UI_SKIN_JSON = "ui/uiskin.json";
@@ -109,7 +110,7 @@ public class Constants {
     public static final int BISHAMON_ATTACK_STRENGTH = 400;
     public static final float HSIEN_KO_SPEED = 70f;
     public static final int HSIEN_KO_HEALTH = 500;
-    public static final int HSIEN_KO_ATTACK_STRENGTH = 200;
+    public static final int HSIEN_KO_ATTACK_STRENGTH = 300;
     public static final float DEATH_ADDER_SPEED = 70f;
     public static final int DEATH_ADDER_HEALTH = 2000;
     public static final int DEATH_ADDER_ATTACK_STRENGTH = 500;
@@ -126,12 +127,10 @@ public class Constants {
     // Effects
     // TODO Podría prescindir de pasar tantos datos de los frames entre los dominios y hacer como ya hago desde EffectManager con estos
     public static final String BLOOD_SMALL = "blood_small";
-    public static final int BLOOD_SMALL_FRAMES = 10;
     public static final float BLOOD_SMALL_DURATION = 0.2f;
     public static final float BLOOD_SMALL_WIDTH = 37;
     public static final float BLOOD_SMALL_HEIGHT = 35;
     public static final String BLOOD_BIG = "blood_big";
-    public static final int BLOOD_BIG_FRAMES = 8;
     public static final float BLOOD_BIG_SCALE = 0.7f;
     public static final float BLOOD_BIG_DURATION = 0.2f;
     public static final float BLOOD_BIG_WIDTH = 122 * BLOOD_BIG_SCALE;
@@ -266,7 +265,7 @@ public class Constants {
     public static final float HSIEN_KO_HEIGHT = 81f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_FRAME_WIDTH = 204f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_FRAME_HEIGHT = 117f * HSIEN_KO_SCALE;
-    public static final float HSIEN_KO_DRAW_CORRECTION_X =  (70f * HSIEN_KO_SCALE) + HSIEN_KO_WIDTH / 2;;
+    public static final float HSIEN_KO_DRAW_CORRECTION_X = (70f * HSIEN_KO_SCALE) + HSIEN_KO_WIDTH / 2;
     public static final float HSIEN_KO_DRAW_CORRECTION_Y = (7f * HSIEN_KO_SCALE) + HSIEN_KO_HEIGHT / 2;
     public static final float HSIEN_KO_IDLE_DURATION = 0.2f;
     public static final int HSIEN_KO_HIT_FRAMES = 3;
@@ -285,15 +284,18 @@ public class Constants {
     public static final float HSIEN_KO_ATTACK_OFFSET_X = -(HSIEN_KO_WIDTH / 2) + (HSIEN_KO_ATTACK_WIDTH / 2) - (11 * HSIEN_KO_SCALE);
     public static final float HSIEN_KO_ATTACK_OFFSET_Y = 30 * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = Float.POSITIVE_INFINITY;
-//    public static final int DEATH_ADDER_WAVE_FRAMES = 28;
-    public static final float HSIEN_KO_BOMB_DURATION = 0.1f;
-//    public static final float DEATH_ADDER_WAVE_WIDTH = 48f * DEATH_ADDER_SCALE;
-//    public static final float DEATH_ADDER_WAVE_HEIGHT = 90f * DEATH_ADDER_SCALE;
-//    public static final float DEATH_ADDER_WAVE_SPEED = 4000f;
     public static final int HSIEN_KO_SPECIAL_ATTACK_FRAMES = 24;
     public static final float HSIEN_KO_SPECIAL_ATTACK_DURATION = 0.1f;
-//    public static final float DEATH_ADDER_WAVE_OFFSET_X = (DEATH_ADDER_WIDTH / 2) + (DEATH_ADDER_WAVE_WIDTH / 2);
-//    public static final float DEATH_ADDER_WAVE_OFFSET_Y = -(DEATH_ADDER_HEIGHT / 2) + (DEATH_ADDER_WAVE_HEIGHT / 2);
+    public static final int HSIEN_KO_BOMB_FRAMES = 25;
+    public static final int HSIEN_KO_BOMB_EXPLOSION_FRAME = 13; // This one takes into account the 0.
+    public static final float HSIEN_KO_BOMB_DURATION = 0.1f;
+    public static final float HSIEN_KO_BOMB_FRAME_WIDTH = 161f * HSIEN_KO_SCALE;
+    public static final float HSIEN_KO_BOMB_FRAME_HEIGHT = 184f * HSIEN_KO_SCALE;
+    public static final float HSIEN_KO_BOMB_WIDTH = 46f * HSIEN_KO_SCALE;
+    public static final float HSIEN_KO_BOMB_HEIGHT = 41f * HSIEN_KO_SCALE;
+    public static final float HSIEN_KO_BOMB_SCALE = 0.5f;
+    public static final float HSIEN_KO_BOMB_OFFSET_X = 5f * HSIEN_KO_BOMB_SCALE - HSIEN_KO_BOMB_FRAME_WIDTH / 2f;
+    public static final float HSIEN_KO_BOMB_OFFSET_Y = 10f * HSIEN_KO_BOMB_SCALE - HSIEN_KO_BOMB_FRAME_HEIGHT / 2f - HSIEN_KO_BOMB_HEIGHT / 2f;
     public static final String HSIEN_KO_IDLE = "hsien_ko_idle";
     public static final String HSIEN_KO_TURN = "hsien_ko_turn";
     public static final String HSIEN_KO_WALK = "hsien_ko_walk";

@@ -119,13 +119,13 @@ public class LevelManager {
                 parallaxTexture2 = backgroundAtlas.findRegion("parallax-2");
                 parallaxTexture3 = backgroundAtlas.findRegion("parallax-3");
                 parallaxTexture4 = backgroundAtlas.findRegion("parallax-4");
-                parallaxLayers.add(new ParallaxLayer(parallaxTexture4, LEVEL_1_PARALLAX_FACTOR_4, cameraManager,
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture4, LEVEL_2_PARALLAX_FACTOR_4, cameraManager,
                         true, 7, 0, -30));
-                parallaxLayers.add(new ParallaxLayer(parallaxTexture3, LEVEL_1_PARALLAX_FACTOR_3, cameraManager,
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture3, LEVEL_2_PARALLAX_FACTOR_3, cameraManager,
                         true, 3, 0, -25));
-                parallaxLayers.add(new ParallaxLayer(parallaxTexture2, LEVEL_1_PARALLAX_FACTOR_2, cameraManager,
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture2, LEVEL_2_PARALLAX_FACTOR_2, cameraManager,
                         true, 7, 0, -25));
-                parallaxLayers.add(new ParallaxLayer(parallaxTexture1, LEVEL_1_PARALLAX_FACTOR_1, cameraManager,
+                parallaxLayers.add(new ParallaxLayer(parallaxTexture1, LEVEL_2_PARALLAX_FACTOR_1, cameraManager,
                         false, 1, -500, -45));
                 break;
         }
