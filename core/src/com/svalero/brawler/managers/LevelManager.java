@@ -208,6 +208,11 @@ public class LevelManager {
                 Object userDataA = fixtureA.getUserData();
                 Object userDataB = fixtureB.getUserData();
 
+                // Ignora los sensores
+                if (fixtureA.isSensor() || fixtureB.isSensor()) {
+                    return;
+                }
+
                 // Detección de colisión con el suelo al caer de un salto
                 if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataB instanceof Character) ||
                         (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND && userDataA instanceof Character)) {

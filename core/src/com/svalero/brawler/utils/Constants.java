@@ -163,6 +163,8 @@ public class Constants {
     public static final float KAIN_SCALE = 0.5f;
     public static final float KAIN_WIDTH = 67f * KAIN_SCALE;
     public static final float KAIN_HEIGHT = 99f * KAIN_SCALE;
+    public static final float KAIN_CROUCH_WIDTH = 67f * KAIN_SCALE;
+    public static final float KAIN_CROUCH_HEIGHT = 63f * KAIN_SCALE;
     public static final float KAIN_FRAME_WIDTH = 256f * KAIN_SCALE;
     public static final float KAIN_FRAME_HEIGHT = 186f * KAIN_SCALE;
     public static final float KAIN_DRAW_CORRECTION_X = (93f * KAIN_SCALE) + KAIN_WIDTH / 2;

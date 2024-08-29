@@ -93,6 +93,10 @@ public abstract class Character implements Disposable {
     protected boolean markToFallDead = false;
     protected float walkingSoundTimer = WALKING_SOUND_TIMER;
     protected float attackDistance;
+    protected Fixture standFixture;
+    protected Fixture crouchFixture;
+    protected float crouchWidth;
+    protected float crouchHeight;
 
     public enum State {
         IDLE,
@@ -132,7 +136,8 @@ public abstract class Character implements Disposable {
                      float jumpAttackDuration, float attackOffsetX, float attackOffsetY, float attackWidth,
                      float attackHeight, float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth,
                      float jumpAttackHeight, String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames,
-                     float deadDuration, String victoryKey, String victorySoundPath) {
+                     float deadDuration, String victoryKey, String victorySoundPath, float crouchWidth,
+                     float crouchHeight) {
         this.levelManager = levelManager;
         this.world = world;
         this.position = position;
@@ -198,6 +203,8 @@ public abstract class Character implements Disposable {
         this.deadDuration = deadDuration;
         this.victoryKey = victoryKey;
         this.victorySoundPath = victorySoundPath;
+        this.crouchWidth = crouchWidth;
+        this.crouchHeight = crouchHeight;
 
         createBody(world, characterAtlas);
     }
@@ -274,22 +281,46 @@ public abstract class Character implements Disposable {
     }
 
     protected void createBodyFixtures() {
+        // Standing fixture
         PolygonShape shape = new PolygonShape();
         shape.setAsBox((width) / 2f, (height) / 2f);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        fixtureDef.friction = 0f;
-        fixtureDef.restitution = 0.0f;
+        FixtureDef standFixtureDef = new FixtureDef();
+        standFixtureDef.shape = shape;
+        standFixtureDef.density = 1f;
+        standFixtureDef.friction = 0f;
+        standFixtureDef.restitution = 0.0f;
         if (this instanceof Player) {
-            fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_PLAYER;
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_ENEMY;
+            standFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_PLAYER;
+            standFixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_ENEMY;
         } else if (this instanceof Enemy) {
-            fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ENEMY;
-            fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_PLAYER;
+            standFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ENEMY;
+            standFixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_PLAYER;
         }
-        body.createFixture(fixtureDef).setUserData(this);
+        standFixture = body.createFixture(standFixtureDef);
+        standFixture.setUserData(this);
         shape.dispose();
+
+        // TODO Necesario restringir esto a los Player mientras los enemigos no puedan agacharse.
+        if (this instanceof Player) {
+            // Crouching fixture
+            PolygonShape crouchShape = new PolygonShape();
+            float heightDifference = (height - crouchHeight) / 2f;
+
+            crouchShape.setAsBox(crouchWidth / 2f, crouchHeight / 2f, new Vector2(0, -heightDifference), 0);
+
+            FixtureDef crouchFixtureDef = new FixtureDef();
+            crouchFixtureDef.shape = crouchShape;
+            crouchFixtureDef.density = 1f;
+            crouchFixtureDef.friction = 0f;
+            crouchFixtureDef.restitution = 0.0f;
+            crouchFixtureDef.filter.categoryBits = COLLIDER_CATEGORY_PLAYER;
+            crouchFixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_BORDER | COLLIDER_CATEGORY_ATTACK_ENEMY;
+            crouchFixture = body.createFixture(crouchFixtureDef);
+            crouchFixture.setUserData(this);
+            crouchFixture.setSensor(true);
+
+            crouchShape.dispose();
+        }
     }
 
     public void createAttackFixture(float offsetX, float offsetY, float attackWidth, float attackHeight) {

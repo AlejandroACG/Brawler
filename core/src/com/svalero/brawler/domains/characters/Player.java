@@ -28,7 +28,7 @@ public abstract class Player extends Character {
                   float attackOffsetX, float attackOffsetY, float attackWidth, float attackHeight,
                   float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight,
                   String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames, float deadDuration,
-                  String victoryKey, String victorySoundPath) {
+                  String victoryKey, String victorySoundPath, float crouchWidth, float crouchHeight) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth, frameHeight,
                 correctionX, correctionY, idleDuration, jumpUpDuration, jumpDownDuration, jumpStrength, idleKey,
                 turnKey, walkKey, runKey, blockUpKey, blockDownKey, crouchDownKey, crouchUpKey, jumpUpKey, jumpDownKey,
@@ -37,7 +37,7 @@ public abstract class Player extends Character {
                 hitFrames, hitDuration, attackFrames, attackDuration, jumpAttackFrames, jumpAttackDuration,
                 attackOffsetX, attackOffsetY, attackWidth, attackHeight, jumpAttackOffsetX, jumpAttackOffsetY,
                 jumpAttackWidth, jumpAttackHeight, hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration,
-                victoryKey, victorySoundPath);
+                victoryKey, victorySoundPath, crouchWidth, crouchHeight);
     }
 
     public void update(float dt) {
@@ -195,6 +195,8 @@ public abstract class Player extends Character {
         // CROUCH
         } else if (currentState == State.CROUCH) {
             currentAnimation = getAnimation(crouchDownKey);
+            standFixture.setSensor(true);
+            crouchFixture.setSensor(false);
             if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
                 currentAnimation = getAnimation(crouchUpKey);
                 setCurrentState(State.CROUCH_UP);
@@ -335,6 +337,11 @@ public abstract class Player extends Character {
         // Erase unused attack fixtures
         if (currentState != State.ATTACK && currentState != State.JUMP_ATTACK) {
             clearAttackFixture();
+        }
+
+        if(currentState != State.CROUCH) {
+            standFixture.setSensor(false);
+            crouchFixture.setSensor(true);
         }
 
         // TODO Estaría bien también un timer antes de empezar, para que no suene en el frame antes de que se active State.RUN
