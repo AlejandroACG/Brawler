@@ -14,7 +14,7 @@ public class Bomb extends Projectile implements ProjectileInterface {
     private Body body;
     private float stateTime;
     private float timeToLive;
-    private boolean exploded;
+    private HsienKo hsienKo;
     protected State currentState;
     private Animation<TextureRegion> animation;
     private LevelManager levelManager;
@@ -29,7 +29,7 @@ public class Bomb extends Projectile implements ProjectileInterface {
         this.timeToLive = timeToLive;
         this.animation = AnimationManager.getAnimation(animationKey);
         this.stateTime = 0;
-        this.exploded = false;
+        this.hsienKo = hsienKo;
         this.levelManager = levelManager;
 
         BodyDef bodyDef = new BodyDef();
@@ -48,8 +48,8 @@ public class Bomb extends Projectile implements ProjectileInterface {
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 1f;
         fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_BOMB_IDLE;
-        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND;
-        body.createFixture(fixtureDef).setUserData(hsienKo);
+        fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_PLAYER;
+        body.createFixture(fixtureDef).setUserData(this);
 
         shape.dispose();
 
@@ -61,12 +61,39 @@ public class Bomb extends Projectile implements ProjectileInterface {
 
     @Override
     public void update(float dt) {
-        stateTime += dt;
-        timeToLive -= dt;
+        if (body != null) {
+            stateTime += dt;
+            timeToLive -= dt;
 
-        if (shouldBeDestroyed()) {
-            levelManager.queueBodyForDestruction(body);
-            body = null;
+            if (currentState == State.IDLE) {
+                if (stateTime >= 13 * HSIEN_KO_BOMB_DURATION) {
+                    currentState = State.EXPLOSION;
+                }
+            }
+
+            if (currentState == State.EXPLOSION) {
+                // TODO Podría ser CircleShape si no estuviese usando las medidas como he decidido hacerlo.
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(HSIEN_KO_BOMB_FRAME_WIDTH / 2f, HSIEN_KO_BOMB_FRAME_HEIGHT / 2f);
+
+                FixtureDef fixtureDef = new FixtureDef();
+                fixtureDef.shape = shape;
+                fixtureDef.density = 0.5f;
+                fixtureDef.friction = 0f;
+                fixtureDef.restitution = 0f;
+                fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK_ENEMY;
+                fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_PLAYER;
+                body.createFixture(fixtureDef).setUserData(hsienKo);
+
+                body.setLinearVelocity(new Vector2(0, 0));
+
+                shape.dispose();
+            }
+
+            if (shouldBeDestroyed()) {
+                levelManager.queueBodyForDestruction(body);
+                body = null;
+            }
         }
     }
 
@@ -86,4 +113,8 @@ public class Bomb extends Projectile implements ProjectileInterface {
     // TODO Investigar por qué si no accedo al world así de manera directa desde levelmanager sale null.
     @Override
     public void dispose() { levelManager.getWorld().destroyBody(body); }
+
+    public void collision() {
+        stateTime = 13 * HSIEN_KO_BOMB_DURATION;
+    }
 }

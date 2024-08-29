@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.svalero.brawler.Brawler;
 import com.svalero.brawler.domains.characters.*;
 import com.svalero.brawler.domains.characters.Character;
+import com.svalero.brawler.domains.projectiles.Bomb;
 import com.svalero.brawler.domains.projectiles.Projectile;
 import com.svalero.brawler.screens.GameOverScreen;
 import com.svalero.brawler.screens.GameScreen;
@@ -229,6 +230,14 @@ public class LevelManager {
                     boolean attackFromLeft = fixtureB.getBody().getPosition().x < fixtureA.getBody().getPosition().x;
                     handleAttackHit((Character) fixtureB.getUserData(), (Character) fixtureA.getUserData(),
                             attackFromLeft, contact.getWorldManifold().getPoints()[0]);
+                }
+
+                // Detección de bombas
+                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_BOMB_IDLE && userDataB instanceof Player) ||
+                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_BOMB_IDLE && userDataA instanceof Player)) {
+                    Bomb bomb = (Bomb) (userDataA instanceof Bomb ? userDataA : userDataB);
+                    System.out.println("BOOM");
+                    bomb.collision();
                 }
             }
 

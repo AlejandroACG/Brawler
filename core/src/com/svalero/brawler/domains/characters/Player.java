@@ -308,9 +308,11 @@ public abstract class Player extends Character {
         // DEAD
         if (currentState == State.DEAD) {
             if (stateTime == 0) {
+                // TODO El espaldarazo de la muerte podria ser una animacion diferente que se active cuando cae al suelo,
+                //  y para eso se podría usar la posición en Y.
                 body.setGravityScale(1);
                 if (isOnGround) {
-                    velocity.y = 100f;
+                    velocity.y = 200f;
                 } else {
                     velocity.y = 0f;
                 }
@@ -323,7 +325,7 @@ public abstract class Player extends Character {
             if (!isOnGround) {
                 markToFallDead = true;
             }
-            if (markToFallDead) {
+            if (markToFallDead || stateTime == KAIN_DEAD_FRAMES * KAIN_DEAD_DURATION) {
                 if (isOnGround) {
                     stayDead();
                 }

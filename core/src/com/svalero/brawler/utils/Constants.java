@@ -86,7 +86,7 @@ public class Constants {
     public static final String HEALTH_GLOBE_FILL = "health_globe_fill";
 
     // Chance
-    public static final float CHANCE_TIMERS_MARK = 1.5f;
+    public static final float CHANCE_TIMERS_MARK = 1f;
     public static final float TURN_CHANCE = 0.5f;
     public static final float TURN_CHANCE_HARD = 1f;
     public static final float WALK_CHANCE = 0.4f;
