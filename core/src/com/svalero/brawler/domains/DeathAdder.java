@@ -4,8 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
-import static com.svalero.brawler.domains.Character.State.IDLE;
-import static com.svalero.brawler.domains.Character.State.SPECIAL_ATTACK;
+import com.svalero.brawler.managers.SoundManager;
+
+import static com.svalero.brawler.domains.Character.State.*;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
@@ -28,9 +29,9 @@ public class DeathAdder extends Enemy implements SpecialAttackable {
 
     @Override
     public void goSpecialAttack() {
-        setCurrentState(SPECIAL_ATTACK);
+        setCurrentState(SPECIAL_ATTACK_PREP);
         currentAnimation = getAnimation(DEATH_ADDER_SPECIAL_ATTACK);
-        shootProjectile();
+        SoundManager.playSound(DEATH_ADDER_SPECIAL_ATTACK_SOUND);
     }
 
     private void shootProjectile() {
@@ -45,10 +46,20 @@ public class DeathAdder extends Enemy implements SpecialAttackable {
 
     @Override
     public Vector2 handleSpecialAttack(float dt, Vector2 velocity) {
-        if (stateTime >= DEATH_ADDER_SPECIAL_ATTACK_FRAMES * DEATH_ADDER_SPECIAL_ATTACK_DURATION) {
-            setCurrentState(IDLE);
-            currentAnimation = getAnimation(idleKey);
+        if (currentState == SPECIAL_ATTACK_PREP) {
+            if (stateTime >= 2 * DEATH_ADDER_ATTACK_DURATION) {
+                shootProjectile();
+                setCurrentStateWithoutReset(SPECIAL_ATTACK);
+            }
         }
+
+        if (currentState == SPECIAL_ATTACK) {
+            if (stateTime >= DEATH_ADDER_SPECIAL_ATTACK_FRAMES * DEATH_ADDER_SPECIAL_ATTACK_DURATION) {
+                setCurrentState(IDLE);
+                currentAnimation = getAnimation(idleKey);
+            }
+        }
+
         return velocity;
     }
 }

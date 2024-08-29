@@ -23,6 +23,8 @@ public class ResourceManager {
         assets.load(KAIN_DEAD_SOUND, Sound.class);
         assets.load(KAIN_VICTORY_SOUND, Sound.class);
         assets.load(BISHAMON_ATTACK_SOUND, Sound.class);
+        assets.load(BISHAMON_SPECIAL_ATTACK_PREP_SOUND, Sound.class);
+        assets.load(BISHAMON_SPECIAL_ATTACK_SOUND, Sound.class);
         assets.load(BISHAMON_HIT_SOUND, Sound.class);
         assets.load(BISHAMON_DEAD_SOUND, Sound.class);
         assets.load(BISHAMON_VICTORY_SOUND, Sound.class);
@@ -31,6 +33,8 @@ public class ResourceManager {
         assets.load(HSIEN_KO_DEAD_SOUND, Sound.class);
         assets.load(HSIEN_KO_VICTORY_SOUND, Sound.class);
         assets.load(DEATH_ADDER_ATTACK_SOUND, Sound.class);
+        assets.load(DEATH_ADDER_SPECIAL_ATTACK_SOUND, Sound.class);
+        assets.load(DEATH_ADDER_SPECIAL_ATTACK_WAVE_SOUND, Sound.class);
         assets.load(DEATH_ADDER_HIT_SOUND, Sound.class);
         assets.load(DEATH_ADDER_DEAD_SOUND, Sound.class);
         assets.load(DEATH_ADDER_VICTORY_SOUND, Sound.class);

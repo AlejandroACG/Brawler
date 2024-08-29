@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.managers.LevelManager;
+import com.svalero.brawler.managers.SoundManager;
+
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Wave {
@@ -40,6 +42,8 @@ public class Wave {
 
         float velocityX = facingLeft ? -DEATH_ADDER_WAVE_SPEED : DEATH_ADDER_WAVE_SPEED;
         body.setLinearVelocity(new Vector2(velocityX, 0));
+        // TODO Si hubiese más waves tendría que autogenerarles un ID y usarlo aquí, por ejemplo.
+        SoundManager.playLongSound(DEATH_ADDER_SPECIAL_ATTACK_WAVE_SOUND, DEATH_ADDER_WAVE);
     }
 
     public void update(float dt) {
@@ -47,6 +51,8 @@ public class Wave {
         timeToLive -= dt;
 
         if (shouldBeDestroyed()) {
+            // TODO En caso de hacer lo del ID, recordar usarlo aquí también.
+            SoundManager.stopLongSound(DEATH_ADDER_WAVE);
             levelManager.queueBodyForDestruction(body);
             body = null;
         }

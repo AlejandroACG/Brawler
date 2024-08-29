@@ -53,6 +53,8 @@ public class AnimationManager {
         animations.put(HSIEN_KO_WALK, new Animation<>(HSIEN_KO_WALK_DURATION, hsienKoAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
         animations.put(HSIEN_KO_TURN, new Animation<>(HSIEN_KO_TURN_DURATION, hsienKoAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
         animations.put(HSIEN_KO_ATTACK, new Animation<>(HSIEN_KO_ATTACK_DURATION, hsienKoAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
+        animations.put(HSIEN_KO_SPECIAL_ATTACK, new Animation<>(HSIEN_KO_SPECIAL_ATTACK_DURATION, hsienKoAtlas.findRegions("special"), Animation.PlayMode.NORMAL));
+        animations.put(HSIEN_KO_BOMB, new Animation<>(HSIEN_KO_BOMB_DURATION, hsienKoAtlas.findRegions("special_projectile"), Animation.PlayMode.NORMAL));
         animations.put(HSIEN_KO_HIT, new Animation<>(HSIEN_KO_HIT_DURATION, hsienKoAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(HSIEN_KO_DEAD, new Animation<>(HSIEN_KO_DEAD_DURATION, hsienKoAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
         animations.put(HSIEN_KO_VICTORY, new Animation<>(HSIEN_KO_VICTORY_DURATION, hsienKoAtlas.findRegions("victory"), Animation.PlayMode.NORMAL));

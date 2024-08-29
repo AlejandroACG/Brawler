@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
+import com.svalero.brawler.managers.SoundManager;
+
 import static com.svalero.brawler.domains.Character.State.*;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
@@ -27,6 +29,7 @@ public class Bishamon extends Enemy implements SpecialAttackable {
     @Override
     public void goSpecialAttack() {
         setCurrentState(SPECIAL_ATTACK_PREP);
+        SoundManager.playSound(BISHAMON_SPECIAL_ATTACK_PREP_SOUND);
         currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK_PREP);
     }
 
@@ -37,6 +40,8 @@ public class Bishamon extends Enemy implements SpecialAttackable {
 
                 setCurrentState(SPECIAL_ATTACK);
                 currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK);
+                SoundManager.playSound(BISHAMON_SPECIAL_ATTACK_SOUND);
+                SoundManager.playSound(BISHAMON_ATTACK_SOUND);
 
                 velocity.x = isFacingLeft() ? -BISHAMON_SPECIAL_ATTACK_SPEED : BISHAMON_SPECIAL_ATTACK_SPEED;
                 // TODO Compensando por la escala
