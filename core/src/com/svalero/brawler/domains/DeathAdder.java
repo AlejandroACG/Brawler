@@ -4,10 +4,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
-
+import static com.svalero.brawler.domains.Character.State.IDLE;
+import static com.svalero.brawler.domains.Character.State.SPECIAL_ATTACK;
+import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
-public class DeathAdder extends Enemy {
+public class DeathAdder extends Enemy implements SpecialAttackable {
     public DeathAdder(LevelManager levelManager, World world, Vector2 position) {
         super(levelManager, world, position, DEATH_ADDER_ATLAS,
                 ConfigurationManager.hard ? DEATH_ADDER_HEALTH_HARD : DEATH_ADDER_HEALTH,
@@ -22,5 +24,31 @@ public class DeathAdder extends Enemy {
                 DEATH_ADDER_ATTACK_OFFSET_Y, DEATH_ADDER_WALK, DEATH_ADDER_ATTACK_SOUND, DEATH_ADDER_ATTACK,
                 DEATH_ADDER_VICTORY, DEATH_ADDER_VICTORY_SOUND, DEATH_ADDER_SPECIAL_ATTACK_DISTANCE,
                 DEATH_ADDER_ATTACK_DISTANCE);
+    }
+
+    @Override
+    public void goSpecialAttack() {
+        setCurrentState(SPECIAL_ATTACK);
+        currentAnimation = getAnimation(DEATH_ADDER_SPECIAL_ATTACK);
+        shootProjectile();
+    }
+
+    private void shootProjectile() {
+        Vector2 position = body.getPosition().cpy();
+        position.x += facingLeft ? -DEATH_ADDER_WAVE_OFFSET_X : DEATH_ADDER_WAVE_OFFSET_X;
+        position.y += DEATH_ADDER_WAVE_OFFSET_Y;
+
+        Wave wave = new Wave(levelManager, position, facingLeft, DEATH_ADDER_WAVE,
+                DEATH_ADDER_WAVE_FRAMES * DEATH_ADDER_WAVE_DURATION, this);
+        levelManager.addProjectile(wave);
+    }
+
+    @Override
+    public Vector2 handleSpecialAttack(float dt, Vector2 velocity) {
+        if (stateTime >= DEATH_ADDER_SPECIAL_ATTACK_FRAMES * DEATH_ADDER_SPECIAL_ATTACK_DURATION) {
+            setCurrentState(IDLE);
+            currentAnimation = getAnimation(idleKey);
+        }
+        return velocity;
     }
 }

@@ -47,6 +47,7 @@ public class GameScreen implements Screen {
         actionManager.update(dt);
         cameraManager.handleCamera();
         renderManager.drawFrame();
+        levelManager.cleanUpBodies();
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             MusicManager.stopMusic();

@@ -1,6 +1,7 @@
 package com.svalero.brawler.domains;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
@@ -37,7 +38,12 @@ public class Bishamon extends Enemy implements SpecialAttackable {
                 setCurrentState(SPECIAL_ATTACK);
                 currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK);
 
-                velocity.x = isFacingLeft() ? -200 : 200;
+                velocity.x = isFacingLeft() ? -BISHAMON_SPECIAL_ATTACK_SPEED : BISHAMON_SPECIAL_ATTACK_SPEED;
+                // TODO Compensando por la escala
+                body.setGravityScale(0.0f);
+                Fixture baseFixture = body.getFixtureList().get(0);
+                baseFixture.setDensity(0.01f);
+                body.resetMassData();
 
                 // TODO El launchAttack() podría modificarse para incluir variaciones como ésta. Ahora mismo es excesivamente
                 //  específico
@@ -47,8 +53,13 @@ public class Bishamon extends Enemy implements SpecialAttackable {
         }
 
         if (currentState == SPECIAL_ATTACK) {
-            velocity.x = isFacingLeft() ? -200 : 200;
+            velocity.x = isFacingLeft() ? -BISHAMON_SPECIAL_ATTACK_SPEED : BISHAMON_SPECIAL_ATTACK_SPEED;
             if (stateTime >= BISHAMON_SPECIAL_ATTACK_FRAMES * BISHAMON_SPECIAL_ATTACK_DURATION) {
+                // TODO Compensando por la escala
+                body.setGravityScale(1.0f);
+                Fixture baseFixture = body.getFixtureList().get(0);
+                baseFixture.setDensity(1f);
+                body.resetMassData();
                 velocity.x = 0;
                 setCurrentState(SPECIAL_ATTACK_POST);
                 currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK_POST);

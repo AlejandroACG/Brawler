@@ -1,6 +1,7 @@
 package com.svalero.brawler.domains;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
@@ -56,6 +57,16 @@ public class Enemy extends Character {
         float distanceX = Math.abs((playerPosition.x - thisPosition.x)) - (levelManager.getPlayer().width / 2 + this.width / 2);
 
         if (specialAttackCooldown > 0) { specialAttackCooldown -= dt; }
+
+        // Reset things after a special move
+        if (currentState != State.SPECIAL_ATTACK_PREP && currentState != State.SPECIAL_ATTACK && currentState
+                != State.SPECIAL_ATTACK_POST) {
+            // TODO Compensando por la escala
+            body.setGravityScale(1.0f);
+            Fixture baseFixture = body.getFixtureList().get(0);
+            baseFixture.setDensity(1f);
+            body.resetMassData();
+        }
 
         // IDLE / WALK
         if (currentState == State.IDLE || currentState == State.WALK) {

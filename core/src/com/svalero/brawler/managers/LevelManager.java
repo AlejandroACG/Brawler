@@ -16,8 +16,9 @@ import com.svalero.brawler.screens.GameOverScreen;
 import com.svalero.brawler.screens.GameScreen;
 import com.svalero.brawler.screens.VictoryScreen;
 import com.svalero.brawler.utils.ParallaxLayer;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
+
 import static com.svalero.brawler.utils.Constants.*;
 import com.svalero.brawler.managers.ConfigurationManager.SelectedCharacter;
 import com.svalero.brawler.domains.Character.*;
@@ -27,7 +28,7 @@ public class LevelManager {
     private int currentLevel;
     private int initialScore;
     private int currentScore;
-    private World world;
+    private final World world;
     private Map<Integer, Character> characters;
     private Map<Integer, Enemy> enemies;
     private TmxMapLoader mapLoader;
@@ -46,6 +47,8 @@ public class LevelManager {
     private float victoryTimer = 5.0f;
     private boolean playerCelebrationTriggered = false;
     private float playerCelebrationTimer = 1.0f;
+    private List<Wave> waves;
+    private Array<Body> bodiesToDestroy;
 
     public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter, int initialScore) {
         this.game = game;
@@ -56,6 +59,8 @@ public class LevelManager {
         characters = new HashMap<>();
         enemies = new HashMap<>();
         mapLoader = new TmxMapLoader();
+        waves = new ArrayList<>();
+        bodiesToDestroy = new Array<>();
 
         switch (currentLevel) {
             case 1:
@@ -291,6 +296,21 @@ public class LevelManager {
         }
     }
 
+    public void queueBodyForDestruction(Body body) {
+        if (!bodiesToDestroy.contains(body, true)) { // Verifica si ya está en la lista
+            bodiesToDestroy.add(body);
+        }
+    }
+
+    public void cleanUpBodies() {
+        for (Body body : bodiesToDestroy) {
+            if (body != null) {
+                world.destroyBody(body);
+            }
+        }
+        bodiesToDestroy.clear();
+    }
+
     public void checkVictoryCondition(float dt) {
         if (!isVictorious) {
             boolean allEnemiesDead = true;
@@ -331,6 +351,10 @@ public class LevelManager {
             game.setScreen(new VictoryScreen(game, currentScore));
         }
     }
+
+    public void addProjectile(Wave wave) { waves.add(wave); }
+
+    public List<Wave> getWaves() { return waves; }
 
     private void triggerGameOver() { game.setScreen(new GameOverScreen(game, currentLevel, initialScore, currentScore)); }
 

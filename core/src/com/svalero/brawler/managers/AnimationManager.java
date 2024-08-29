@@ -64,6 +64,8 @@ public class AnimationManager {
         animations.put(DEATH_ADDER_WALK, new Animation<>(DEATH_ADDER_WALK_DURATION, deathAdderAtlas.findRegions("walk"), Animation.PlayMode.LOOP));
         animations.put(DEATH_ADDER_TURN, new Animation<>(DEATH_ADDER_TURN_DURATION, deathAdderAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
         animations.put(DEATH_ADDER_ATTACK, new Animation<>(DEATH_ADDER_ATTACK_DURATION, deathAdderAtlas.findRegions("attack"), Animation.PlayMode.NORMAL));
+        animations.put(DEATH_ADDER_SPECIAL_ATTACK, new Animation<>(DEATH_ADDER_SPECIAL_ATTACK_DURATION, deathAdderAtlas.findRegions("special"), Animation.PlayMode.NORMAL));
+        animations.put(DEATH_ADDER_WAVE, new Animation<>(DEATH_ADDER_WAVE_DURATION, deathAdderAtlas.findRegions("special_projectile"), Animation.PlayMode.NORMAL));
         animations.put(DEATH_ADDER_HIT, new Animation<>(DEATH_ADDER_HIT_DURATION, deathAdderAtlas.findRegions("hit"), Animation.PlayMode.NORMAL));
         animations.put(DEATH_ADDER_DEAD, new Animation<>(DEATH_ADDER_DEAD_DURATION, deathAdderAtlas.findRegions("knockdown"), Animation.PlayMode.NORMAL));
         animations.put(DEATH_ADDER_VICTORY, new Animation<>(DEATH_ADDER_VICTORY_DURATION, deathAdderAtlas.findRegions("victory"), Animation.PlayMode.NORMAL));

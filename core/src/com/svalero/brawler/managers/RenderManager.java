@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.svalero.brawler.Brawler;
 import com.svalero.brawler.domains.Character;
 import com.svalero.brawler.domains.Enemy;
+import com.svalero.brawler.domains.Wave;
 import com.svalero.brawler.utils.ParallaxLayer;
 
 import static com.svalero.brawler.utils.Constants.*;
@@ -66,6 +67,13 @@ public class RenderManager {
         for (Character character : levelManager.getCharacters().values()) {
             character.getEffectManager().drawEffects(batch);
         }
+
+        if (!levelManager.getWaves().isEmpty()) {
+            for (Wave wave : levelManager.getWaves()) {
+                wave.render(batch);
+            }
+        }
+
         batch.end();
 
         batch.setProjectionMatrix(cameraManager.getUICamera().combined);

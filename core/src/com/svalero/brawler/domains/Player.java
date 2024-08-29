@@ -55,8 +55,11 @@ public abstract class Player extends Character {
     // TODO Pause
     // TODO Todo el tema de agacharse
     // TODO Darle ángulo al fixture del ataque aéreo para mejorar la hitbox
+    // TODO Que algunos hitboxes o sigan las armas o aparezcan en un momento más apropiado.
     // TODO Se puede reducir código en la lógica de A y D
     // TODO Seguir encapsulando de ser necesario
+    // TODO Escalar de píxeles a metros para mayor control
+    // TODO Podría implementar daños diferentes para cada tipo de ataque pero sus fixtures tendrías que llevar esa información
 
     public void manageInput(float dt) {
         Vector2 velocity = body.getLinearVelocity();
