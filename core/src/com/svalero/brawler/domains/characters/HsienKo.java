@@ -6,11 +6,14 @@ import com.svalero.brawler.domains.projectiles.Bomb;
 import com.svalero.brawler.interfaces.SpecialAttackableInterface;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
+import com.svalero.brawler.managers.SoundManager;
 import static com.svalero.brawler.domains.characters.Character.State.*;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class HsienKo extends Enemy implements SpecialAttackableInterface {
+    private boolean sound = false;
+
     public HsienKo(LevelManager levelManager, World world, Vector2 position) {
         super(levelManager, world, position, HSIEN_KO_ATLAS,
                 ConfigurationManager.hard ? HSIEN_KO_HEALTH_HARD : HSIEN_KO_HEALTH,
@@ -29,12 +32,17 @@ public class HsienKo extends Enemy implements SpecialAttackableInterface {
     public void goSpecialAttack() {
         setCurrentState(SPECIAL_ATTACK_PREP);
         currentAnimation = getAnimation(HSIEN_KO_SPECIAL_ATTACK);
+        sound = false;
     }
 
     @Override
     public Vector2 handleSpecialAttack(float dt, Vector2 velocity) {
         if (currentState == SPECIAL_ATTACK_PREP) {
             if (stateTime >= 10 * HSIEN_KO_SPECIAL_ATTACK_DURATION) {
+                if (!sound) {
+                    SoundManager.playSound(HSIEN_KO_SPECIAL_ATTACK_SOUND);
+                    sound = true;
+                }
 
                 setCurrentStateWithoutReset(SPECIAL_ATTACK);
 

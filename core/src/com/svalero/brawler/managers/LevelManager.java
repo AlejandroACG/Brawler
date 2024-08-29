@@ -232,12 +232,23 @@ public class LevelManager {
                             attackFromLeft, contact.getWorldManifold().getPoints()[0]);
                 }
 
-                // Detección de bombas
+                // Detección de bombas contra el jugador
                 if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_BOMB_IDLE && userDataB instanceof Player) ||
                         (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_BOMB_IDLE && userDataA instanceof Player)) {
                     Bomb bomb = (Bomb) (userDataA instanceof Bomb ? userDataA : userDataB);
                     System.out.println("BOOM");
                     bomb.collision();
+                }
+
+                // Detección de bombas contra el suelo
+                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_BOMB_IDLE
+                        && fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND)
+                        || (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_BOMB_IDLE
+                        && fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_GROUND)) {
+                    Bomb bomb = (Bomb) (userDataA instanceof Bomb ? userDataA : userDataB);
+                    if (bomb.getCurrentState() == Bomb.State.IDLE) {
+                        SoundManager.playSound(LAND_SOUND);
+                    }
                 }
             }
 

@@ -57,6 +57,8 @@ public class Constants {
     public static final String BISHAMON_DEAD_SOUND = "sounds/bishamon-dead.wav";
     public static final String BISHAMON_VICTORY_SOUND = "sounds/bishamon-victory.wav";
     public static final String HSIEN_KO_ATTACK_SOUND = "sounds/hsien-ko-attack.wav";
+    public static final String HSIEN_KO_SPECIAL_ATTACK_SOUND = "sounds/hsien-ko-special-attack.wav";
+    public static final String HSIEN_KO_BOMB_EXPLOSION_SOUND = "sounds/hsien-ko-bomb-explosion.mp3";
     public static final String HSIEN_KO_HIT_SOUND = "sounds/hsien-ko-hit.wav";
     public static final String HSIEN_KO_DEAD_SOUND = "sounds/hsien-ko-dead.wav";
     public static final String HSIEN_KO_VICTORY_SOUND = "sounds/hsien-ko-victory.wav";

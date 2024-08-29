@@ -8,6 +8,8 @@ import com.svalero.brawler.domains.characters.HsienKo;
 import com.svalero.brawler.interfaces.ProjectileInterface;
 import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.managers.LevelManager;
+import com.svalero.brawler.managers.SoundManager;
+
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Bomb extends Projectile implements ProjectileInterface {
@@ -66,8 +68,9 @@ public class Bomb extends Projectile implements ProjectileInterface {
             timeToLive -= dt;
 
             if (currentState == State.IDLE) {
-                if (stateTime >= 13 * HSIEN_KO_BOMB_DURATION) {
+                if (stateTime >= HSIEN_KO_BOMB_EXPLOSION_FRAME * HSIEN_KO_BOMB_DURATION) {
                     currentState = State.EXPLOSION;
+                    SoundManager.playSound(HSIEN_KO_BOMB_EXPLOSION_SOUND);
                 }
             }
 
@@ -115,6 +118,8 @@ public class Bomb extends Projectile implements ProjectileInterface {
     public void dispose() { levelManager.getWorld().destroyBody(body); }
 
     public void collision() {
-        stateTime = 13 * HSIEN_KO_BOMB_DURATION;
+        stateTime = HSIEN_KO_BOMB_EXPLOSION_FRAME * HSIEN_KO_BOMB_DURATION;
     }
+
+    public State getCurrentState() { return currentState; }
 }

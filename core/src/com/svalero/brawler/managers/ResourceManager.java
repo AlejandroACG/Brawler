@@ -29,6 +29,8 @@ public class ResourceManager {
         assets.load(BISHAMON_DEAD_SOUND, Sound.class);
         assets.load(BISHAMON_VICTORY_SOUND, Sound.class);
         assets.load(HSIEN_KO_ATTACK_SOUND, Sound.class);
+        assets.load(HSIEN_KO_SPECIAL_ATTACK_SOUND, Sound.class);
+        assets.load(HSIEN_KO_BOMB_EXPLOSION_SOUND, Sound.class);
         assets.load(HSIEN_KO_HIT_SOUND, Sound.class);
         assets.load(HSIEN_KO_DEAD_SOUND, Sound.class);
         assets.load(HSIEN_KO_VICTORY_SOUND, Sound.class);
