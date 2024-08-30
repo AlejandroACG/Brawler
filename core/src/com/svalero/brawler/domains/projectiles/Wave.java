@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.svalero.brawler.domains.AttackInfo;
 import com.svalero.brawler.domains.characters.DeathAdder;
 import com.svalero.brawler.interfaces.ProjectileInterface;
 import com.svalero.brawler.managers.AnimationManager;
@@ -53,7 +54,7 @@ public class Wave extends Projectile implements ProjectileInterface {
         fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK_ENEMY;
         fixtureDef.filter.maskBits = COLLIDER_CATEGORY_PLAYER;
 
-        body.createFixture(fixtureDef).setUserData(deathAdder);
+        body.createFixture(fixtureDef).setUserData(new AttackInfo(deathAdder.getAttackStrength() / 2, false));
         shape.dispose();
 
         float velocityX = facingLeft ? -DEATH_ADDER_WAVE_SPEED : DEATH_ADDER_WAVE_SPEED;

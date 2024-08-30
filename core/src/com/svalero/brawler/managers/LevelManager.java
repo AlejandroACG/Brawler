@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.svalero.brawler.Brawler;
+import com.svalero.brawler.domains.AttackInfo;
 import com.svalero.brawler.domains.characters.*;
 import com.svalero.brawler.domains.characters.Character;
 import com.svalero.brawler.domains.projectiles.Bomb;
@@ -222,19 +223,13 @@ public class LevelManager {
                 }
 
                 // Detección de colisión de ataques
-                if ((fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureB.getUserData() instanceof Enemy) ||
-                        (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureB.getUserData() instanceof Player)) {
-
+                if (userDataA instanceof AttackInfo && userDataB instanceof Character) {
                     boolean attackFromLeft = fixtureA.getBody().getPosition().x < fixtureB.getBody().getPosition().x;
-                    handleAttackHit((Character) fixtureA.getUserData(), (Character) fixtureB.getUserData(),
-                            attackFromLeft, contact.getWorldManifold().getPoints()[0]);
+                    handleAttackHit((AttackInfo) userDataA, (Character) userDataB, attackFromLeft, contact.getWorldManifold().getPoints()[0]);
 
-                } else if ((fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_PLAYER && fixtureA.getUserData() instanceof Enemy) ||
-                        (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY && fixtureA.getUserData() instanceof Player)) {
-
+                } else if (userDataB instanceof AttackInfo && userDataA instanceof Character) {
                     boolean attackFromLeft = fixtureB.getBody().getPosition().x < fixtureA.getBody().getPosition().x;
-                    handleAttackHit((Character) fixtureB.getUserData(), (Character) fixtureA.getUserData(),
-                            attackFromLeft, contact.getWorldManifold().getPoints()[0]);
+                    handleAttackHit((AttackInfo) userDataB, (Character) userDataA, attackFromLeft, contact.getWorldManifold().getPoints()[0]);
                 }
 
                 // Detección de bombas contra el jugador
@@ -254,12 +249,6 @@ public class LevelManager {
                     if (bomb.getCurrentState() == Bomb.State.IDLE) {
                         SoundManager.playSound(LAND_SOUND);
                     }
-                }
-            }
-
-            private void handleAttackHit(Character attacker, Character victim, boolean attackFromLeft, Vector2 contactPoint) {
-                if (victim.getCurrentState() != State.HIT && victim.getCurrentState() != State.DEAD) {
-                    victim.getHit(attacker.getAttackStrength(), attackFromLeft, contactPoint);
                 }
             }
 
@@ -293,6 +282,16 @@ public class LevelManager {
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
+    }
+
+    private void handleAttackHit(AttackInfo attackInfo, Character victim, boolean attackFromLeft, Vector2 contactPoint) {
+        if (victim.getCurrentState() != State.HIT && victim.getCurrentState() != State.DEAD) {
+            if (victim instanceof Player && victim.getCurrentState() == State.BLOCK && attackInfo.isBlockable()) {
+                victim.blockAttack();
+            } else {
+                victim.getHit(attackInfo.getDamage(), attackFromLeft);
+            }
+        }
     }
 
     public void checkDefeatCondition(float dt) {

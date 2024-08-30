@@ -47,6 +47,7 @@ public class Constants {
     public static final String KAIN_ATTACK_SOUND = "sounds/kain-attack.mp3";
     public static final String KAIN_GRUNT_SOUND = "sounds/kain-grunt.wav";
     public static final String KAIN_BLOCK_MOVE_SOUND = "sounds/kain-block-prep.wav";
+    public static final String KAIN_BLOCK_SOUND = "sounds/kain-block.mp3";
     public static final String KAIN_HIT_SOUND = "sounds/kain-hit.mp3";
     public static final String KAIN_DEAD_SOUND = "sounds/kain-dead.mp3";
     public static final String KAIN_VICTORY_SOUND = "sounds/kain-victory.mp3";

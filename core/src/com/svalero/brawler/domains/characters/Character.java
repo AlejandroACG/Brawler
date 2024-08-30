@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import com.svalero.brawler.domains.AttackInfo;
 import com.svalero.brawler.managers.*;
 import com.svalero.brawler.utils.IDGenerator;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
@@ -116,6 +117,7 @@ public abstract class Character implements Disposable {
         JUMP_ATTACK,
         BLOCK_UP,
         BLOCK,
+        BLOCK_SUCCESS,
         BLOCK_DOWN,
         HIT,
         DEAD,
@@ -323,6 +325,7 @@ public abstract class Character implements Disposable {
         }
     }
 
+    // TODO Podría personalizar esto para recibir la boolean de si son bloqueables o no.
     public void createAttackFixture(float offsetX, float offsetY, float attackWidth, float attackHeight) {
         PolygonShape attackShape = new PolygonShape();
         attackShape.setAsBox(attackWidth / 2, attackHeight / 2, new Vector2(offsetX, offsetY), 0);
@@ -343,7 +346,8 @@ public abstract class Character implements Disposable {
         }
 
         attackFixture = body.createFixture(attackFixtureDef);
-        attackFixture.setUserData(this);
+
+        attackFixture.setUserData(new AttackInfo(attackStrength, true));
 
         attackShape.dispose();
     }
@@ -398,7 +402,7 @@ public abstract class Character implements Disposable {
         }
     }
 
-    public void getHit(int strength, boolean attackFromLeft, Vector2 contactPoint) {
+    public void getHit(int strength, boolean attackFromLeft) {
         currentHealth = currentHealth - strength;
         int previousScore = levelManager.getCurrentScore();
         int newScore;
@@ -428,6 +432,15 @@ public abstract class Character implements Disposable {
             effectManager.createVisualEffect(position, BLOOD_SMALL_WIDTH, BLOOD_SMALL_HEIGHT,
                     BLOOD_SMALL_DURATION, BLOOD_SMALL, attackFromLeft);
         }
+    }
+
+    public void blockAttack() {
+        // TODO Gestionar cómo suena el bloquear una explosión requeriría refactorizar toda la lógica de getHit.
+        //  Quizás funcionaría crear un dominio de ataque que es lo que se le da a cada fixture de ataque como User data
+        //  en vez de dar directamente al atacante, y en esa entidad se le puede dar el daño de ataque y alguna boolean
+        //  que determine si es bloqueable o no.
+        SoundManager.playSound(KAIN_BLOCK_SOUND);
+        currentState = State.BLOCK;
     }
 
     public void stayDead() {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.svalero.brawler.domains.AttackInfo;
 import com.svalero.brawler.domains.characters.HsienKo;
 import com.svalero.brawler.interfaces.ProjectileInterface;
 import com.svalero.brawler.managers.AnimationManager;
@@ -86,7 +87,7 @@ public class Bomb extends Projectile implements ProjectileInterface {
                 fixtureDef.restitution = 0f;
                 fixtureDef.filter.categoryBits = COLLIDER_CATEGORY_ATTACK_ENEMY;
                 fixtureDef.filter.maskBits = COLLIDER_CATEGORY_GROUND | COLLIDER_CATEGORY_PLAYER;
-                body.createFixture(fixtureDef).setUserData(hsienKo);
+                body.createFixture(fixtureDef).setUserData(new AttackInfo(hsienKo.getAttackStrength() / 2, false));
 
                 body.setLinearVelocity(new Vector2(0, 0));
 

@@ -143,12 +143,12 @@ public abstract class Player extends Character {
                 velocity = goAttack(velocity);
             }
 
-        // TURN
+            // TURN
         } else if (currentState == State.TURN) {
             if ((Gdx.input.isKeyJustPressed(Input.Keys.A) && currentTime - lastKeyPressTimeA < DOUBLE_CLICK_THRESHOLD
                     && !(Gdx.input.isKeyJustPressed(Input.Keys.D)))
                     || (Gdx.input.isKeyJustPressed(Input.Keys.D) && (currentTime - lastKeyPressTimeD < DOUBLE_CLICK_THRESHOLD
-                && !Gdx.input.isKeyJustPressed(Input.Keys.A)))) {
+                    && !Gdx.input.isKeyJustPressed(Input.Keys.A)))) {
                 isRunning = true;
             }
             if (stateTime >= turnFrames * turnDuration) {
@@ -166,7 +166,7 @@ public abstract class Player extends Character {
                 }
             }
 
-        // BLOCK
+            // BLOCK
         } else if (currentState == State.BLOCK_UP) {
             if (stateTime >= blockFrames * blockDuration) {
                 setCurrentStateWithoutReset(State.BLOCK);
@@ -182,7 +182,7 @@ public abstract class Player extends Character {
                 velocity = goIdle(velocity);
             }
 
-        // CROUCH DOWN
+            // CROUCH DOWN
         } else if (currentState == State.CROUCH_DOWN) {
             if (stateTime >= crouchFrames * crouchDuration) {
                 setCurrentState(State.CROUCH);
@@ -192,7 +192,7 @@ public abstract class Player extends Character {
                 setCurrentState(State.CROUCH_UP);
             }
 
-        // CROUCH
+            // CROUCH
         } else if (currentState == State.CROUCH) {
             currentAnimation = getAnimation(crouchDownKey);
             standFixture.setSensor(true);
@@ -202,7 +202,7 @@ public abstract class Player extends Character {
                 setCurrentState(State.CROUCH_UP);
             }
 
-        // CROUCH UP
+            // CROUCH UP
         } else if (currentState == State.CROUCH_UP) {
             if (stateTime >= crouchFrames * crouchDuration) {
                 velocity = goIdle(velocity);
@@ -212,7 +212,7 @@ public abstract class Player extends Character {
                 setCurrentState(State.CROUCH_DOWN);
             }
 
-        // JUMP
+            // JUMP
         } else if (currentState == State.JUMP_UP || currentState == State.JUMP_DOWN) {
             if (currentState == State.JUMP_DOWN && isOnGround) {
                 goLand();
@@ -240,7 +240,7 @@ public abstract class Player extends Character {
                 }
             }
 
-        // LAND
+            // LAND
         } else if (currentState == State.LAND) {
             currentAnimation = getAnimation(landKey);
             velocity.x = 0;
@@ -304,6 +304,18 @@ public abstract class Player extends Character {
                     currentAnimation = getAnimation(jumpDownKey);
                     setCurrentStateWithoutReset(State.JUMP_DOWN);
                 }
+            }
+        }
+
+        // BLOCK SUCCESS
+        if (currentState == State.BLOCK_SUCCESS) {
+            body.setGravityScale(0);
+            velocity.x = 0;
+            velocity.y = 0;
+            if (stateTime >= hitFrames * hitDuration) {
+                body.setGravityScale(1);
+                velocity.x = -1;
+                setCurrentStateWithoutReset(State.BLOCK);
             }
         }
 

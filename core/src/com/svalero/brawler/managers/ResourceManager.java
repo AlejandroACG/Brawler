@@ -19,6 +19,7 @@ public class ResourceManager {
         assets.load(KAIN_ATTACK_SOUND, Sound.class);
         assets.load(KAIN_GRUNT_SOUND, Sound.class);
         assets.load(KAIN_BLOCK_MOVE_SOUND, Sound.class);
+        assets.load(KAIN_BLOCK_SOUND, Sound.class);
         assets.load(KAIN_HIT_SOUND, Sound.class);
         assets.load(KAIN_DEAD_SOUND, Sound.class);
         assets.load(KAIN_VICTORY_SOUND, Sound.class);
