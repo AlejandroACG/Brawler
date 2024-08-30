@@ -77,7 +77,7 @@ public class AnimationManager {
 
         animations.put(BLOOD_SMALL, new Animation<>(BLOOD_SMALL_DURATION, effectsAtlas.findRegions("blood_small"), Animation.PlayMode.NORMAL));
         animations.put(BLOOD_BIG, new Animation<>(BLOOD_BIG_DURATION, effectsAtlas.findRegions("blood_big"), Animation.PlayMode.NORMAL));
-        animations.put(BLOCK, new Animation<>(BLOCK_DURATION, effectsAtlas.findRegions("block"), Animation.PlayMode.NORMAL));
+        animations.put(BLOCK_SPARK, new Animation<>(BLOCK_SPARK_DURATION, effectsAtlas.findRegions("block"), Animation.PlayMode.NORMAL));
     }
 
     public static Animation<TextureRegion> getAnimation(String key) { return animations.get(key); }

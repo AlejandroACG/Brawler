@@ -312,7 +312,7 @@ public abstract class Player extends Character {
             body.setGravityScale(0);
             velocity.x = 0;
             velocity.y = 0;
-            if (stateTime >= hitFrames * hitDuration) {
+            if (stateTime >= BLOCK_SPARK_FRAMES * BLOCK_SPARK_DURATION) {
                 body.setGravityScale(1);
                 velocity.x = -1;
                 setCurrentStateWithoutReset(State.BLOCK);
@@ -340,7 +340,7 @@ public abstract class Player extends Character {
                 markToFallDead = true;
             }
             if (markToFallDead || stateTime == KAIN_DEAD_FRAMES * KAIN_DEAD_DURATION) {
-                if (isOnGround) {
+                if (isOnGround || stateTime == KAIN_DEAD_FRAMES * KAIN_DEAD_DURATION) {
                     stayDead();
                 }
             }

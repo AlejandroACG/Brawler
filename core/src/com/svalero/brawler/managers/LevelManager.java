@@ -286,7 +286,8 @@ public class LevelManager {
 
     private void handleAttackHit(AttackInfo attackInfo, Character victim, boolean attackFromLeft, Vector2 contactPoint) {
         if (victim.getCurrentState() != State.HIT && victim.getCurrentState() != State.DEAD) {
-            if (victim instanceof Player && victim.getCurrentState() == State.BLOCK && attackInfo.isBlockable()) {
+            if (victim instanceof Player && victim.getCurrentState() == State.BLOCK && attackInfo.isBlockable()
+                    && victim.isFacingLeft() == attackFromLeft) {
                 victim.blockAttack();
             } else {
                 victim.getHit(attackInfo.getDamage(), attackFromLeft);

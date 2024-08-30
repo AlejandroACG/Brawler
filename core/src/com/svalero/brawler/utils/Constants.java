@@ -138,11 +138,12 @@ public class Constants {
     public static final float BLOOD_BIG_DURATION = 0.2f;
     public static final float BLOOD_BIG_WIDTH = 122 * BLOOD_BIG_SCALE;
     public static final float BLOOD_BIG_HEIGHT = 109 * BLOOD_BIG_SCALE;
-    public static final String BLOCK = "block";
-    public static final int BLOCK_FRAMES = 4;
-    public static final float BLOCK_DURATION = 0.2f;
-    public static final float BLOCK_WIDTH = 117;
-    public static final float BLOCK_HEIGHT = 114;
+    public static final String BLOCK_SPARK = "block";
+    public static final float BLOCK_SPARK_SCALE = 0.3f;
+    public static final int BLOCK_SPARK_FRAMES = 4;
+    public static final float BLOCK_SPARK_DURATION = 0.2f;
+    public static final float BLOCK_SPARK_WIDTH = 117 * BLOCK_SPARK_SCALE;
+    public static final float BLOCK_SPARK_HEIGHT = 114 * BLOCK_SPARK_SCALE;
 
     // Level 1
     public static final String LEVEL_1_MAP = "maps/level-1.tmx";

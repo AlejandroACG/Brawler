@@ -9,8 +9,8 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import static com.svalero.brawler.utils.Constants.BLOOD_BIG;
-import static com.svalero.brawler.utils.Constants.BLOOD_SMALL;
+
+import static com.svalero.brawler.utils.Constants.*;
 
 public class EffectManager implements Disposable {
     private final List<VisualEffect> effects = new ArrayList<>();
@@ -97,6 +97,14 @@ public class EffectManager implements Disposable {
                         adjustedX = position.x - width;
                     }
                     adjustedY = position.y - (height / 2);
+                    break;
+                case BLOCK_SPARK:
+                    adjustedX = position.x + (width / 4);
+                    if (facingLeft) {
+                        // TODO Demasiado manual.
+                        adjustedX = position.x - width - 30 * BLOCK_SPARK_SCALE;
+                    }
+                    adjustedY = position.y - height;
                     break;
             }
 

@@ -435,10 +435,8 @@ public abstract class Character implements Disposable {
     }
 
     public void blockAttack() {
-        // TODO Gestionar cómo suena el bloquear una explosión requeriría refactorizar toda la lógica de getHit.
-        //  Quizás funcionaría crear un dominio de ataque que es lo que se le da a cada fixture de ataque como User data
-        //  en vez de dar directamente al atacante, y en esa entidad se le puede dar el daño de ataque y alguna boolean
-        //  que determine si es bloqueable o no.
+        effectManager.createVisualEffect(position, BLOCK_SPARK_WIDTH, BLOCK_SPARK_HEIGHT,
+                BLOCK_SPARK_DURATION, BLOCK_SPARK, isFacingLeft());
         SoundManager.playSound(KAIN_BLOCK_SOUND);
         currentState = State.BLOCK;
     }
