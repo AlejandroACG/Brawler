@@ -3,7 +3,7 @@ package com.svalero.brawler.utils;
 public class Constants {
     public static final float ASPECT_RATIO = 16f / 9f;
     public static final float GRAVITY = -175f;
-    public static final boolean DEBUG_MODE = true;
+    public static final boolean DEBUG_MODE = false;
     public static final int NUMBER_OF_LEVELS = 2;
 
     // Timers

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="21">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="22">
  <tileset firstgid="1" source="level-1-tileset.tsx"/>
  <layer id="1" name="Tiles" width="60" height="17">
   <data encoding="csv">
@@ -49,10 +49,15 @@
     <property name="tag" value="player"/>
    </properties>
   </object>
-  <object id="20" x="279.761" y="239.91">
+  <object id="20" x="629.76" y="239.91">
+   <properties>
+    <property name="tag" value="bishamon"/>
+   </properties>
+  </object>
+  <object id="21" x="692.75" y="239.91">
    <properties>
     <property name="tag" value="hsien-ko"/>
    </properties>
   </object>
-</objectgroup>
+ </objectgroup>
 </map>
