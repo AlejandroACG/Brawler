@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
+
+import com.svalero.brawler.managers.AnimationManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 
@@ -28,7 +30,7 @@ public abstract class Player extends Character {
                   float attackOffsetX, float attackOffsetY, float attackWidth, float attackHeight,
                   float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth, float jumpAttackHeight,
                   String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames, float deadDuration,
-                  String victoryKey, String victorySoundPath, float crouchWidth, float crouchHeight) {
+                  String victoryKey, String victorySoundPath, float crouchWidth, float crouchHeight, String introKey) {
         super(levelManager, world, position, characterAtlas, health, attackStrength, speed, width, height, frameWidth, frameHeight,
                 correctionX, correctionY, idleDuration, jumpUpDuration, jumpDownDuration, jumpStrength, idleKey,
                 turnKey, walkKey, runKey, blockUpKey, blockDownKey, crouchDownKey, crouchUpKey, jumpUpKey, jumpDownKey,
@@ -37,7 +39,7 @@ public abstract class Player extends Character {
                 hitFrames, hitDuration, attackFrames, attackDuration, jumpAttackFrames, jumpAttackDuration,
                 attackOffsetX, attackOffsetY, attackWidth, attackHeight, jumpAttackOffsetX, jumpAttackOffsetY,
                 jumpAttackWidth, jumpAttackHeight, hitSoundPath, deadKey, deadSoundPath, deadFrames, deadDuration,
-                victoryKey, victorySoundPath, crouchWidth, crouchHeight);
+                victoryKey, victorySoundPath, crouchWidth, crouchHeight, introKey);
     }
 
     public void update(float dt) {
@@ -65,6 +67,13 @@ public abstract class Player extends Character {
         Vector2 velocity = body.getLinearVelocity();
         long currentTime = System.currentTimeMillis();
 
+        // INTRO
+        if (currentState == State.INTRO) {
+            velocity.x = 0;
+            currentAnimation = getAnimation(introKey);
+            return;
+        }
+
         // Stop WALK / RUN
         if ((currentState == State.WALK || currentState == State.RUN) &&
                 (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))) {
@@ -74,6 +83,9 @@ public abstract class Player extends Character {
 
         // IDLE / WALK / RUN
         if (currentState == State.IDLE || currentState == State.WALK || currentState == State.RUN) {
+            if (currentState == State.IDLE) {
+                velocity = goIdle(velocity);
+            }
 
             turnBlocked = Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.D);
 
@@ -339,9 +351,9 @@ public abstract class Player extends Character {
             if (!isOnGround) {
                 markToFallDead = true;
             }
-            if (markToFallDead || stateTime == KAIN_DEAD_FRAMES * KAIN_DEAD_DURATION) {
-                if (isOnGround || stateTime == KAIN_DEAD_FRAMES * KAIN_DEAD_DURATION) {
-                    stayDead();
+            if (markToFallDead || stateTime == deadFrames * deadDuration) {
+                if (isOnGround || stateTime == deadFrames * deadDuration) {
+                    velocity = stayDead(velocity);
                 }
             }
         }

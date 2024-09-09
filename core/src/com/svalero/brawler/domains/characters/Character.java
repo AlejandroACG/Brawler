@@ -98,8 +98,10 @@ public abstract class Character implements Disposable {
     protected Fixture crouchFixture;
     protected float crouchWidth;
     protected float crouchHeight;
+    protected String introKey;
 
     public enum State {
+        INTRO,
         IDLE,
         TURN,
         WALK,
@@ -139,7 +141,7 @@ public abstract class Character implements Disposable {
                      float attackHeight, float jumpAttackOffsetX, float jumpAttackOffsetY, float jumpAttackWidth,
                      float jumpAttackHeight, String hitSoundPath, String deadKey, String deadSoundPath, int deadFrames,
                      float deadDuration, String victoryKey, String victorySoundPath, float crouchWidth,
-                     float crouchHeight) {
+                     float crouchHeight, String introKey) {
         this.levelManager = levelManager;
         this.world = world;
         this.position = position;
@@ -150,7 +152,7 @@ public abstract class Character implements Disposable {
         this.id = IDGenerator.generateUniqueId();
         this.width = width;
         this.height = height;
-        this.currentState = State.IDLE;
+        this.currentState = State.INTRO;
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.correctionX = correctionX;
@@ -207,6 +209,7 @@ public abstract class Character implements Disposable {
         this.victorySoundPath = victorySoundPath;
         this.crouchWidth = crouchWidth;
         this.crouchHeight = crouchHeight;
+        this.introKey = introKey;
 
         createBody(world, characterAtlas);
     }
@@ -230,7 +233,7 @@ public abstract class Character implements Disposable {
         this.id = IDGenerator.generateUniqueId();
         this.width = width;
         this.height = height;
-        this.currentState = State.IDLE;
+        this.currentState = State.INTRO;
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.correctionX = correctionX;
@@ -441,12 +444,11 @@ public abstract class Character implements Disposable {
         currentState = State.BLOCK;
     }
 
-    public void stayDead() {
-        Vector2 velocity = body.getLinearVelocity();
+    public Vector2 stayDead(Vector2 velocity) {
         velocity.y = 0;
         velocity.x = 0;
 
-        body.setLinearVelocity(velocity.x, velocity.y);
+        return velocity;
     }
 
     protected Vector2 goIdle(Vector2 velocity) {

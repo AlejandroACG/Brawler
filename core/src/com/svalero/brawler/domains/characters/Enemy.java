@@ -68,8 +68,17 @@ public class Enemy extends Character {
             body.resetMassData();
         }
 
+        // INTRO
+        if (currentState == State.INTRO) {
+            velocity.x = 0;
+            return;
+        }
+
         // IDLE / WALK
         if (currentState == State.IDLE || currentState == State.WALK) {
+            if (currentState == State.IDLE) {
+                velocity = goIdle(velocity);
+            }
             if (currentState == State.WALK && facingLeft != isPlayerLeft) {
                 velocity = goIdle(velocity);
             }
@@ -158,9 +167,9 @@ public class Enemy extends Character {
             if (!isOnGround) {
                 markToFallDead = true;
             }
-            if (markToFallDead) {
-                if (isOnGround) {
-                    stayDead();
+            if (markToFallDead || stateTime == deadFrames * deadDuration) {
+                if (isOnGround || stateTime == deadFrames * deadDuration) {
+                    velocity = stayDead(velocity);
                 }
             }
         }

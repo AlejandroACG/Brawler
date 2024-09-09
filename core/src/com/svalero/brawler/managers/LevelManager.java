@@ -42,6 +42,7 @@ public class LevelManager {
     private CameraManager cameraManager;
     private final Array<ParallaxLayer> parallaxLayers = new Array<>();
     private String backgroundMusic;
+    private String startSound;
     private boolean isDefeated = false;
     private float defeatTimer = 10.0f;
     private boolean enemyCelebrationTriggered = false;
@@ -52,6 +53,12 @@ public class LevelManager {
     private float playerCelebrationTimer = 1.0f;
     private List<Projectile> projectiles;
     private Array<Body> bodiesToDestroy;
+    // TODO Esto habría que personalizarlo de haber más de un jugador, inicializándolo más tarde y pasando estos dos
+    //  datos como parámetros en el constructor de cada player y luego aquí eligiendo el que más dure.
+    private float levelStartDelay = KAIN_INTRO_DURATION * KAIN_INTRO_FRAMES;
+    private float elapsedTime = 0.0f;
+    private boolean introPlayed = false;
+    private boolean levelStarted = false;
 
     public LevelManager(Brawler game, int currentLevel, SelectedCharacter selectedCharacter, int initialScore) {
         this.game = game;
@@ -71,12 +78,14 @@ public class LevelManager {
                 mapWidth = LEVEL_1_MAP_WIDTH;
                 mapHeight = LEVEL_1_MAP_HEIGHT;
                 backgroundMusic = LEVEL_1_MUSIC;
+                this.startSound = MISSION_ONE_START_SOUND;
                 break;
             case 2:
                 map = mapLoader.load(LEVEL_2_MAP);
                 mapWidth = LEVEL_2_MAP_WIDTH;
                 mapHeight = LEVEL_2_MAP_HEIGHT;
                 backgroundMusic = LEVEL_2_MUSIC;
+                this.startSound = MISSION_TWO_START_SOUND;
                 break;
         }
 
@@ -86,7 +95,6 @@ public class LevelManager {
         loadCharacters(selectedCharacter);
 
         setContactListener();
-
     }
 
     public void setCameraManager(CameraManager cameraManager) {
@@ -281,7 +289,7 @@ public class LevelManager {
                 // TODO Si hubiese más de un player, esto también sería necesario.
                 if (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ENEMY &&
                         fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ENEMY) {
-                    contact.setEnabled(false);  // Desactiva la colisión entre enemigos
+                    contact.setEnabled(false);
                 }
             }
 
@@ -341,6 +349,27 @@ public class LevelManager {
             }
         }
         bodiesToDestroy.clear();
+    }
+
+    public void checkIntroCondition(float dt) {
+        elapsedTime += dt;
+
+        // TODO Para el tiempo de intro, igual que para el estado de victoria o derrota, podría utilizar States también
+        //  para el juego y así evitaría tantas booleanas
+        if (!introPlayed) {
+            getPlayer().setCurrentState(Character.State.INTRO);
+            SoundManager.playSound(getStartSound());
+            introPlayed = true;
+        }
+        if (elapsedTime >= levelStartDelay) {
+            if (!levelStarted) {
+                getPlayer().setCurrentState(Character.State.IDLE);
+                for (Character character : getCharacters().values()) {
+                    character.setCurrentStateWithoutReset(Character.State.IDLE);
+                }
+                levelStarted = true;
+            }
+        }
     }
 
     public void checkVictoryCondition(float dt) {
@@ -411,4 +440,6 @@ public class LevelManager {
     public void setCurrentScore(int currentScore) { this.currentScore = currentScore; }
 
     public int getCurrentLevel() { return currentLevel; }
+
+    public String getStartSound() { return startSound; }
 }
