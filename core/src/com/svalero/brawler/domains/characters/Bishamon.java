@@ -7,7 +7,6 @@ import com.svalero.brawler.interfaces.SpecialAttackableInterface;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
-
 import static com.svalero.brawler.domains.characters.Character.State.*;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
@@ -37,6 +36,7 @@ public class Bishamon extends Enemy implements SpecialAttackableInterface {
     @Override
     public Vector2 handleSpecialAttack(float dt, Vector2 velocity) {
         if (currentState == SPECIAL_ATTACK_PREP) {
+            velocity.x = 0;
             if (stateTime >= BISHAMON_SPECIAL_ATTACK_PREP_FRAMES * BISHAMON_SPECIAL_ATTACK_PREP_DURATION) {
 
                 setCurrentState(SPECIAL_ATTACK);

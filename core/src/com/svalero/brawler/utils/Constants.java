@@ -242,7 +242,7 @@ public class Constants {
     public static final float BISHAMON_ATTACK_HEIGHT = 104f * BISHAMON_SCALE;
     public static final float BISHAMON_ATTACK_OFFSET_X = (BISHAMON_WIDTH / 2 + BISHAMON_ATTACK_WIDTH / 2);
     public static final float BISHAMON_ATTACK_OFFSET_Y = (BISHAMON_ATTACK_HEIGHT / 2) - 39 * BISHAMON_SCALE;
-    public static final float BISHAMON_SPECIAL_ATTACK_DISTANCE = BISHAMON_FRAME_WIDTH * 2;
+    public static final float BISHAMON_SPECIAL_ATTACK_DISTANCE = BISHAMON_FRAME_WIDTH * 1.2f;
     public static final float BISHAMON_SPECIAL_ATTACK_PREP_FRAMES = 8;
     public static final float BISHAMON_SPECIAL_ATTACK_PREP_DURATION = 0.4f;
     public static final int BISHAMON_SPECIAL_ATTACK_FRAMES = 8;
@@ -295,7 +295,7 @@ public class Constants {
     public static final int HSIEN_KO_BOMB_FRAMES = 25;
     public static final int HSIEN_KO_BOMB_EXPLOSION_FRAME = 13; // This one takes into account the 0.
     public static final float HSIEN_KO_BOMB_DURATION = 0.2f;
-    public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = HSIEN_KO_BOMB_SPEED * HSIEN_KO_BOMB_FRAMES * HSIEN_KO_BOMB_DURATION;
+    public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = HSIEN_KO_BOMB_SPEED * HSIEN_KO_BOMB_DURATION * 0.4f;
     public static final float HSIEN_KO_BOMB_FRAME_WIDTH = 161f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_BOMB_FRAME_HEIGHT = 184f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_BOMB_WIDTH = 46f * HSIEN_KO_SCALE;
