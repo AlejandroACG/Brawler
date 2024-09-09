@@ -277,6 +277,12 @@ public class LevelManager {
                         fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ATTACK_ENEMY) {
                     contact.setEnabled(false);
                 }
+
+                // TODO Si hubiese más de un player, esto también sería necesario.
+                if (fixtureA.getFilterData().categoryBits == COLLIDER_CATEGORY_ENEMY &&
+                        fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_ENEMY) {
+                    contact.setEnabled(false);  // Desactiva la colisión entre enemigos
+                }
             }
 
             @Override
