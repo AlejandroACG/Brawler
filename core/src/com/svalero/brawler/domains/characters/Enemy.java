@@ -183,6 +183,15 @@ public class Enemy extends Character {
             }
         }
 
+        // Stop special attack prep sound
+        if (currentState != State.SPECIAL_ATTACK_PREP) {
+            // TODO Aparte de poder identificarlo mejor por ID, esto habría que despersonalizarlo para que sea genérico
+            //  a toda la clase Enemy.
+            if (this instanceof Bishamon) {
+                SoundManager.stopLongSound(BISHAMON_SPECIAL_ATTACK_PREP);
+            }
+        }
+
         // Erase unused attack fixtures
         if (currentState != State.ATTACK && currentState != State.SPECIAL_ATTACK) { clearAttackFixture(); }
 

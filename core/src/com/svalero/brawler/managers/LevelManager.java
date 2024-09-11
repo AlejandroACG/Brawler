@@ -245,7 +245,7 @@ public class LevelManager {
                         (fixtureB.getFilterData().categoryBits == COLLIDER_CATEGORY_BOMB_IDLE && userDataA instanceof Player)) {
                     Bomb bomb = (Bomb) (userDataA instanceof Bomb ? userDataA : userDataB);
                     System.out.println("BOOM");
-                    bomb.collision();
+                    bomb.explode();
                 }
 
                 // Detección de bombas contra el suelo

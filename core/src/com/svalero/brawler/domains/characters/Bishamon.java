@@ -29,7 +29,11 @@ public class Bishamon extends Enemy implements SpecialAttackableInterface {
     @Override
     public void goSpecialAttack() {
         setCurrentState(SPECIAL_ATTACK_PREP);
-        SoundManager.playSound(BISHAMON_SPECIAL_ATTACK_PREP_SOUND);
+        // TODO Igual que con el resto de long sounds, si fuese a haber más de una instancia del mismo personaje al mismo tiempo,
+        //  aquí tendría que añadir un identificador por ID de cada entidad, y lo mismo en cada stop.
+        // TODO Una manera de hacer mejor esto sería añadir también una boolean que indique si se va a reproducir en bucle o no,
+        //  porque por ejemplo, en este caso en particular, sería mejor que no se reprodujese en bucle.
+        SoundManager.playLongSound(BISHAMON_SPECIAL_ATTACK_PREP_SOUND, BISHAMON_SPECIAL_ATTACK_PREP);
         currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK_PREP);
     }
 

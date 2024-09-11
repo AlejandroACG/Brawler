@@ -249,7 +249,7 @@ public class Constants {
     public static final float BISHAMON_ATTACK_OFFSET_Y = (BISHAMON_ATTACK_HEIGHT / 2) - 39 * BISHAMON_SCALE;
     public static final float BISHAMON_SPECIAL_ATTACK_DISTANCE = BISHAMON_FRAME_WIDTH * 1.2f;
     public static final float BISHAMON_SPECIAL_ATTACK_PREP_FRAMES = 8;
-    public static final float BISHAMON_SPECIAL_ATTACK_PREP_DURATION = 0.4f;
+    public static final float BISHAMON_SPECIAL_ATTACK_PREP_DURATION = 0.3f;
     public static final int BISHAMON_SPECIAL_ATTACK_FRAMES = 8;
     public static final float BISHAMON_SPECIAL_ATTACK_DURATION = 0.1f;
     public static final float BISHAMON_SPECIAL_ATTACK_POST_FRAMES = 3;
