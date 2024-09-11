@@ -42,6 +42,8 @@ public class ResourceManager {
         assets.load(DEATH_ADDER_DEAD_SOUND, Sound.class);
         assets.load(DEATH_ADDER_VICTORY_SOUND, Sound.class);
         assets.load(HIT_SOUND, Sound.class);
+        assets.load(MISSION_ONE_START_SOUND, Sound.class);
+        assets.load(MISSION_TWO_START_SOUND, Sound.class);
         assets.load(LAND_SOUND, Sound.class);
         assets.load(WALKING_ON_GRASS_SOUND, Sound.class);
         assets.load(RUNNING_ON_GRASS_SOUND, Sound.class);

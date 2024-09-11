@@ -1,4 +1,4 @@
-package com.svalero.brawler.domains.characters;
+package com.svalero.brawler.domains;
 
 import com.badlogic.gdx.audio.Sound;
 

@@ -68,8 +68,17 @@ public class Enemy extends Character {
             body.resetMassData();
         }
 
+        // INTRO
+        if (currentState == State.INTRO) {
+            velocity.x = 0;
+            return;
+        }
+
         // IDLE / WALK
         if (currentState == State.IDLE || currentState == State.WALK) {
+            if (currentState == State.IDLE) {
+                velocity = goIdle(velocity);
+            }
             if (currentState == State.WALK && facingLeft != isPlayerLeft) {
                 velocity = goIdle(velocity);
             }
@@ -158,9 +167,9 @@ public class Enemy extends Character {
             if (!isOnGround) {
                 markToFallDead = true;
             }
-            if (markToFallDead) {
-                if (isOnGround) {
-                    stayDead();
+            if (markToFallDead || stateTime == deadFrames * deadDuration) {
+                if (isOnGround || stateTime == deadFrames * deadDuration) {
+                    velocity = stayDead(velocity);
                 }
             }
         }
@@ -171,6 +180,15 @@ public class Enemy extends Character {
                 walkingSoundTimer -= dt;
             } else {
                 SoundManager.stopLongSound(walkKey);
+            }
+        }
+
+        // Stop special attack prep sound
+        if (currentState != State.SPECIAL_ATTACK_PREP) {
+            // TODO Aparte de poder identificarlo mejor por ID, esto habría que despersonalizarlo para que sea genérico
+            //  a toda la clase Enemy.
+            if (this instanceof Bishamon) {
+                SoundManager.stopLongSound(BISHAMON_SPECIAL_ATTACK_PREP);
             }
         }
 

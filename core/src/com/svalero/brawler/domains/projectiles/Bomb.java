@@ -70,8 +70,7 @@ public class Bomb extends Projectile implements ProjectileInterface {
 
             if (currentState == State.IDLE) {
                 if (stateTime >= HSIEN_KO_BOMB_EXPLOSION_FRAME * HSIEN_KO_BOMB_DURATION) {
-                    currentState = State.EXPLOSION;
-                    SoundManager.playSound(HSIEN_KO_BOMB_EXPLOSION_SOUND);
+                    explode();
                 }
             }
 
@@ -95,6 +94,7 @@ public class Bomb extends Projectile implements ProjectileInterface {
             }
 
             if (shouldBeDestroyed()) {
+                SoundManager.stopLongSound("explosion");
                 levelManager.queueBodyForDestruction(body);
                 body = null;
             }
@@ -116,10 +116,17 @@ public class Bomb extends Projectile implements ProjectileInterface {
 
     // TODO Investigar por qué si no accedo al world así de manera directa desde levelmanager sale null.
     @Override
-    public void dispose() { levelManager.getWorld().destroyBody(body); }
+    public void dispose() {levelManager.getWorld().destroyBody(body); }
 
-    public void collision() {
+    public void explode() {
         stateTime = HSIEN_KO_BOMB_EXPLOSION_FRAME * HSIEN_KO_BOMB_DURATION;
+        currentState = State.EXPLOSION;
+        // TODO Debería mejorar esto igual que el resto de LongSounds. Puse notas más específicas en Bishamon.
+        //  Además, no debería pasar un String de manera tan manual.
+        SoundManager.playLongSound(HSIEN_KO_BOMB_EXPLOSION_SOUND, "explosion");
+        for (Fixture fixture : body.getFixtureList()) {
+            fixture.setSensor(true);
+        }
     }
 
     public State getCurrentState() { return currentState; }

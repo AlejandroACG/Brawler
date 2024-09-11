@@ -7,7 +7,6 @@ import com.svalero.brawler.interfaces.SpecialAttackableInterface;
 import com.svalero.brawler.managers.ConfigurationManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
-
 import static com.svalero.brawler.domains.characters.Character.State.*;
 import static com.svalero.brawler.managers.AnimationManager.getAnimation;
 import static com.svalero.brawler.utils.Constants.*;
@@ -30,13 +29,18 @@ public class Bishamon extends Enemy implements SpecialAttackableInterface {
     @Override
     public void goSpecialAttack() {
         setCurrentState(SPECIAL_ATTACK_PREP);
-        SoundManager.playSound(BISHAMON_SPECIAL_ATTACK_PREP_SOUND);
+        // TODO Igual que con el resto de long sounds, si fuese a haber más de una instancia del mismo personaje al mismo tiempo,
+        //  aquí tendría que añadir un identificador por ID de cada entidad, y lo mismo en cada stop.
+        // TODO Una manera de hacer mejor esto sería añadir también una boolean que indique si se va a reproducir en bucle o no,
+        //  porque por ejemplo, en este caso en particular, sería mejor que no se reprodujese en bucle.
+        SoundManager.playLongSound(BISHAMON_SPECIAL_ATTACK_PREP_SOUND, BISHAMON_SPECIAL_ATTACK_PREP);
         currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK_PREP);
     }
 
     @Override
     public Vector2 handleSpecialAttack(float dt, Vector2 velocity) {
         if (currentState == SPECIAL_ATTACK_PREP) {
+            velocity.x = 0;
             if (stateTime >= BISHAMON_SPECIAL_ATTACK_PREP_FRAMES * BISHAMON_SPECIAL_ATTACK_PREP_DURATION) {
 
                 setCurrentState(SPECIAL_ATTACK);

@@ -15,6 +15,7 @@ public class AnimationManager {
         // KAIN
         TextureAtlas kainAtlas = ResourceManager.getAtlas(KAIN_ATLAS);
 
+        animations.put(KAIN_INTRO, new Animation<>(KAIN_INTRO_DURATION, kainAtlas.findRegions("intro"), Animation.PlayMode.NORMAL));
         animations.put(KAIN_IDLE, new Animation<>(KAIN_IDLE_DURATION, kainAtlas.findRegions("idle"), Animation.PlayMode.LOOP));
         animations.put(KAIN_TURN, new Animation<>(KAIN_TURN_DURATION, kainAtlas.findRegions("turn"), Animation.PlayMode.REVERSED));
         animations.put(KAIN_WALK, new Animation<>(KAIN_WALK_DURATION, kainAtlas.findRegions("walk"), Animation.PlayMode.LOOP));

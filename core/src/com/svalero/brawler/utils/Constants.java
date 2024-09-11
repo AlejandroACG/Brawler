@@ -70,6 +70,8 @@ public class Constants {
     public static final String DEATH_ADDER_DEAD_SOUND = "sounds/death-adder-dead.wav";
     public static final String DEATH_ADDER_VICTORY_SOUND = "sounds/death-adder-victory.mp3";
     public static final String HIT_SOUND = "sounds/hit.mp3";
+    public static final String MISSION_ONE_START_SOUND = "sounds/mission-one-start.wav";
+    public static final String MISSION_TWO_START_SOUND = "sounds/mission-two-start.wav";
     public static final String LAND_SOUND = "sounds/land.mp3";
     public static final String WALKING_ON_GRASS_SOUND = "sounds/walking-on-grass.wav";
     public static final String RUNNING_ON_GRASS_SOUND = "sounds/running-on-grass.mp3";
@@ -171,6 +173,8 @@ public class Constants {
     public static final float KAIN_FRAME_HEIGHT = 186f * KAIN_SCALE;
     public static final float KAIN_DRAW_CORRECTION_X = (93f * KAIN_SCALE) + KAIN_WIDTH / 2;
     public static final float KAIN_DRAW_CORRECTION_Y = (31f * KAIN_SCALE) + KAIN_HEIGHT / 2;
+    public static final float KAIN_INTRO_FRAMES = 16;
+    public static final float KAIN_INTRO_DURATION = 0.1f;
     public static final float KAIN_IDLE_DURATION = 0.15f;
     public static final int KAIN_TURN_FRAMES = 3;
     public static final float KAIN_TURN_DURATION = 0.1f;
@@ -201,6 +205,7 @@ public class Constants {
     public static final int KAIN_DEAD_FRAMES = 6;
     public static final float KAIN_DEAD_DURATION = 0.2f;
     public static final float KAIN_VICTORY_DURATION = 0.1f;
+    public static final String KAIN_INTRO = "kain_intro";
     public static final String KAIN_IDLE = "kain_idle";
     public static final String KAIN_TURN = "kain_turn";
     public static final String KAIN_WALK = "kain_walk";
@@ -242,9 +247,9 @@ public class Constants {
     public static final float BISHAMON_ATTACK_HEIGHT = 104f * BISHAMON_SCALE;
     public static final float BISHAMON_ATTACK_OFFSET_X = (BISHAMON_WIDTH / 2 + BISHAMON_ATTACK_WIDTH / 2);
     public static final float BISHAMON_ATTACK_OFFSET_Y = (BISHAMON_ATTACK_HEIGHT / 2) - 39 * BISHAMON_SCALE;
-    public static final float BISHAMON_SPECIAL_ATTACK_DISTANCE = BISHAMON_FRAME_WIDTH * 2;
+    public static final float BISHAMON_SPECIAL_ATTACK_DISTANCE = BISHAMON_FRAME_WIDTH * 1.2f;
     public static final float BISHAMON_SPECIAL_ATTACK_PREP_FRAMES = 8;
-    public static final float BISHAMON_SPECIAL_ATTACK_PREP_DURATION = 0.4f;
+    public static final float BISHAMON_SPECIAL_ATTACK_PREP_DURATION = 0.3f;
     public static final int BISHAMON_SPECIAL_ATTACK_FRAMES = 8;
     public static final float BISHAMON_SPECIAL_ATTACK_DURATION = 0.1f;
     public static final float BISHAMON_SPECIAL_ATTACK_POST_FRAMES = 3;
@@ -294,8 +299,10 @@ public class Constants {
     public static final float HSIEN_KO_SPECIAL_ATTACK_DURATION = 0.1f;
     public static final int HSIEN_KO_BOMB_FRAMES = 25;
     public static final int HSIEN_KO_BOMB_EXPLOSION_FRAME = 13; // This one takes into account the 0.
+    // TODO La explosión en sí podría ser más rápida. Una opción sería partir la parte de la explosión en otra
+    //  animación diferente con otra duración más breve.
     public static final float HSIEN_KO_BOMB_DURATION = 0.2f;
-    public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = HSIEN_KO_BOMB_SPEED * HSIEN_KO_BOMB_FRAMES * HSIEN_KO_BOMB_DURATION;
+    public static final float HSIEN_KO_SPECIAL_ATTACK_DISTANCE = HSIEN_KO_BOMB_SPEED * HSIEN_KO_BOMB_DURATION * 0.4f;
     public static final float HSIEN_KO_BOMB_FRAME_WIDTH = 161f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_BOMB_FRAME_HEIGHT = 184f * HSIEN_KO_SCALE;
     public static final float HSIEN_KO_BOMB_WIDTH = 46f * HSIEN_KO_SCALE;

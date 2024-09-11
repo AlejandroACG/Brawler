@@ -11,7 +11,7 @@ import com.svalero.brawler.domains.characters.Character;
 import com.svalero.brawler.managers.*;
 import java.util.Map;
 import static com.svalero.brawler.managers.ConfigurationManager.SelectedCharacter.*;
-import static com.svalero.brawler.utils.Constants.DEBUG_MODE;
+import static com.svalero.brawler.utils.Constants.*;
 
 public class GameScreen implements Screen {
     private CameraManager cameraManager;
@@ -19,13 +19,10 @@ public class GameScreen implements Screen {
     private ActionManager actionManager;
     private LevelManager levelManager;
     private RenderManager renderManager;
-    private int currentLevel;
-    private int initialScore = 0;
     private Box2DDebugRenderer debugRenderer;
 
     public GameScreen(Brawler game, int currentLevel, int initialScore) {
         this.game = game;
-        this.currentLevel = currentLevel;
         levelManager = new LevelManager(game, currentLevel, KAIN, initialScore);
         cameraManager = new CameraManager(levelManager);
         levelManager.setCameraManager(cameraManager);
@@ -42,6 +39,7 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        levelManager.checkIntroCondition(dt);
         levelManager.checkDefeatCondition(dt);
         levelManager.checkVictoryCondition(dt);
         actionManager.update(dt);
