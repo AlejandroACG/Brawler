@@ -406,7 +406,7 @@ public abstract class Player extends Character {
         setCurrentState(State.RUN);
         isRunning = true;
         currentAnimation = getAnimation(runKey);
-        SoundManager.playLongSound(levelManager.getCurrentLevel() == 1 ? RUNNING_ON_GRASS_SOUND : RUNNING_ON_STONE_SOUND, runKey);
+        SoundManager.playLongSound(levelManager.getCurrentLevel() == 1 ? RUNNING_ON_GRASS_SOUND : RUNNING_ON_STONE_SOUND, runKey, true);
         return velocity;
     }
 }

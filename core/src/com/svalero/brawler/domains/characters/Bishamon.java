@@ -33,7 +33,7 @@ public class Bishamon extends Enemy implements SpecialAttackableInterface {
         //  aquí tendría que añadir un identificador por ID de cada entidad, y lo mismo en cada stop.
         // TODO Una manera de hacer mejor esto sería añadir también una boolean que indique si se va a reproducir en bucle o no,
         //  porque por ejemplo, en este caso en particular, sería mejor que no se reprodujese en bucle.
-        SoundManager.playLongSound(BISHAMON_SPECIAL_ATTACK_PREP_SOUND, BISHAMON_SPECIAL_ATTACK_PREP);
+        SoundManager.playLongSound(BISHAMON_SPECIAL_ATTACK_PREP_SOUND, BISHAMON_SPECIAL_ATTACK_PREP, false);
         currentAnimation = getAnimation(BISHAMON_SPECIAL_ATTACK_PREP);
     }
 
