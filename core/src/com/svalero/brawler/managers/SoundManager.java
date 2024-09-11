@@ -5,6 +5,9 @@ import com.svalero.brawler.domains.LongSoundInstance;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO Una refactorización que estaría muy bien sería cambiar la lógica de sonidos cortos y sonidos largos a un
+//  único método para que luego yo pueda controlar también si hay que terminarlos todos de manera súbita. Por ejemplo
+//  al pausar la partida o salir del juego.
 public class SoundManager {
     private static final Map<String, LongSoundInstance> longSoundData = new HashMap<>();
 
@@ -24,11 +27,16 @@ public class SoundManager {
         }
     }
 
-    public static void playLongSound(String path, String instanceKey) {
+    public static void playLongSound(String path, String instanceKey, boolean loop) {
         if (!ConfigurationManager.mute) {
             Sound sound = ResourceManager.getSound(path);
             if (sound != null && !longSoundData.containsKey(instanceKey)) {
-                long soundId = sound.loop();
+                long soundId;
+                if (loop) {
+                    soundId = sound.loop();
+                } else {
+                    soundId = sound.play();
+                }
                 longSoundData.put(instanceKey, new LongSoundInstance(sound, soundId, path));
             }
         }

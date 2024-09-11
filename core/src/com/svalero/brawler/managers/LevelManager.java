@@ -71,6 +71,7 @@ public class LevelManager {
         mapLoader = new TmxMapLoader();
         projectiles = new ArrayList<>();
         bodiesToDestroy = new Array<>();
+        IDManager.reset();
 
         switch (currentLevel) {
             case 1:
@@ -337,7 +338,7 @@ public class LevelManager {
     }
 
     public void queueBodyForDestruction(Body body) {
-        if (!bodiesToDestroy.contains(body, true)) { // Verifica si ya está en la lista
+        if (!bodiesToDestroy.contains(body, true)) {
             bodiesToDestroy.add(body);
         }
     }

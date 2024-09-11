@@ -9,36 +9,35 @@ import com.svalero.brawler.domains.AttackInfo;
 import com.svalero.brawler.domains.characters.DeathAdder;
 import com.svalero.brawler.interfaces.ProjectileInterface;
 import com.svalero.brawler.managers.AnimationManager;
+import com.svalero.brawler.managers.IDManager;
 import com.svalero.brawler.managers.LevelManager;
 import com.svalero.brawler.managers.SoundManager;
 import static com.svalero.brawler.utils.Constants.*;
 
 public class Wave extends Projectile implements ProjectileInterface {
-    private World world;
     private Body body;
     private Animation<TextureRegion> animation;
     private float stateTime;
     private float timeToLive;
     private boolean facingLeft;
-    private DeathAdder deathAdder;
     private LevelManager levelManager;
+    private int id;
 
     public Wave(LevelManager levelManager, Vector2 startPosition, boolean facingLeft, String animationKey,
                 float timeToLive, DeathAdder deathAdder) {
-        this.world = levelManager.getWorld();
         this.animation = AnimationManager.getAnimation(animationKey);
         this.timeToLive = timeToLive;
         this.stateTime = 0;
         this.facingLeft = facingLeft;
-        this.deathAdder = deathAdder;
         this.levelManager = levelManager;
+        this.id = IDManager.getNewWaveId();
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(startPosition);
         bodyDef.fixedRotation = true;
         bodyDef.gravityScale = 0;
-        this.body = world.createBody(bodyDef);
+        this.body = levelManager.getWorld().createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
 
@@ -60,7 +59,7 @@ public class Wave extends Projectile implements ProjectileInterface {
         float velocityX = facingLeft ? -DEATH_ADDER_WAVE_SPEED : DEATH_ADDER_WAVE_SPEED;
         body.setLinearVelocity(new Vector2(velocityX, 0));
         // TODO Si hubiese más waves tendría que autogenerarles un ID y usarlo aquí, por ejemplo.
-        SoundManager.playLongSound(DEATH_ADDER_SPECIAL_ATTACK_WAVE_SOUND, DEATH_ADDER_WAVE);
+        SoundManager.playLongSound(DEATH_ADDER_SPECIAL_ATTACK_WAVE_SOUND, DEATH_ADDER_WAVE + id, true);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class Wave extends Projectile implements ProjectileInterface {
 
         if (shouldBeDestroyed()) {
             // TODO En caso de hacer lo del ID, recordar usarlo aquí también.
-            SoundManager.stopLongSound(DEATH_ADDER_WAVE);
+            SoundManager.stopLongSound(DEATH_ADDER_WAVE + id);
             levelManager.queueBodyForDestruction(body);
             body = null;
         }
@@ -95,5 +94,5 @@ public class Wave extends Projectile implements ProjectileInterface {
     }
 
     @Override
-    public void dispose() { world.destroyBody(body); }
+    public void dispose() { levelManager.getWorld().destroyBody(body); }
 }
